@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" >
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/iconView"
@@ -10,7 +10,7 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:scaleType="fitXY"
-        android:src="@drawable/video_placeholder_200x200" />
+        android:src="@drawable/video_placeholder_200x200"/>
 
     <TextView
         android:id="@+id/titleView"
@@ -24,7 +24,7 @@
         android:ellipsize="marquee"
         android:fadingEdge="horizontal"
         android:maxLines="1"
-        android:textAppearance="@style/android:TextAppearance.StatusBar.EventContent.Title" />
+        android:textAppearance="@style/android:TextAppearance.StatusBar.EventContent.Title"/>
 
     <TextView
         android:id="@+id/subTitleView"
@@ -38,6 +38,6 @@
         android:ellipsize="marquee"
         android:fadingEdge="horizontal"
         android:maxLines="1"
-        android:textAppearance="@style/android:TextAppearance.StatusBar.EventContent" />
+        android:textAppearance="@style/android:TextAppearance.StatusBar.EventContent"/>
 
 </RelativeLayout>

@@ -28,8 +28,10 @@
         <item name="android:actionDropDownStyle">@style/DropDownNav.Democast</item>
         <item name="android:actionBarStyle">@style/ActionBar.Solid.Democast</item>
         <item name="android:actionModeBackground">@drawable/cab_background_top_democast</item>
-        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_democast</item>
-        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Democast</item>
+        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_democast
+        </item>
+        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Democast
+        </item>
 
         <!-- Light.DarkActionBar specific -->
         <item name="android:actionBarWidgetTheme">@style/Theme.Democast.Widget</item>
@@ -74,8 +76,12 @@
     </style>
 
     <style name="SeekBarAppTheme" parent="android:Widget.Holo.Light.SeekBar">
-        <item name="android:progressDrawable">@drawable/apptheme_scrubber_progress_horizontal_holo_light</item>
-        <item name="android:indeterminateDrawable">@drawable/apptheme_scrubber_progress_horizontal_holo_light</item>
+        <item name="android:progressDrawable">
+            @drawable/apptheme_scrubber_progress_horizontal_holo_light
+        </item>
+        <item name="android:indeterminateDrawable">
+            @drawable/apptheme_scrubber_progress_horizontal_holo_light
+        </item>
         <item name="android:thumb">@drawable/apptheme_scrubber_control_selector_holo_light</item>
     </style>
 

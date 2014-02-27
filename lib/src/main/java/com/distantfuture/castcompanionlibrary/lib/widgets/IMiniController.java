@@ -16,10 +16,10 @@
 
 package com.distantfuture.castcompanionlibrary.lib.widgets;
 
-import com.google.android.gms.cast.MediaStatus;
-import com.distantfuture.castcompanionlibrary.lib.widgets.MiniController.OnMiniControllerChangedListener;
-
 import android.net.Uri;
+
+import com.distantfuture.castcompanionlibrary.lib.widgets.MiniController.OnMiniControllerChangedListener;
+import com.google.android.gms.cast.MediaStatus;
 
 /**
  * An interface to abstract {@link MiniController} so that other components can also control the
@@ -28,55 +28,55 @@ import android.net.Uri;
  */
 public interface IMiniController {
 
-    /**
-     * Sets the uri for the album art
-     * 
-     * @param uri
-     */
-    public void setIcon(Uri uri);
+  /**
+   * Sets the uri for the album art
+   *
+   * @param uri
+   */
+  public void setIcon(Uri uri);
 
-    /**
-     * Sets the title
-     * 
-     * @param title
-     */
-    public void setTitle(String title);
+  /**
+   * Sets the title
+   *
+   * @param title
+   */
+  public void setTitle(String title);
 
-    /**
-     * Sets the subtitle
-     * 
-     * @param subTitle
-     */
-    public void setSubTitle(String subTitle);
+  /**
+   * Sets the subtitle
+   *
+   * @param subTitle
+   */
+  public void setSubTitle(String subTitle);
 
-    /**
-     * Sets the state of the play/pause button. Values that can be passed to this method are from
-     * {@link MediaStatus}
-     * 
-     * @param state
-     */
-    public void setPlaybackStatus(int state);
+  /**
+   * Sets the state of the play/pause button. Values that can be passed to this method are from
+   * {@link MediaStatus}
+   *
+   * @param state
+   */
+  public void setPlaybackStatus(int state);
 
-    /**
-     * Sets whether this component should be visible or hidden.
-     * 
-     * @param visibility
-     */
-    public void setVisibility(int visibility);
+  /**
+   * Sets whether this component should be visible or hidden.
+   *
+   * @param visibility
+   */
+  public void setVisibility(int visibility);
 
-    /**
-     * Returns the visibility state of this widget
-     * 
-     * @return
-     */
-    public boolean isVisible();
+  /**
+   * Returns the visibility state of this widget
+   *
+   * @return
+   */
+  public boolean isVisible();
 
-    /**
-     * Assigns a {@link OnMiniControllerChangedListener} listener to be notified of the changes in
-     * the mini controller
-     * 
-     * @param listener
-     */
-    public void setOnMiniControllerChangedListener(OnMiniControllerChangedListener listener);
+  /**
+   * Assigns a {@link OnMiniControllerChangedListener} listener to be notified of the changes in
+   * the mini controller
+   *
+   * @param listener
+   */
+  public void setOnMiniControllerChangedListener(OnMiniControllerChangedListener listener);
 
 }

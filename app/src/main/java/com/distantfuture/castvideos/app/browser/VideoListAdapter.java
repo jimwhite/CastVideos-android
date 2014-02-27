@@ -14,12 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.sample.cast.refplayer.browser;
-
-import com.androidquery.AQuery;
-import com.google.android.gms.cast.MediaInfo;
-import com.google.android.gms.cast.MediaMetadata;
-import com.google.sample.cast.refplayer.R;
+package com.distantfuture.castvideos.app.browser;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -29,6 +24,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.androidquery.AQuery;
+import com.google.android.gms.cast.MediaInfo;
+import com.google.android.gms.cast.MediaMetadata;
+
 import java.util.List;
 
 /**
@@ -36,63 +35,66 @@ import java.util.List;
  */
 public class VideoListAdapter extends ArrayAdapter<MediaInfo> {
 
-    private final Context mContext;
-    private final float mAspectRatio = 9f / 16f;
+  private final Context mContext;
+  private final float mAspectRatio = 9f / 16f;
 
-    /**
-     * @param context
-     * @param resource
-     */
-    public VideoListAdapter(Context context) {
-        super(context, 0);
-        this.mContext = context;
+  /**
+   * @param context
+   * @param resource
+   */
+  public VideoListAdapter(Context context) {
+    super(context, 0);
+    this.mContext = context;
+  }
+
+  /*
+   * (non-Javadoc)
+   * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
+   */
+  @Override
+  public View getView(int position, View convertView, ViewGroup parent) {
+
+    ViewHolder holder;
+    LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    MediaMetadata mm = getItem(position).getMetadata();
+
+    if (convertView == null) {
+      convertView = inflater.inflate(R.layout.browse_row, null);
+      holder = new ViewHolder();
+      holder.imgView = (ImageView) convertView.findViewById(R.id.imageView1);
+      holder.titleView = (TextView) convertView.findViewById(R.id.textView1);
+      holder.descrView = (TextView) convertView.findViewById(R.id.textView2);
+      convertView.setTag(holder);
+    } else {
+      holder = (ViewHolder) convertView.getTag();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
-     */
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    AQuery aq = new AQuery(convertView);
+    aq.id(holder.imgView)
+        .width(110)
+        .image(mm.getImages()
+            .get(0)
+            .getUrl()
+            .toString(), true, true, 0, R.drawable.default_video, null, 0, mAspectRatio);
+    aq.id(holder.titleView).text(mm.getString(MediaMetadata.KEY_TITLE));
+    aq.id(holder.descrView).text(mm.getString(MediaMetadata.KEY_SUBTITLE));
 
-        ViewHolder holder;
-        LayoutInflater inflater = (LayoutInflater) mContext
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        MediaMetadata mm = getItem(position).getMetadata();
+    return convertView;
+  }
 
-        if (convertView == null) {
-            convertView = inflater.inflate(R.layout.browse_row, null);
-            holder = new ViewHolder();
-            holder.imgView = (ImageView) convertView.findViewById(R.id.imageView1);
-            holder.titleView = (TextView) convertView.findViewById(R.id.textView1);
-            holder.descrView = (TextView) convertView.findViewById(R.id.textView2);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
+  private class ViewHolder {
+    TextView titleView;
+    TextView descrView;
+    ImageView imgView;
+  }
 
-        AQuery aq = new AQuery(convertView);
-        aq.id(holder.imgView).width(110).image(mm.getImages().get(0).getUrl().toString(),
-                true, true, 0, R.drawable.default_video, null, 0, mAspectRatio);
-        aq.id(holder.titleView).text(mm.getString(MediaMetadata.KEY_TITLE));
-        aq.id(holder.descrView).text(mm.getString(MediaMetadata.KEY_SUBTITLE));
-
-        return convertView;
+  public void setData(List<MediaInfo> data) {
+    clear();
+    if (data != null) {
+      for (MediaInfo item : data) {
+        add(item);
+      }
     }
 
-    private class ViewHolder {
-        TextView titleView;
-        TextView descrView;
-        ImageView imgView;
-    }
-
-    public void setData(List<MediaInfo> data) {
-        clear();
-        if (data != null) {
-            for (MediaInfo item : data) {
-                add(item);
-            }
-        }
-
-    }
+  }
 }
