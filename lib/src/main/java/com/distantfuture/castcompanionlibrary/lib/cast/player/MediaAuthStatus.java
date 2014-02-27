@@ -17,28 +17,28 @@
 package com.distantfuture.castcompanionlibrary.lib.cast.player;
 
 public enum MediaAuthStatus {
-    /* Service has not started yet */
-    NOT_STARTED,
+  /* Service has not started yet */
+  NOT_STARTED,
 
-    /* Service is running but no results is available yet */
-    PENDING,
+  /* Service is running but no results is available yet */
+  PENDING,
 
-    /* Service has finished its query and results are available */
-    FINISHED,
+  /* Service has finished its query and results are available */
+  FINISHED,
 
-    /* Service has finished but user was not authorized */
-    RESULT_AUTHORIZED,
+  /* Service has finished but user was not authorized */
+  RESULT_AUTHORIZED,
 
-    /* Service has finished and user was authorized */
-    RESULT_NOT_AUTHORIZED,
+  /* Service has finished and user was authorized */
+  RESULT_NOT_AUTHORIZED,
 
-    /* Timneout has reached with no result */
-    ABORT_TIMEOUT,
+  /* Timneout has reached with no result */
+  ABORT_TIMEOUT,
 
-    /* User triggered abort */
-    ABORT_USER_CANCELLED,
+  /* User triggered abort */
+  ABORT_USER_CANCELLED,
 
-    /* Abort due to an unknown issue */
-    ABORT_UNKNOWN;
+  /* Abort due to an unknown issue */
+  ABORT_UNKNOWN;
 
 }

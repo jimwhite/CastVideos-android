@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2014 Google Inc. All Rights Reserved.
  *
@@ -47,59 +46,59 @@ import com.google.android.gms.cast.MediaInfo;
  */
 public interface IMediaAuthService {
 
-    /**
-     * Starts the authorization process. Before this call, it is assumed that the implementor has
-     * all the information required to perform the authorization task. This is where the dynamic
-     * life cycle of this class starts.
-     */
-    public void start();
+  /**
+   * Starts the authorization process. Before this call, it is assumed that the implementor has
+   * all the information required to perform the authorization task. This is where the dynamic
+   * life cycle of this class starts.
+   */
+  public void start();
 
-    /**
-     * Registers an {@link IMediaAuthListener} listener to be notified when the authentication
-     * service has obtained its result. To remove a previously set listener, pass a
-     * <code>null</code> argument.
-     *
-     * @param listener
-     */
-    public void setOnResult(IMediaAuthListener listener);
+  /**
+   * Registers an {@link IMediaAuthListener} listener to be notified when the authentication
+   * service has obtained its result. To remove a previously set listener, pass a
+   * <code>null</code> argument.
+   *
+   * @param listener
+   */
+  public void setOnResult(IMediaAuthListener listener);
 
-    /**
-     * Returns the current {@link MediaInfo} object that is the subject of authorization. At a
-     * minimum, it is expected to have images for the media at any stage.
-     *
-     * @return
-     */
-    public MediaInfo getMediaInfo();
+  /**
+   * Returns the current {@link MediaInfo} object that is the subject of authorization. At a
+   * minimum, it is expected to have images for the media at any stage.
+   *
+   * @return
+   */
+  public MediaInfo getMediaInfo();
 
-    /**
-     * In pending state, implementors can provide an optional localized message to be shown to the
-     * user. If <code>null</code> is returned, no message will be shown to the user.
-     *
-     * @return
-     */
-    public String getPendingMessage();
+  /**
+   * In pending state, implementors can provide an optional localized message to be shown to the
+   * user. If <code>null</code> is returned, no message will be shown to the user.
+   *
+   * @return
+   */
+  public String getPendingMessage();
 
-    /**
-     * Returns the current status of the service.
-     *
-     * @return
-     */
-    public MediaAuthStatus getStatus();
+  /**
+   * Returns the current status of the service.
+   *
+   * @return
+   */
+  public MediaAuthStatus getStatus();
 
-    /**
-     * Returns the length of time within which the library expects to have heard back from the
-     * authorization service. If it doesn't, it will call {@link abort()}.
-     *
-     * @return Timeout in milliseconds
-     */
-    public long getTimeout();
+  /**
+   * Returns the length of time within which the library expects to have heard back from the
+   * authorization service. If it doesn't, it will call {@link abort()}.
+   *
+   * @return Timeout in milliseconds
+   */
+  public long getTimeout();
 
-    /**
-     * If authorization times out or user cancels the authorization process, this method will be
-     * called.
-     *
-     * @param abortReason One of the {@link MediaAuthStatus#ABORT_*} reasons
-     */
-    public void abort(MediaAuthStatus abortReason);
+  /**
+   * If authorization times out or user cancels the authorization process, this method will be
+   * called.
+   *
+   * @param abortReason One of the {@link MediaAuthStatus#ABORT_*} reasons
+   */
+  public void abort(MediaAuthStatus abortReason);
 
 }

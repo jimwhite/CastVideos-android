@@ -24,26 +24,26 @@ import com.google.android.gms.cast.MediaInfo;
  */
 public interface IMediaAuthListener {
 
-    /**
-     * Called when IMediaAuthService has successfully obtained a result.
-     *
-     * @param status Provides the status of result, will be one of
-     *            {@link MediaAusthStatus#RESULT_AUTHORIZED} or
-     *            {@link MediaAusthStatus#RESULT_NOT_AUTHORIZED}
-     * @param info The fully populated {@link MediaInfo} that is obtained through authorization.
-     * @param message If authorization was not granted, then an optional message can be provided to
-     *            be presented to the user. If no message is provided, it will be silently ignored.
-     *            Implementors have to make sure the message is localized.
-     */
-    public void onResult(MediaAuthStatus status, MediaInfo info, String message);
+  /**
+   * Called when IMediaAuthService has successfully obtained a result.
+   *
+   * @param status  Provides the status of result, will be one of
+   *                {@link MediaAusthStatus#RESULT_AUTHORIZED} or
+   *                {@link MediaAusthStatus#RESULT_NOT_AUTHORIZED}
+   * @param info    The fully populated {@link MediaInfo} that is obtained through authorization.
+   * @param message If authorization was not granted, then an optional message can be provided to
+   *                be presented to the user. If no message is provided, it will be silently ignored.
+   *                Implementors have to make sure the message is localized.
+   */
+  public void onResult(MediaAuthStatus status, MediaInfo info, String message);
 
-    /**
-     * Called when IMediaAuthService returns with a failure message due to some issues such as
-     * network, backend issues, etc.
-     *
-     * @param failureMessage The message stating the reason for failure. This message should be
-     *            localized.
-     */
-    public void onFailure(String failureMessage);
+  /**
+   * Called when IMediaAuthService returns with a failure message due to some issues such as
+   * network, backend issues, etc.
+   *
+   * @param failureMessage The message stating the reason for failure. This message should be
+   *                       localized.
+   */
+  public void onFailure(String failureMessage);
 
 }

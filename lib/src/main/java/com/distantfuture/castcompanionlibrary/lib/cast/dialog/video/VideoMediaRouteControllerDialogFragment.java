@@ -26,13 +26,12 @@ import android.support.v7.app.MediaRouteControllerDialogFragment;
  */
 public class VideoMediaRouteControllerDialogFragment extends MediaRouteControllerDialogFragment {
 
-    private VideoMediaRouteControllerDialog mCustomControllerDialog;
+  private VideoMediaRouteControllerDialog mCustomControllerDialog;
 
-    @Override
-    public VideoMediaRouteControllerDialog onCreateControllerDialog(
-            Context context, Bundle savedInstanceState) {
-        mCustomControllerDialog = new VideoMediaRouteControllerDialog(context);
-        mCustomControllerDialog.setVolumeControlEnabled(false);
-        return mCustomControllerDialog;
-    }
+  @Override
+  public VideoMediaRouteControllerDialog onCreateControllerDialog(Context context, Bundle savedInstanceState) {
+    mCustomControllerDialog = new VideoMediaRouteControllerDialog(context);
+    mCustomControllerDialog.setVolumeControlEnabled(false);
+    return mCustomControllerDialog;
+  }
 }

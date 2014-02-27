@@ -18,9 +18,9 @@ package com.distantfuture.castcompanionlibrary.lib.widgets;
 
 import android.net.Uri;
 
+import com.distantfuture.castcompanionlibrary.lib.widgets.MiniController.OnMiniControllerChangedListener;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaStatus;
-import com.distantfuture.castcompanionlibrary.lib.widgets.MiniController.OnMiniControllerChangedListener;
 
 /**
  * An interface to abstract {@link MiniController} so that other components can also control the
@@ -29,64 +29,64 @@ import com.distantfuture.castcompanionlibrary.lib.widgets.MiniController.OnMiniC
  */
 public interface IMiniController {
 
-    /**
-     * Sets the uri for the album art
-     *
-     * @param uri
-     */
-    public void setIcon(Uri uri);
+  /**
+   * Sets the uri for the album art
+   *
+   * @param uri
+   */
+  public void setIcon(Uri uri);
 
-    /**
-     * Sets the title
-     *
-     * @param title
-     */
-    public void setTitle(String title);
+  /**
+   * Sets the title
+   *
+   * @param title
+   */
+  public void setTitle(String title);
 
-    /**
-     * Sets the subtitle
-     *
-     * @param subTitle
-     */
-    public void setSubTitle(String subTitle);
+  /**
+   * Sets the subtitle
+   *
+   * @param subTitle
+   */
+  public void setSubTitle(String subTitle);
 
-    /**
-     * Sets the playback state, and the idleReason (this is only reliable when the state is idle).
-     * Values that can be passed to this method are from {@link MediaStatus}
-     *
-     * @param state
-     * @param idelReason
-     */
-    public void setPlaybackStatus(int state, int idleReason);
+  /**
+   * Sets the playback state, and the idleReason (this is only reliable when the state is idle).
+   * Values that can be passed to this method are from {@link MediaStatus}
+   *
+   * @param state
+   * @param idelReason
+   */
+  public void setPlaybackStatus(int state, int idleReason);
 
-    /**
-     * Sets whether this component should be visible or hidden.
-     *
-     * @param visibility
-     */
-    public void setVisibility(int visibility);
+  /**
+   * Sets whether this component should be visible or hidden.
+   *
+   * @param visibility
+   */
+  public void setVisibility(int visibility);
 
-    /**
-     * Returns the visibility state of this widget
-     *
-     * @return
-     */
-    public boolean isVisible();
+  /**
+   * Returns the visibility state of this widget
+   *
+   * @return
+   */
+  public boolean isVisible();
 
-    /**
-     * Assigns a {@link OnMiniControllerChangedListener} listener to be notified of the changes in
-     * the mini controller
-     *
-     * @param listener
-     */
-    public void setOnMiniControllerChangedListener(OnMiniControllerChangedListener listener);
+  /**
+   * Assigns a {@link OnMiniControllerChangedListener} listener to be notified of the changes in
+   * the mini controller
+   *
+   * @param listener
+   */
+  public void setOnMiniControllerChangedListener(OnMiniControllerChangedListener listener);
 
-    /**
-     * Sets the type of stream. <code>streamType</code> can be {@link MediaInfo.STREAM_TYPE_LIVE} or
-     * {@link MediaInfo.STREAM_TYPE_BUFFERED}
-     *
-     * @param streamType
-     */
-    public void setStreamType(int streamType);
+  /**
+   * Sets the type of stream. <code>streamType</code> can be {@link MediaInfo.STREAM_TYPE_LIVE} or
+   * {@link MediaInfo.STREAM_TYPE_BUFFERED}
+   *
+   * @param streamType
+   */
+  public void setStreamType(int streamType);
 
 }

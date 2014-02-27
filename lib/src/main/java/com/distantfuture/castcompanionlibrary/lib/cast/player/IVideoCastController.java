@@ -18,65 +18,65 @@ package com.distantfuture.castcompanionlibrary.lib.cast.player;
 
 import android.graphics.Bitmap;
 
+import com.distantfuture.castcompanionlibrary.lib.widgets.MiniController.OnMiniControllerChangedListener;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaStatus;
-import com.distantfuture.castcompanionlibrary.lib.widgets.MiniController.OnMiniControllerChangedListener;
 
 public interface IVideoCastController {
 
-    /**
-     * Sets the uri for the album art
-     *
-     * @param bitmap
-     */
-    public void setImage(Bitmap bitmap);
+  /**
+   * Sets the uri for the album art
+   *
+   * @param bitmap
+   */
+  public void setImage(Bitmap bitmap);
 
-    /**
-     * Sets the title
-     *
-     * @param text
-     */
-    public void setLine1(String text);
+  /**
+   * Sets the title
+   *
+   * @param text
+   */
+  public void setLine1(String text);
 
-    /**
-     * Sets the subtitle
-     *
-     * @param text
-     */
-    public void setLine2(String text);
+  /**
+   * Sets the subtitle
+   *
+   * @param text
+   */
+  public void setLine2(String text);
 
-    /**
-     * Sets the playback state, and the idleReason (this is only reliable when the state is idle).
-     * Values that can be passed to this method are from {@link MediaStatus}
-     *
-     * @param state
-     * @param idelReason
-     */
-    public void setPlaybackStatus(int state);
+  /**
+   * Sets the playback state, and the idleReason (this is only reliable when the state is idle).
+   * Values that can be passed to this method are from {@link MediaStatus}
+   *
+   * @param state
+   * @param idelReason
+   */
+  public void setPlaybackStatus(int state);
 
-    /**
-     * Assigns a {@link OnMiniControllerChangedListener} listener to be notified of the changes in
-     * the mini controller
-     *
-     * @param listener
-     */
-    public void setOnVideoCastControllerChangedListener(OnVideoCastControllerListener listener);
+  /**
+   * Assigns a {@link OnMiniControllerChangedListener} listener to be notified of the changes in
+   * the mini controller
+   *
+   * @param listener
+   */
+  public void setOnVideoCastControllerChangedListener(OnVideoCastControllerListener listener);
 
-    /**
-     * Sets the type of stream. <code>streamType</code> can be {@link MediaInfo.STREAM_TYPE_LIVE} or
-     * {@link MediaInfo.STREAM_TYPE_BUFFERED}
-     *
-     * @param streamType
-     */
-    public void setStreamType(int streamType);
+  /**
+   * Sets the type of stream. <code>streamType</code> can be {@link MediaInfo.STREAM_TYPE_LIVE} or
+   * {@link MediaInfo.STREAM_TYPE_BUFFERED}
+   *
+   * @param streamType
+   */
+  public void setStreamType(int streamType);
 
-    public void updateSeekbar(int position, int duration);
+  public void updateSeekbar(int position, int duration);
 
-    public void updateControllersStatus(boolean enabled);
+  public void updateControllersStatus(boolean enabled);
 
-    public void showLoading(boolean visible);
+  public void showLoading(boolean visible);
 
-    public void closeActivity();
+  public void closeActivity();
 
-    public void adjustControllersForLiveStream(boolean isLive);
+  public void adjustControllersForLiveStream(boolean isLive);
 }
