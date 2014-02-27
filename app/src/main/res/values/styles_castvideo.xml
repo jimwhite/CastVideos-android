@@ -88,8 +88,12 @@
 
     <!-- custom -->
     <style name="SeekBarAppTheme" parent="android:Widget.SeekBar">
-        <item name="android:progressDrawable">@drawable/apptheme_scrubber_progress_horizontal_holo_light</item>
-        <item name="android:indeterminateDrawable">@drawable/apptheme_scrubber_progress_horizontal_holo_light</item>
+        <item name="android:progressDrawable">
+            @drawable/apptheme_scrubber_progress_horizontal_holo_light
+        </item>
+        <item name="android:indeterminateDrawable">
+            @drawable/apptheme_scrubber_progress_horizontal_holo_light
+        </item>
         <item name="android:minHeight">13dip</item>
         <item name="android:maxHeight">13dip</item>
         <item name="android:thumb">@drawable/apptheme_scrubber_control_selector_holo_light</item>
@@ -118,7 +122,7 @@
     <style name="CastDialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowTitleStyle">@style/CastDialogWindowTitle</item>
     </style>
-    
+
     <style name="Theme.CastVideoOverlayYellow" parent="@style/Theme.CastVideoOverlay">
         <item name="android:seekBarStyle">@style/SeekBarAppTheme</item>
     </style>

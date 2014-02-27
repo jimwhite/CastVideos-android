@@ -21,15 +21,18 @@
 <resources>
 
     <style name="Theme.Castvideo" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:actionBarItemBackground">@drawable/selectable_background_castvideo</item>
+        <item name="android:actionBarItemBackground">@drawable/selectable_background_castvideo
+        </item>
         <item name="android:popupMenuStyle">@style/PopupMenu.Castvideo</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Castvideo</item>
         <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Castvideo</item>
         <item name="android:actionDropDownStyle">@style/DropDownNav.Castvideo</item>
         <item name="android:actionBarStyle">@style/ActionBar.Solid.Castvideo</item>
         <item name="android:actionModeBackground">@drawable/cab_background_top_castvideo</item>
-        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_castvideo</item>
-        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Castvideo</item>
+        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_castvideo
+        </item>
+        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Castvideo
+        </item>
 
         <!-- Light.DarkActionBar specific -->
         <item name="android:actionBarWidgetTheme">@style/Theme.Castvideo.Widget</item>
@@ -57,7 +60,7 @@
         <item name="android:popupMenuStyle">@style/PopupMenu.Castvideo</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Castvideo</item>
     </style>
-    
+
     <style name="Theme.CastVideoOverlay" parent="@style/Theme.Castvideo">
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:actionBarStyle">@style/ActionBar.Transparent.CastVideoOverlay</item>
@@ -72,14 +75,18 @@
     <style name="WhiteText" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
         <item name="android:textColor">@android:color/white</item>
     </style>
-    
+
     <style name="Theme.CastVideoOverlayYellow" parent="@style/Theme.CastVideoOverlay">
         <item name="android:seekBarStyle">@style/SeekBarAppTheme</item>
     </style>
-    
+
     <style name="SeekBarAppTheme" parent="android:Widget.SeekBar">
-        <item name="android:progressDrawable">@drawable/apptheme_scrubber_progress_horizontal_holo_light</item>
-        <item name="android:indeterminateDrawable">@drawable/apptheme_scrubber_progress_horizontal_holo_light</item>
+        <item name="android:progressDrawable">
+            @drawable/apptheme_scrubber_progress_horizontal_holo_light
+        </item>
+        <item name="android:indeterminateDrawable">
+            @drawable/apptheme_scrubber_progress_horizontal_holo_light
+        </item>
         <item name="android:minHeight">13dip</item>
         <item name="android:maxHeight">13dip</item>
         <item name="android:thumb">@drawable/apptheme_scrubber_control_selector_holo_light</item>
