@@ -1,6 +1,4 @@
-CastVideos-android and companion library
+Rebuilt for Android Studio
 ==================
 
-* Rebuilt for Android Studio *
-
-CastVideos-android application and library.
+CastVideos-android application and library combined.
