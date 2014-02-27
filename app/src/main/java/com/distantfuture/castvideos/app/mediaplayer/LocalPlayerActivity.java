@@ -234,8 +234,7 @@ public class LocalPlayerActivity extends ActionBarActivity {
         startControllersTimer();
       } else {
         stopControllersTimer();
-        setCoverArtStatus(
-            getImageUrl(mSelectedMedia, 0));
+        setCoverArtStatus(getImageUrl(mSelectedMedia, 0));
       }
 
       getSupportActionBar().setTitle("");
