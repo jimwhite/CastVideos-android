@@ -24,10 +24,10 @@ import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.ListView;
 
+import com.distantfuture.castcompanionlibrary.lib.utils.Utils;
 import com.distantfuture.castvideos.app.R;
 import com.distantfuture.castvideos.app.mediaplayer.LocalPlayerActivity;
 import com.google.android.gms.cast.MediaInfo;
-import com.google.sample.castcompanionlibrary.utils.Utils;
 
 import java.util.List;
 

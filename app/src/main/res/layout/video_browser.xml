@@ -11,13 +11,13 @@
         android:layout_marginBottom="-5dp"
         class="com.distantfuture.castvideos.app.browser.VideoBrowserListFragment"/>
 
-    <com.google.sample.castcompanionlibrary.widgets.MiniController
+    <com.distantfuture.castcompanionlibrary.lib.widgets.MiniController
         android:id="@+id/miniController1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/shadow7"
         android:visibility="gone">
-    </com.google.sample.castcompanionlibrary.widgets.MiniController>
+    </com.distantfuture.castcompanionlibrary.lib.widgets.MiniController>
 
 </RelativeLayout>

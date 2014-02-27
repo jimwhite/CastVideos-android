@@ -27,6 +27,7 @@ import android.preference.PreferenceManager;
 
 import com.distantfuture.castcompanionlibrary.lib.cast.VideoCastManager;
 import com.distantfuture.castvideos.app.CastApplication;
+import com.distantfuture.castvideos.app.R;
 import com.distantfuture.castvideos.app.utils.Utils;
 
 public class CastPreference extends PreferenceActivity implements OnSharedPreferenceChangeListener {

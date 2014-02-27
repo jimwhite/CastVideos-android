@@ -51,6 +51,7 @@ import com.distantfuture.castcompanionlibrary.lib.cast.VideoCastManager;
 import com.distantfuture.castcompanionlibrary.lib.cast.callbacks.VideoCastConsumerImpl;
 import com.distantfuture.castcompanionlibrary.lib.widgets.MiniController;
 import com.distantfuture.castvideos.app.CastApplication;
+import com.distantfuture.castvideos.app.R;
 import com.distantfuture.castvideos.app.settings.CastPreference;
 import com.distantfuture.castvideos.app.utils.Utils;
 import com.google.android.gms.cast.ApplicationMetadata;
@@ -59,6 +60,10 @@ import com.google.android.gms.cast.MediaMetadata;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static com.distantfuture.castcompanionlibrary.lib.utils.Utils.formatMillis;
+import static com.distantfuture.castcompanionlibrary.lib.utils.Utils.getImageUrl;
+import static com.distantfuture.castcompanionlibrary.lib.utils.Utils.toMediaInfo;
 
 public class LocalPlayerActivity extends ActionBarActivity {
 
@@ -121,7 +126,7 @@ public class LocalPlayerActivity extends ActionBarActivity {
     // see what we need to play and were
     Bundle b = getIntent().getExtras();
     if (null != b) {
-      mSelectedMedia = Utils.toMediaInfo(getIntent().getBundleExtra("media"));
+      mSelectedMedia = toMediaInfo(getIntent().getBundleExtra("media"));
       mShouldStartPlayback = b.getBoolean("shouldStart");
       int startPosition = b.getInt("startPosition", 0);
       mVideoView.setVideoURI(Uri.parse(mSelectedMedia.getContentId()));
@@ -229,15 +234,14 @@ public class LocalPlayerActivity extends ActionBarActivity {
         startControllersTimer();
       } else {
         stopControllersTimer();
-        setCoverArtStatus(com.google.sample.castcompanionlibrary.utils.Utils.
+        setCoverArtStatus(
             getImageUrl(mSelectedMedia, 0));
       }
 
       getSupportActionBar().setTitle("");
     } else {
       stopControllersTimer();
-      setCoverArtStatus(com.google.sample.castcompanionlibrary.utils.Utils.
-          getImageUrl(mSelectedMedia, 0));
+      setCoverArtStatus(getImageUrl(mSelectedMedia, 0));
       updateControlersVisibility(true);
     }
   }
@@ -484,7 +488,7 @@ public class LocalPlayerActivity extends ActionBarActivity {
       public void onPrepared(MediaPlayer mp) {
         Log.d(TAG, "onPrepared is reached");
         mDuration = mp.getDuration();
-        mEndText.setText(com.google.sample.castcompanionlibrary.utils.Utils.formatMillis(mDuration));
+        mEndText.setText(formatMillis(mDuration));
         mSeekbar.setMax(mDuration);
         restartTrickplayTimer();
       }
@@ -533,7 +537,7 @@ public class LocalPlayerActivity extends ActionBarActivity {
 
       @Override
       public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        mStartText.setText(com.google.sample.castcompanionlibrary.utils.Utils.formatMillis(progress));
+        mStartText.setText(formatMillis(progress));
       }
     });
 
@@ -574,8 +578,8 @@ public class LocalPlayerActivity extends ActionBarActivity {
   private void updateSeekbar(int position, int duration) {
     mSeekbar.setProgress(position);
     mSeekbar.setMax(duration);
-    mStartText.setText(com.google.sample.castcompanionlibrary.utils.Utils.formatMillis(position));
-    mEndText.setText(com.google.sample.castcompanionlibrary.utils.Utils.formatMillis(duration));
+    mStartText.setText(formatMillis(position));
+    mEndText.setText(formatMillis(duration));
   }
 
   private void updatePlayButton(PlaybackState state) {
@@ -600,7 +604,6 @@ public class LocalPlayerActivity extends ActionBarActivity {
     }
   }
 
-  @SuppressLint("NewApi")
   @Override
   public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);

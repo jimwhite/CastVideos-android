@@ -25,6 +25,11 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.CastException;
+import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.NoConnectionException;
+import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.TransientNetworkDisconnectionException;
+import com.distantfuture.castvideos.app.R;
+
 import java.io.IOException;
 
 /**
