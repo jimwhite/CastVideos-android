@@ -107,7 +107,7 @@ import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGE;
  * those methods that they are interested in. Since this library depends on the cast functionalities
  * provided by the Google Play services, the library checks to ensure that the right version of that
  * service is installed. It also provides a simple static method
- * <code>checkGooglePlaySevices()</code> that clients can call at an early stage of their
+ * <code>checkGooglePlayServices()</code> that clients can call at an early stage of their
  * applications to provide a dialog for users if they need to update/activate their GMS library. To
  * learn more about this library, please read the documentation that is distributed as part of this
  * library.

@@ -382,8 +382,8 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
    * @param activity
    * @return
    */
-  public static boolean checkGooglePlaySevices(final Activity activity) {
-    return Utils.checkGooglePlaySevices(activity);
+  public static boolean checkGooglePlayServices(final Activity activity) {
+    return Utils.checkGooglePlayServices(activity);
   }
 
   /**
