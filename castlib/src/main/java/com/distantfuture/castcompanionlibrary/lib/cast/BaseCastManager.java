@@ -316,7 +316,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
    * Calling this method signals the library that an activity page is made visible. In common
    * cases, this should be called in the "onResume()" method of each activity of the application.
    * The library keeps a counter and when at least one page of the application becomes visible,
-   * the {@link onUiVisibilityChanged()} method is called.
    */
   public synchronized void incrementUiCounter() {
     mVisibilityCounter++;
@@ -335,7 +334,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
    * Calling this method signals the library that an activity page is made invisible. In common
    * cases, this should be called in the "onPause()" method of each activity of the application.
    * The library keeps a counter and when all pages of the application become invisible, the
-   * {@link onUiVisibilityChanged()} method is called.
    */
   public synchronized void decrementUiCounter() {
     mHandler.postDelayed(new Runnable() {
