@@ -27,7 +27,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.FragmentActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -61,7 +61,7 @@ import com.google.android.gms.cast.MediaMetadata;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class LocalPlayerActivity extends ActionBarActivity {
+public class LocalPlayerActivity extends FragmentActivity {
 
   private static final String TAG = "LocalPlayerActivity";
   private VideoView mVideoView;
@@ -234,7 +234,7 @@ public class LocalPlayerActivity extends ActionBarActivity {
             getImageUrl(mSelectedMedia, 0));
       }
 
-      getSupportActionBar().setTitle("");
+      getActionBar().setTitle("");
     } else {
       stopControllersTimer();
       setCoverArtStatus(com.distantfuture.castcompanionlibrary.lib.utils.Utils.
@@ -359,10 +359,10 @@ public class LocalPlayerActivity extends ActionBarActivity {
   // should be called from the main thread
   private void updateControlersVisibility(boolean show) {
     if (show) {
-      getSupportActionBar().show();
+      getActionBar().show();
       mControlers.setVisibility(View.VISIBLE);
     } else {
-      getSupportActionBar().hide();
+      getActionBar().hide();
       mControlers.setVisibility(View.INVISIBLE);
     }
   }
@@ -631,7 +631,7 @@ public class LocalPlayerActivity extends ActionBarActivity {
       mTitleView.setVisibility(View.GONE);
       mAuthorView.setVisibility(View.GONE);
       mDisplaySize = Utils.getDisplaySize(this);
-      RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(mDisplaySize.x, mDisplaySize.y + getSupportActionBar()
+      RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(mDisplaySize.x, mDisplaySize.y + getActionBar()
           .getHeight());
       lp.addRule(RelativeLayout.CENTER_IN_PARENT);
       mVideoView.setLayoutParams(lp);
@@ -673,11 +673,11 @@ public class LocalPlayerActivity extends ActionBarActivity {
   }
 
   private void setupActionBar() {
-    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-    getSupportActionBar().setDisplayUseLogoEnabled(false);
-    getSupportActionBar().setDisplayShowHomeEnabled(false);
-    getSupportActionBar().setDisplayShowTitleEnabled(false);
-    getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_transparent_democastoverlay));
+    getActionBar().setDisplayHomeAsUpEnabled(false);
+    getActionBar().setDisplayUseLogoEnabled(false);
+    getActionBar().setDisplayShowHomeEnabled(false);
+    getActionBar().setDisplayShowTitleEnabled(false);
+    getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_transparent_democastoverlay));
   }
 
   private void loadViews() {

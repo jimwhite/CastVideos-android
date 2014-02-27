@@ -16,11 +16,11 @@
 
 package com.distantfuture.castvideos.app;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.media.MediaRouter.RouteInfo;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -33,7 +33,7 @@ import com.distantfuture.castcompanionlibrary.lib.cast.callbacks.VideoCastConsum
 import com.distantfuture.castcompanionlibrary.lib.widgets.MiniController;
 import com.distantfuture.castvideos.app.settings.CastPreference;
 
-public class VideoBrowserActivity extends ActionBarActivity {
+public class VideoBrowserActivity extends FragmentActivity {
 
   private static final String TAG = "VideoBrowserActivity";
   private VideoCastManager mCastManager;
@@ -50,7 +50,7 @@ public class VideoBrowserActivity extends ActionBarActivity {
     super.onCreate(savedInstanceState);
     VideoCastManager.checkGooglePlayServices(this);
     setContentView(R.layout.video_browser);
-    ActionBar actionBar = getSupportActionBar();
+    ActionBar actionBar = getActionBar();
 
     mCastManager = CastApplication.getCastManager(this);
 
@@ -104,8 +104,8 @@ public class VideoBrowserActivity extends ActionBarActivity {
 
   private void setupActionBar(ActionBar actionBar) {
     actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-    getSupportActionBar().setIcon(R.drawable.actionbar_logo_castvideos);
-    getSupportActionBar().setDisplayShowTitleEnabled(false);
+    getActionBar().setIcon(R.drawable.actionbar_logo_castvideos);
+    getActionBar().setDisplayShowTitleEnabled(false);
   }
 
   @Override
