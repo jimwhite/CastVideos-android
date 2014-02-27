@@ -46,10 +46,6 @@
             android:parentActivityName="com.distantfuture.castvideos.app.VideoBrowserActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.CastVideoOverlayYellow">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.distantfuture.app.VideoBrowserActivity"/>
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
             </intent-filter>
