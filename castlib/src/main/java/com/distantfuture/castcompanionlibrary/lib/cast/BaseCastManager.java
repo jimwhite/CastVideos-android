@@ -27,6 +27,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.MediaRouteActionProvider;
+import android.support.v7.app.MediaRouteButton;
 import android.support.v7.app.MediaRouteDialogFactory;
 import android.support.v7.media.MediaRouteSelector;
 import android.support.v7.media.MediaRouter;
@@ -293,7 +294,16 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
    * @return
    */
 
-  public MenuItem addMediaRouterButton(Menu menu, int menuResourceId) {
+  public MenuItem addMediaRouterButton(Menu menu, int menuResourceId, Activity activity) {
+    /* lame way
+
+        <item
+        android:id="@+id/media_route_menu_item"
+        android:title="@string/media_route_menu_title"
+        app:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
+        app:showAsAction="always"/>
+
+
     MenuItem mediaRouteMenuItem = menu.findItem(menuResourceId);
     MediaRouteActionProvider mediaRouteActionProvider = (MediaRouteActionProvider) MenuItemCompat.getActionProvider(mediaRouteMenuItem);
     mediaRouteActionProvider.setRouteSelector(mMediaRouteSelector);
@@ -301,6 +311,21 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
       mediaRouteActionProvider.setDialogFactory(getMediaRouteDialogFactory());
     }
     return mediaRouteMenuItem;
+*/
+
+    MenuItem item = menu.findItem(menuResourceId);
+    if (item != null) {
+      MediaRouteButton button = new MediaRouteButton(activity);  // don't pass mContext, it needs a real activity or it's fucked
+      button.setRouteSelector(mMediaRouteSelector);
+
+      if (null != getMediaRouteDialogFactory()) {
+        button.setDialogFactory(getMediaRouteDialogFactory());
+      }
+
+      item.setActionView(button);
+    }
+
+    return item;
   }
 
   /*************************************************************************/

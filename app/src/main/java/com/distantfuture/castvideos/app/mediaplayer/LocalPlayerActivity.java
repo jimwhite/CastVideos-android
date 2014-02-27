@@ -656,7 +656,7 @@ public class LocalPlayerActivity extends ActionBarActivity {
   public boolean onCreateOptionsMenu(Menu menu) {
     super.onCreateOptionsMenu(menu);
     getMenuInflater().inflate(R.menu.main, menu);
-    mCastManager.addMediaRouterButton(menu, R.id.media_route_menu_item);
+    mCastManager.addMediaRouterButton(menu, R.id.media_route_menu_item, this);
     return true;
   }
 

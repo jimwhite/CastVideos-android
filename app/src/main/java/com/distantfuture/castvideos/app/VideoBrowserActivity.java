@@ -114,7 +114,7 @@ public class VideoBrowserActivity extends ActionBarActivity {
     getMenuInflater().inflate(R.menu.main, menu);
 
     mediaRouteMenuItem = mCastManager.
-        addMediaRouterButton(menu, R.id.media_route_menu_item);
+        addMediaRouterButton(menu, R.id.media_route_menu_item, this);
 
     return true;
   }
