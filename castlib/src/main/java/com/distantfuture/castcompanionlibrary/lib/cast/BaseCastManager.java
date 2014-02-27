@@ -73,7 +73,7 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
    * Enumerates various stages during a session recovery
    */
   public static enum ReconnectionStatus {
-    STARTED, IN_PROGRESS, FINALIZE, INACTIVE;
+    STARTED, IN_PROGRESS, FINALIZE, INACTIVE
   }
 
   public static final int FEATURE_DEBUGGING = 1;

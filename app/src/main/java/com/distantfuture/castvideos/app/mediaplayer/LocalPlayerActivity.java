@@ -98,14 +98,14 @@ public class LocalPlayerActivity extends ActionBarActivity {
    */
   public static enum PlaybackLocation {
     LOCAL,
-    REMOTE;
+    REMOTE
   }
 
   /*
    * List of various states that we can be in
    */
   public static enum PlaybackState {
-    PLAYING, PAUSED, BUFFERING, IDLE;
+    PLAYING, PAUSED, BUFFERING, IDLE
   }
 
   @Override
@@ -171,7 +171,6 @@ public class LocalPlayerActivity extends ActionBarActivity {
             } catch (Exception e) {
               Utils.handleException(LocalPlayerActivity.this, e);
             }
-            return;
           } else {
             updatePlaybackLocation(PlaybackLocation.REMOTE);
           }

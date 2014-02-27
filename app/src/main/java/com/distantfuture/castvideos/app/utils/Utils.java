@@ -64,7 +64,7 @@ public class Utils {
    * @param context
    * @param errorString
    */
-  public static final void showErrorDialog(Context context, String errorString) {
+  public static void showErrorDialog(Context context, String errorString) {
     new AlertDialog.Builder(context).setTitle(R.string.error)
         .setMessage(errorString)
         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -83,7 +83,7 @@ public class Utils {
    * @param context
    * @param resourceId
    */
-  public static final void showErrorDialog(Context context, int resourceId) {
+  public static void showErrorDialog(Context context, int resourceId) {
     new AlertDialog.Builder(context).setTitle(R.string.error)
         .setMessage(context.getString(resourceId))
         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -102,7 +102,7 @@ public class Utils {
    * @param context
    * @param resourceId
    */
-  public static final void showOopsDialog(Context context, int resourceId) {
+  public static void showOopsDialog(Context context, int resourceId) {
     new AlertDialog.Builder(context).setTitle(R.string.oops)
         .setMessage(context.getString(resourceId))
         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {

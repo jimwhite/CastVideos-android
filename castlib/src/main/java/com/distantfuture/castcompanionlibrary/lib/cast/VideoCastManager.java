@@ -125,7 +125,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
    */
   public static enum VolumeType {
     STREAM,
-    DEVICE;
+    DEVICE
   }
 
   private static final String TAG = LogUtils.makeLogTag(VideoCastManager.class);
@@ -928,7 +928,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
         mReconnectionStatus = ReconnectionStatus.INACTIVE;
         onDeviceSelected(null);
       }
-      return;
     } else {
       boolean showError = false;
       for (IVideoCastConsumer consumer : mVideoConsumers) {

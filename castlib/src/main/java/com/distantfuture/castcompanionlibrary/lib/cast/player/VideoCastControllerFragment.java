@@ -82,7 +82,7 @@ public class VideoCastControllerFragment extends Fragment implements OnVideoCast
   private boolean mIsFresh;
 
   private enum OverallState {
-    AUTHORIZING, PLAYBACK, UNKNOWN;
+    AUTHORIZING, PLAYBACK, UNKNOWN
   }
 
   @Override
@@ -379,7 +379,7 @@ public class VideoCastControllerFragment extends Fragment implements OnVideoCast
         switch (mCastManager.getIdleReason()) {
           case MediaStatus.IDLE_REASON_FINISHED:
             mCastController.closeActivity();
-            ;
+
             break;
           case MediaStatus.IDLE_REASON_CANCELED:
             try {

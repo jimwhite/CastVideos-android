@@ -39,6 +39,6 @@ public enum MediaAuthStatus {
   ABORT_USER_CANCELLED,
 
   /* Abort due to an unknown issue */
-  ABORT_UNKNOWN;
+  ABORT_UNKNOWN
 
 }

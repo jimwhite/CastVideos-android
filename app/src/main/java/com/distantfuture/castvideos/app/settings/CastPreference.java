@@ -90,7 +90,7 @@ public class CastPreference extends PreferenceActivity implements OnSharedPrefer
     String valueStr = sharedPreferences.getString(TERMINATION_POLICY_KEY, "0");
     String[] labels = getResources().getStringArray(R.array.prefs_termination_policy_names);
     int value = CONTINUE_ON_DISCONNECT.equals(valueStr) ? 0 : 1;
-    mStopOnExit = value == 0 ? false : true;
+    mStopOnExit = value != 0;
     return labels[value];
   }
 
