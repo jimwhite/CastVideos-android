@@ -23,7 +23,7 @@
     <item android:drawable="@drawable/spinner_ab_disabled_castvideo" android:state_enabled="false"/>
     <item android:drawable="@drawable/spinner_ab_pressed_castvideo" android:state_pressed="true"/>
     <item android:drawable="@drawable/spinner_ab_focused_castvideo" android:state_focused="true"
-          android:state_pressed="false"/>
+        android:state_pressed="false"/>
     <item android:drawable="@drawable/spinner_ab_default_castvideo"/>
 
 </selector>
