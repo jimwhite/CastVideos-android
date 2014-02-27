@@ -40,7 +40,7 @@ public class CastApplication extends Application {
   public void onCreate() {
     super.onCreate();
     mAppContext = getApplicationContext();
-    APPLICATION_ID = "6142AE0B"; // getString(R.string.app_id);
+    APPLICATION_ID = getString(R.string.app_id);
     Utils.saveFloatToPreference(getApplicationContext(), VideoCastManager.PREFS_KEY_VOLUME_INCREMENT, (float) VOLUME_INCREMENT);
 
   }
