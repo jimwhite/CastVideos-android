@@ -16,9 +16,9 @@
 
 package com.distantfuture.castcompanionlibrary.lib.utils;
 
-import android.util.Log;
-
 import com.distantfuture.castcompanionlibrary.lib.BuildConfig;
+
+import android.util.Log;
 
 /**
  * Provides a simple wrapper to control logging in development vs production environment. This
@@ -26,76 +26,76 @@ import com.distantfuture.castcompanionlibrary.lib.BuildConfig;
  */
 public class LogUtils {
 
-  private static final String LOG_PREFIX = "ccl_";
-  private static final int LOG_PREFIX_LENGTH = LOG_PREFIX.length();
-  private static final int MAX_LOG_TAG_LENGTH = 23;
+    private static final String LOG_PREFIX = "ccl_";
+    private static final int LOG_PREFIX_LENGTH = LOG_PREFIX.length();
+    private static final int MAX_LOG_TAG_LENGTH = 23;
 
-  private LogUtils() {
-  }
-
-  public static String makeLogTag(String str) {
-    if (str.length() > MAX_LOG_TAG_LENGTH - LOG_PREFIX_LENGTH) {
-      return LOG_PREFIX + str.substring(0, MAX_LOG_TAG_LENGTH - LOG_PREFIX_LENGTH - 1);
+    private LogUtils() {
     }
 
-    return LOG_PREFIX + str;
-  }
+    public static String makeLogTag(String str) {
+        if (str.length() > MAX_LOG_TAG_LENGTH - LOG_PREFIX_LENGTH) {
+            return LOG_PREFIX + str.substring(0, MAX_LOG_TAG_LENGTH - LOG_PREFIX_LENGTH - 1);
+        }
 
-  /**
-   * WARNING: Don't use this when obfuscating class names with Proguard!
-   */
-  public static String makeLogTag(Class<?> cls) {
-    return makeLogTag(cls.getSimpleName());
-  }
-
-  @SuppressWarnings("unused")
-  public static void LOGD(final String tag, String message) {
-    if (BuildConfig.DEBUG || Log.isLoggable(tag, Log.DEBUG)) {
-      Log.d(tag, message);
+        return LOG_PREFIX + str;
     }
-  }
 
-  @SuppressWarnings("unused")
-  public static void LOGD(final String tag, String message, Throwable cause) {
-    if (BuildConfig.DEBUG || Log.isLoggable(tag, Log.DEBUG)) {
-      Log.d(tag, message, cause);
+    /**
+     * WARNING: Don't use this when obfuscating class names with Proguard!
+     */
+    public static String makeLogTag(Class<?> cls) {
+        return makeLogTag(cls.getSimpleName());
     }
-  }
 
-  public static void LOGV(final String tag, String message) {
-    if (BuildConfig.DEBUG && Log.isLoggable(tag, Log.VERBOSE)) {
-      Log.v(tag, message);
+    @SuppressWarnings("unused")
+    public static void LOGD(final String tag, String message) {
+        if (BuildConfig.DEBUG || Log.isLoggable(tag, Log.DEBUG)) {
+            Log.d(tag, message);
+        }
     }
-  }
 
-  public static void LOGV(final String tag, String message, Throwable cause) {
-    if (BuildConfig.DEBUG && Log.isLoggable(tag, Log.VERBOSE)) {
-      Log.v(tag, message, cause);
+    @SuppressWarnings("unused")
+    public static void LOGD(final String tag, String message, Throwable cause) {
+        if (BuildConfig.DEBUG || Log.isLoggable(tag, Log.DEBUG)) {
+            Log.d(tag, message, cause);
+        }
     }
-  }
 
-  public static void LOGI(final String tag, String message) {
-    Log.i(tag, message);
-  }
+    public static void LOGV(final String tag, String message) {
+        if (BuildConfig.DEBUG && Log.isLoggable(tag, Log.VERBOSE)) {
+            Log.v(tag, message);
+        }
+    }
 
-  public static void LOGI(final String tag, String message, Throwable cause) {
-    Log.i(tag, message, cause);
-  }
+    public static void LOGV(final String tag, String message, Throwable cause) {
+        if (BuildConfig.DEBUG && Log.isLoggable(tag, Log.VERBOSE)) {
+            Log.v(tag, message, cause);
+        }
+    }
 
-  public static void LOGW(final String tag, String message) {
-    Log.w(tag, message);
-  }
+    public static void LOGI(final String tag, String message) {
+        Log.i(tag, message);
+    }
 
-  public static void LOGW(final String tag, String message, Throwable cause) {
-    Log.w(tag, message, cause);
-  }
+    public static void LOGI(final String tag, String message, Throwable cause) {
+        Log.i(tag, message, cause);
+    }
 
-  public static void LOGE(final String tag, String message) {
-    Log.e(tag, message);
-  }
+    public static void LOGW(final String tag, String message) {
+        Log.w(tag, message);
+    }
 
-  public static void LOGE(final String tag, String message, Throwable cause) {
-    Log.e(tag, message, cause);
-  }
+    public static void LOGW(final String tag, String message, Throwable cause) {
+        Log.w(tag, message, cause);
+    }
+
+    public static void LOGE(final String tag, String message) {
+        Log.e(tag, message);
+    }
+
+    public static void LOGE(final String tag, String message, Throwable cause) {
+        Log.e(tag, message, cause);
+    }
 
 }

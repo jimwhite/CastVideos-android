@@ -1,20 +1,23 @@
 /*
- * Copyright (C) 2013 Google Inc. All Rights Reserved. 
+ * Copyright (C) 2013 Google Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at 
+ * You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software 
+ * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and 
+ * See the License for the specific language governing permissions and
  * limitations under the License.
  */
 
 package com.distantfuture.castcompanionlibrary.lib.notification;
+
+import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGD;
+import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGE;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -33,6 +36,9 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.widget.RemoteViews;
 
+import com.google.android.gms.cast.MediaInfo;
+import com.google.android.gms.cast.MediaMetadata;
+import com.google.android.gms.cast.MediaStatus;
 import com.distantfuture.castcompanionlibrary.lib.R;
 import com.distantfuture.castcompanionlibrary.lib.cast.VideoCastManager;
 import com.distantfuture.castcompanionlibrary.lib.cast.callbacks.VideoCastConsumerImpl;
@@ -42,16 +48,10 @@ import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.TransientNetwo
 import com.distantfuture.castcompanionlibrary.lib.cast.player.VideoCastControllerActivity;
 import com.distantfuture.castcompanionlibrary.lib.utils.LogUtils;
 import com.distantfuture.castcompanionlibrary.lib.utils.Utils;
-import com.google.android.gms.cast.MediaInfo;
-import com.google.android.gms.cast.MediaMetadata;
-import com.google.android.gms.cast.MediaStatus;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGD;
-import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGE;
 
 /**
  * A service to provide status bar Notifications when we are casting. For JB+ versions, notification
@@ -60,312 +60,334 @@ import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGE;
  */
 public class VideoCastNotificationService extends Service {
 
-  public static final String ACTION_TOGGLE_PLAYBACK = "com.distantfuture.castcompanionlibrary.lib.action.toggleplayback";
-  public static final String ACTION_STOP = "com.distantfuture.castcompanionlibrary.lib.action.stop";
-  public static final String ACTION_VISIBILITY = "com.distantfuture.castcompanionlibrary.lib.action.notificationvisibility";
-  private static int NOTIFICATION_ID = 1;
+    public static final String ACTION_TOGGLE_PLAYBACK =
+            "com.distantfuture.castcompanionlibrary.lib.action.toggleplayback";
+    public static final String ACTION_STOP =
+            "com.distantfuture.castcompanionlibrary.lib.action.stop";
+    public static final String ACTION_VISIBILITY =
+            "com.distantfuture.castcompanionlibrary.lib.action.notificationvisibility";
+    private static int NOTIFICATION_ID = 1;
 
-  private static final String TAG = LogUtils.makeLogTag(VideoCastNotificationService.class);
-  private String mApplicationId;
-  private Bitmap mVideoArtBitmap;
-  private Uri mVideoArtUri;
-  private boolean isPlaying;
-  private Class<?> mTargetActivity;
-  private int mStatus;
-  private Notification mNotification;
-  private boolean mVisible;
-  boolean mIsIcsOrAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH;
-  private BroadcastReceiver mBroadcastReceiver;
-  private VideoCastManager mCastManager;
-  private VideoCastConsumerImpl mConsumer;
+    private static final String TAG = LogUtils.makeLogTag(VideoCastNotificationService.class);
+    private String mApplicationId;
+    private Bitmap mVideoArtBitmap;
+    private Uri mVideoArtUri;
+    private boolean mIsPlaying;
+    private Class<?> mTargetActivity;
+    private int mStatus;
+    private Notification mNotification;
+    private boolean mVisible;
+    boolean mIsIcsOrAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH;
+    private BroadcastReceiver mBroadcastReceiver;
+    private VideoCastManager mCastManager;
+    private VideoCastConsumerImpl mConsumer;
 
-  @Override
-  public void onCreate() {
-    super.onCreate();
-    readPersistedData();
-    mCastManager = VideoCastManager.initialize(this, mApplicationId, mTargetActivity, null);
-    if (!mCastManager.isConnected()) {
-      mCastManager.reconnectSessionIfPossible(this, false);
-    }
-    mConsumer = new VideoCastConsumerImpl() {
-      @Override
-      public void onApplicationDisconnected(int errorCode) {
-        LOGD(TAG, "onApplicationDisconnected() was reached");
-        stopSelf();
-      }
-
-      @Override
-      public void onRemoteMediaPlayerStatusUpdated() {
-        int mediaStatus = mCastManager.getPlaybackStatus();
-        VideoCastNotificationService.this.onRemoteMediaPlayerStatusUpdated(mediaStatus);
-      }
-
-    };
-    mCastManager.addVideoCastConsumer(mConsumer);
-  }
-
-  @Override
-  public IBinder onBind(Intent arg0) {
-    return null;
-  }
-
-  @Override
-  public int onStartCommand(Intent intent, int flags, int startId) {
-    if (null != intent) {
-
-      String action = intent.getAction();
-      if (ACTION_TOGGLE_PLAYBACK.equals(action) && mIsIcsOrAbove) {
-        LOGD(TAG, "onStartCommand(): Action: ACTION_TOGGLE_PLAYBACK");
-        togglePlayback();
-      } else if (ACTION_STOP.equals(action) && mIsIcsOrAbove) {
-        LOGD(TAG, "onStartCommand(): Action: ACTION_STOP");
-        stopApplication();
-      } else if (ACTION_VISIBILITY.equals(action)) {
-        mVisible = intent.getBooleanExtra("visible", false);
-        LOGD(TAG, "onStartCommand(): Action: ACTION_VISIBILITY " + mVisible);
-        if (mVisible && null != mNotification) {
-          startForeground(NOTIFICATION_ID, mNotification);
-        } else {
-          stopForeground(true);
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        readPersistedData();
+        mCastManager = VideoCastManager.initialize(this, mApplicationId, mTargetActivity, null);
+        if (!mCastManager.isConnected()) {
+            mCastManager.reconnectSessionIfPossible(this, false);
         }
-      } else {
-        LOGD(TAG, "onStartCommand(): Action: none");
-      }
-
-    } else {
-      LOGD(TAG, "onStartCommand(): Intent was null");
-    }
-
-    return Service.START_FLAG_REDELIVERY;
-  }
-
-  private void setupNotification(final MediaInfo info, final boolean visible) throws TransientNetworkDisconnectionException, NoConnectionException {
-    if (null == info) {
-      return;
-    }
-    try {
-      MediaMetadata mm = info.getMetadata();
-      Uri uri = null;
-      if (!mm.getImages().isEmpty()) {
-        uri = mm.getImages().get(0).getUrl();
-      }
-      if (null == uri) {
-        build(info, null, isPlaying, mTargetActivity);
-        if (visible) {
-          startForeground(NOTIFICATION_ID, mNotification);
-        }
-      } else if (null != mVideoArtBitmap && null != mVideoArtUri &&
-          mVideoArtUri.equals(uri)) {
-        build(info, mVideoArtBitmap, isPlaying, mTargetActivity);
-        if (visible) {
-          startForeground(NOTIFICATION_ID, mNotification);
-        }
-      } else {
-        new Thread(new Runnable() {
-
-          @Override
-          public void run() {
-            URL imgUrl = null;
-            try {
-              MediaMetadata mm = info.getMetadata();
-              mVideoArtUri = mm.getImages().get(0).getUrl();
-              imgUrl = new URL(mVideoArtUri.toString());
-              mVideoArtBitmap = BitmapFactory.decodeStream(imgUrl.openStream());
-              build(info, mVideoArtBitmap, isPlaying, mTargetActivity);
-              if (visible) {
-                startForeground(NOTIFICATION_ID, mNotification);
-              }
-            } catch (MalformedURLException e) {
-              LOGE(TAG, "setIcon(): Failed to load the image with url: " +
-                  imgUrl + ", using the default one", e);
-            } catch (IOException e) {
-              LOGE(TAG, "setIcon(): Failed to load the image with url: " +
-                  imgUrl + ", using the default one", e);
-            } catch (CastException e) {
-              LOGE(TAG, "setIcon(): Failed to load the image with url: " +
-                  imgUrl + ", using the default one", e);
-            } catch (TransientNetworkDisconnectionException e) {
-              LOGE(TAG, "setIcon(): Failed to load the image with url: " +
-                  imgUrl + " due to network issues, using the default one", e);
-            } catch (NoConnectionException e) {
-              LOGE(TAG, "setIcon(): Failed to load the image with url: " +
-                  imgUrl + " due to network issues, using the default one", e);
+        mConsumer = new VideoCastConsumerImpl() {
+            @Override
+            public void onApplicationDisconnected(int errorCode) {
+                LOGD(TAG, "onApplicationDisconnected() was reached");
+                stopSelf();
             }
 
-          }
-        }).start();
-      }
-    } catch (CastException e) {
-      // already logged
+            @Override
+            public void onRemoteMediaPlayerStatusUpdated() {
+                int mediaStatus = mCastManager.getPlaybackStatus();
+                VideoCastNotificationService.this.onRemoteMediaPlayerStatusUpdated(mediaStatus);
+            }
+
+        };
+        mCastManager.addVideoCastConsumer(mConsumer);
     }
-  }
 
-  /**
-   * Removes the existing notification.
-   */
-  private void removeNotification() {
-    ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).
-        cancel(NOTIFICATION_ID);
-  }
-
-  private void onRemoteMediaPlayerStatusUpdated(int mediaStatus) {
-    mStatus = mediaStatus;
-    LOGD(TAG, "onRemoteMediaPlayerMetadataUpdated() reached with status: " + mStatus);
-    try {
-      switch (mediaStatus) {
-        case MediaStatus.PLAYER_STATE_BUFFERING: // (== 4)
-          isPlaying = false;
-          setupNotification(mCastManager.getRemoteMediaInformation(), mVisible);
-          break;
-        case MediaStatus.PLAYER_STATE_PLAYING: // (== 2)
-          isPlaying = true;
-          setupNotification(mCastManager.getRemoteMediaInformation(), mVisible);
-          break;
-        case MediaStatus.PLAYER_STATE_PAUSED: // (== 3)
-          isPlaying = false;
-          setupNotification(mCastManager.getRemoteMediaInformation(), mVisible);
-          break;
-        case MediaStatus.PLAYER_STATE_IDLE: // (== 1)
-          isPlaying = false;
-          stopForeground(true);
-          break;
-        case MediaStatus.PLAYER_STATE_UNKNOWN: // (== 0)
-          isPlaying = false;
-          stopForeground(true);
-          break;
-        default:
-          break;
-      }
-    } catch (TransientNetworkDisconnectionException e) {
-      LOGE(TAG, "Failed to update the playback status due to network issues", e);
-    } catch (NoConnectionException e) {
-      LOGE(TAG, "Failed to update the playback status due to network issues", e);
+    @Override
+    public IBinder onBind(Intent arg0) {
+        return null;
     }
-  }
 
-  /*
-   * (non-Javadoc)
-   * @see android.app.Service#onDestroy()
-   */
-  @Override
-  public void onDestroy() {
-    LOGD(TAG, "onDestroy was called");
-    removeNotification();
-    if (null != mBroadcastReceiver) {
-      unregisterReceiver(mBroadcastReceiver);
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (null != intent) {
+
+            String action = intent.getAction();
+            if (ACTION_TOGGLE_PLAYBACK.equals(action) && mIsIcsOrAbove) {
+                LOGD(TAG, "onStartCommand(): Action: ACTION_TOGGLE_PLAYBACK");
+                togglePlayback();
+            } else if (ACTION_STOP.equals(action) && mIsIcsOrAbove) {
+                LOGD(TAG, "onStartCommand(): Action: ACTION_STOP");
+                stopApplication();
+            } else if (ACTION_VISIBILITY.equals(action)) {
+                mVisible = intent.getBooleanExtra("visible", false);
+                LOGD(TAG, "onStartCommand(): Action: ACTION_VISIBILITY " + mVisible);
+                if (mVisible && null != mNotification) {
+                    startForeground(NOTIFICATION_ID, mNotification);
+                } else {
+                    stopForeground(true);
+                }
+            } else {
+                LOGD(TAG, "onStartCommand(): Action: none");
+            }
+
+        } else {
+            LOGD(TAG, "onStartCommand(): Intent was null");
+        }
+
+        return Service.START_FLAG_REDELIVERY;
     }
-    if (null != mCastManager && null != mConsumer) {
-      mCastManager.removeVideoCastConsumer(mConsumer);
-      mCastManager = null;
+
+    private void setupNotification(final MediaInfo info, final boolean visible)
+            throws TransientNetworkDisconnectionException, NoConnectionException {
+        if (null == info) {
+            return;
+        }
+        try {
+            MediaMetadata mm = info.getMetadata();
+            Uri uri = null;
+            if (!mm.getImages().isEmpty()) {
+                uri = mm.getImages().get(0).getUrl();
+            }
+            if (null == uri) {
+                build(info, null, mIsPlaying, mTargetActivity);
+                if (visible) {
+                    startForeground(NOTIFICATION_ID, mNotification);
+                }
+            } else if (null != mVideoArtBitmap && null != mVideoArtUri &&
+                    mVideoArtUri.equals(uri)) {
+                build(info, mVideoArtBitmap, mIsPlaying, mTargetActivity);
+                if (visible) {
+                    startForeground(NOTIFICATION_ID, mNotification);
+                }
+            } else {
+                new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        URL imgUrl = null;
+                        try {
+                            MediaMetadata mm = info.getMetadata();
+                            mVideoArtUri = mm.getImages().get(0).getUrl();
+                            imgUrl = new URL(mVideoArtUri.toString());
+                            mVideoArtBitmap = BitmapFactory.decodeStream(imgUrl.openStream());
+                            build(info, mVideoArtBitmap, mIsPlaying, mTargetActivity);
+                            if (visible) {
+                                startForeground(NOTIFICATION_ID, mNotification);
+                            }
+                        } catch (MalformedURLException e) {
+                            LOGE(TAG, "setIcon(): Failed to load the image with url: " +
+                                    imgUrl + ", using the default one", e);
+                        } catch (IOException e) {
+                            LOGE(TAG, "setIcon(): Failed to load the image with url: " +
+                                    imgUrl + ", using the default one", e);
+                        } catch (CastException e) {
+                            LOGE(TAG, "setIcon(): Failed to load the image with url: " +
+                                    imgUrl + ", using the default one", e);
+                        } catch (TransientNetworkDisconnectionException e) {
+                            LOGE(TAG, "setIcon(): Failed to load the image with url: " +
+                                    imgUrl + " due to network issues, using the default one", e);
+                        } catch (NoConnectionException e) {
+                            LOGE(TAG, "setIcon(): Failed to load the image with url: " +
+                                    imgUrl + " due to network issues, using the default one", e);
+                        }
+
+                    }
+                }).start();
+            }
+        } catch (CastException e) {
+            // already logged
+        }
     }
-  }
 
-  /*
-   * Build the RemoteViews for the notification. We also need to add the appropriate "back stack"
-   * so when user goes into the CastPlayerActivity, she can have a meaningful "back" experience.
-   */
-  private RemoteViews build(MediaInfo info, Bitmap bitmap, boolean isPlaying, Class<?> targetActivity) throws CastException, TransientNetworkDisconnectionException, NoConnectionException {
-    Bundle mediaWrapper = Utils.fromMediaInfo(mCastManager.getRemoteMediaInformation());
-    Intent contentIntent = null;
-    if (null == mTargetActivity) {
-      mTargetActivity = VideoCastControllerActivity.class;
+    /**
+     * Removes the existing notification.
+     */
+    private void removeNotification() {
+        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).
+                cancel(NOTIFICATION_ID);
     }
-    contentIntent = new Intent(this, mTargetActivity);
 
-    contentIntent.putExtra("media", mediaWrapper);
-
-    TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-
-    stackBuilder.addParentStack(mTargetActivity);
-
-    stackBuilder.addNextIntent(contentIntent);
-    stackBuilder.editIntentAt(1).putExtra("media", mediaWrapper);
-
-    // Gets a PendingIntent containing the entire back stack
-    PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(NOTIFICATION_ID, PendingIntent.FLAG_UPDATE_CURRENT);
-
-    MediaMetadata mm = info.getMetadata();
-
-    RemoteViews rv = new RemoteViews(getPackageName(), R.layout.custom_notification);
-    if (mIsIcsOrAbove) {
-      addPendingIntents(rv, isPlaying);
+    private void onRemoteMediaPlayerStatusUpdated(int mediaStatus) {
+        mStatus = mediaStatus;
+        LOGD(TAG, "onRemoteMediaPlayerMetadataUpdated() reached with status: " + mStatus);
+        try {
+            switch (mediaStatus) {
+                case MediaStatus.PLAYER_STATE_BUFFERING: // (== 4)
+                    mIsPlaying = false;
+                    setupNotification(mCastManager.getRemoteMediaInformation(), mVisible);
+                    break;
+                case MediaStatus.PLAYER_STATE_PLAYING: // (== 2)
+                    mIsPlaying = true;
+                    setupNotification(mCastManager.getRemoteMediaInformation(), mVisible);
+                    break;
+                case MediaStatus.PLAYER_STATE_PAUSED: // (== 3)
+                    mIsPlaying = false;
+                    setupNotification(mCastManager.getRemoteMediaInformation(), mVisible);
+                    break;
+                case MediaStatus.PLAYER_STATE_IDLE: // (== 1)
+                    mIsPlaying = false;
+                    if (!mCastManager.shouldRemoteUiBeVisible(mediaStatus,
+                            mCastManager.getIdleReason())) {
+                        stopForeground(true);
+                    } else {
+                        setupNotification(mCastManager.getRemoteMediaInformation(), mVisible);
+                    }
+                    break;
+                case MediaStatus.PLAYER_STATE_UNKNOWN: // (== 0)
+                    mIsPlaying = false;
+                    stopForeground(true);
+                    break;
+                default:
+                    break;
+            }
+        } catch (TransientNetworkDisconnectionException e) {
+            LOGE(TAG, "Failed to update the playback status due to network issues", e);
+        } catch (NoConnectionException e) {
+            LOGE(TAG, "Failed to update the playback status due to network issues", e);
+        }
     }
-    if (null != bitmap) {
-      rv.setImageViewBitmap(R.id.iconView, bitmap);
+
+    /*
+     * (non-Javadoc)
+     * @see android.app.Service#onDestroy()
+     */
+    @Override
+    public void onDestroy() {
+        LOGD(TAG, "onDestroy was called");
+        removeNotification();
+        if (null != mBroadcastReceiver) {
+            unregisterReceiver(mBroadcastReceiver);
+        }
+        if (null != mCastManager && null != mConsumer) {
+            mCastManager.removeVideoCastConsumer(mConsumer);
+            mCastManager = null;
+        }
     }
-    rv.setTextViewText(R.id.titleView, mm.getString(MediaMetadata.KEY_TITLE));
-    String castingTo = getResources().getString(R.string.casting_to_device, mCastManager.getDeviceName());
-    rv.setTextViewText(R.id.subTitleView, castingTo);
-    mNotification = new NotificationCompat.Builder(this).setSmallIcon(R.drawable.ic_stat_action_notification)
-        .setContentIntent(resultPendingIntent)
-        .setContent(rv)
-        .setAutoCancel(false)
-        .setOngoing(true)
-        .build();
 
-    // to get around a bug in GB version, we add the following line
-    // see https://code.google.com/p/android/issues/detail?id=30495
-    mNotification.contentView = rv;
+    /*
+     * Build the RemoteViews for the notification. We also need to add the appropriate "back stack"
+     * so when user goes into the CastPlayerActivity, she can have a meaningful "back" experience.
+     */
+    private RemoteViews build(MediaInfo info, Bitmap bitmap, boolean isPlaying,
+            Class<?> targetActivity) throws CastException, TransientNetworkDisconnectionException,
+            NoConnectionException {
+        Bundle mediaWrapper = Utils.fromMediaInfo(mCastManager.getRemoteMediaInformation());
+        Intent contentIntent = null;
+        if (null == mTargetActivity) {
+            mTargetActivity = VideoCastControllerActivity.class;
+        }
+        contentIntent = new Intent(this, mTargetActivity);
 
-    return rv;
-  }
+        contentIntent.putExtra("media", mediaWrapper);
 
-  private void addPendingIntents(RemoteViews rv, boolean isPlaying) {
-    Intent playbackIntent = new Intent(ACTION_TOGGLE_PLAYBACK);
-    playbackIntent.setPackage(getPackageName());
-    PendingIntent playbackPendingIntent = PendingIntent.getBroadcast(this, 0, playbackIntent, 0);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 
-    Intent stopIntent = new Intent(ACTION_STOP);
-    stopIntent.setPackage(getPackageName());
-    PendingIntent stopPendingIntent = PendingIntent.getBroadcast(this, 0, stopIntent, 0);
+        stackBuilder.addParentStack(mTargetActivity);
 
-    rv.setOnClickPendingIntent(R.id.playPauseView, playbackPendingIntent);
-    rv.setOnClickPendingIntent(R.id.removeView, stopPendingIntent);
+        stackBuilder.addNextIntent(contentIntent);
+        stackBuilder.editIntentAt(1).putExtra("media", mediaWrapper);
 
-    if (isPlaying) {
-      rv.setImageViewResource(R.id.playPauseView, R.drawable.ic_av_pause_sm_dark);
-    } else {
-      rv.setImageViewResource(R.id.playPauseView, R.drawable.ic_av_play_sm_dark);
+        // Gets a PendingIntent containing the entire back stack
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(NOTIFICATION_ID, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        MediaMetadata mm = info.getMetadata();
+
+        RemoteViews rv = new RemoteViews(getPackageName(), R.layout.custom_notification);
+        if (mIsIcsOrAbove) {
+            addPendingIntents(rv, isPlaying, info);
+        }
+        if (null != bitmap) {
+            rv.setImageViewBitmap(R.id.iconView, bitmap);
+        }
+        rv.setTextViewText(R.id.titleView, mm.getString(MediaMetadata.KEY_TITLE));
+        String castingTo = getResources().getString(R.string.casting_to_device,
+                mCastManager.getDeviceName());
+        rv.setTextViewText(R.id.subTitleView, castingTo);
+        mNotification = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_stat_action_notification)
+                .setContentIntent(resultPendingIntent)
+                .setContent(rv)
+                .setAutoCancel(false)
+                .setOngoing(true)
+                .build();
+
+        // to get around a bug in GB version, we add the following line
+        // see https://code.google.com/p/android/issues/detail?id=30495
+        mNotification.contentView = rv;
+
+        return rv;
     }
-  }
 
-  private void togglePlayback() {
-    try {
-      mCastManager.togglePlayback();
-    } catch (Exception e) {
-      LOGE(TAG, "Failed to toggle the playback", e);
+    private void addPendingIntents(RemoteViews rv, boolean isPlaying, MediaInfo info) {
+        Intent playbackIntent = new Intent(ACTION_TOGGLE_PLAYBACK);
+        playbackIntent.setPackage(getPackageName());
+        PendingIntent playbackPendingIntent = PendingIntent
+                .getBroadcast(this, 0, playbackIntent, 0);
+
+        Intent stopIntent = new Intent(ACTION_STOP);
+        stopIntent.setPackage(getPackageName());
+        PendingIntent stopPendingIntent = PendingIntent.getBroadcast(this, 0, stopIntent, 0);
+
+        rv.setOnClickPendingIntent(R.id.playPauseView, playbackPendingIntent);
+        rv.setOnClickPendingIntent(R.id.removeView, stopPendingIntent);
+
+        if (isPlaying) {
+            if (info.getStreamType() == MediaInfo.STREAM_TYPE_LIVE) {
+                rv.setImageViewResource(R.id.playPauseView, R.drawable.ic_av_stop_sm_dark);
+            } else {
+                rv.setImageViewResource(R.id.playPauseView, R.drawable.ic_av_pause_sm_dark);
+            }
+
+        } else {
+            rv.setImageViewResource(R.id.playPauseView, R.drawable.ic_av_play_sm_dark);
+        }
     }
-  }
 
-  /*
-   * We try to disconnect application but even if that fails, we need to remove notification since
-   * that is the only way to get rid of it without going to the application
-   */
-  private void stopApplication() {
-    try {
-      LOGD(TAG, "Calling stopApplication");
-      mCastManager.disconnect();
-    } catch (Exception e) {
-      LOGE(TAG, "Failed to disconnect application", e);
+    private void togglePlayback() {
+        try {
+            mCastManager.togglePlayback();
+        } catch (Exception e) {
+            LOGE(TAG, "Failed to toggle the playback", e);
+        }
     }
-    stopSelf();
-  }
 
-  /*
-   * Reads application ID and target activity from preference storage.
-   */
-  private void readPersistedData() {
-    mApplicationId = Utils.getStringFromPreference(this, VideoCastManager.PREFS_KEY_APPLICATION_ID);
-    String targetName = Utils.getStringFromPreference(this, VideoCastManager.PREFS_KEY_CAST_ACTIVITY_NAME);
-    try {
-      if (null != targetName) {
-        mTargetActivity = Class.forName(targetName);
-      } else {
-        mTargetActivity = VideoCastControllerActivity.class;
-      }
-
-    } catch (ClassNotFoundException e) {
-      LOGE(TAG, "Failed to find the targetActivity class", e);
+    /*
+     * We try to disconnect application but even if that fails, we need to remove notification since
+     * that is the only way to get rid of it without going to the application
+     */
+    private void stopApplication() {
+        try {
+            LOGD(TAG, "Calling stopApplication");
+            mCastManager.disconnect();
+        } catch (Exception e) {
+            LOGE(TAG, "Failed to disconnect application", e);
+        }
+        stopSelf();
     }
-  }
+
+    /*
+     * Reads application ID and target activity from preference storage.
+     */
+    private void readPersistedData() {
+        mApplicationId = Utils.getStringFromPreference(
+                this, VideoCastManager.PREFS_KEY_APPLICATION_ID);
+        String targetName = Utils.getStringFromPreference(
+                this, VideoCastManager.PREFS_KEY_CAST_ACTIVITY_NAME);
+        try {
+            if (null != targetName) {
+                mTargetActivity = Class.forName(targetName);
+            } else {
+                mTargetActivity = VideoCastControllerActivity.class;
+            }
+
+        } catch (ClassNotFoundException e) {
+            LOGE(TAG, "Failed to find the targetActivity class", e);
+        }
+    }
 }

@@ -16,18 +16,18 @@
 
 package com.distantfuture.castcompanionlibrary.lib.remotecontrol;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.view.KeyEvent;
+import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGD;
+import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGE;
 
 import com.distantfuture.castcompanionlibrary.lib.cast.VideoCastManager;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.CastException;
 import com.distantfuture.castcompanionlibrary.lib.notification.VideoCastNotificationService;
 import com.distantfuture.castcompanionlibrary.lib.utils.LogUtils;
 
-import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGD;
-import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGE;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.view.KeyEvent;
 
 /**
  * A {@link BroadcasrReceiver} for receiving media button actions (from the lock screen) as well as
@@ -35,63 +35,64 @@ import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGE;
  */
 public class VideoIntentReceiver extends BroadcastReceiver {
 
-  private static final String TAG = LogUtils.makeLogTag(VideoIntentReceiver.class);
+    private static final String TAG = LogUtils.makeLogTag(VideoIntentReceiver.class);
 
-  @Override
-  public void onReceive(Context context, Intent intent) {
-    VideoCastManager castMgr = null;
-    try {
-      castMgr = VideoCastManager.getInstance();
-    } catch (CastException e1) {
-      LOGE(TAG, "onReceive(): No CastManager instance exists");
-    }
-    String action = intent.getAction();
-    if (null == action) {
-      return;
-    }
-    if (action.equals(VideoCastNotificationService.ACTION_TOGGLE_PLAYBACK)) {
-      try {
-        if (null != castMgr) {
-          LOGD(TAG, "Toggling playback via CastManager");
-          castMgr.togglePlayback();
-        } else {
-          LOGD(TAG, "Toggling playback via NotificationService");
-          context.startService(new Intent(VideoCastNotificationService.ACTION_TOGGLE_PLAYBACK));
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        VideoCastManager castMgr = null;
+        try {
+            castMgr = VideoCastManager.getInstance();
+        } catch (CastException e1) {
+            LOGE(TAG, "onReceive(): No CastManager instance exists");
+        }
+        String action = intent.getAction();
+        if (null == action) {
+            return;
+        }
+        if (action.equals(VideoCastNotificationService.ACTION_TOGGLE_PLAYBACK)) {
+            try {
+                if (null != castMgr) {
+                    LOGD(TAG, "Toggling playback via CastManager");
+                    castMgr.togglePlayback();
+                } else {
+                    LOGD(TAG, "Toggling playback via NotificationService");
+                    context.startService(
+                            new Intent(VideoCastNotificationService.ACTION_TOGGLE_PLAYBACK));
+                }
+
+            } catch (Exception e) {
+                // already logged
+            }
+        } else if (action.equals(VideoCastNotificationService.ACTION_STOP)) {
+
+            try {
+                if (null != castMgr) {
+                    LOGD(TAG, "Calling stopApplication from intent");
+                    castMgr.disconnect();
+                } else {
+                    context.startService(new Intent(VideoCastNotificationService.ACTION_STOP));
+                }
+            } catch (Exception e) {
+                LOGE(TAG, "onReceive(): Failed to stop application");
+            }
+        } else if (action.equals(Intent.ACTION_MEDIA_BUTTON)) {
+
+            KeyEvent keyEvent = (KeyEvent) intent.getExtras().get(Intent.EXTRA_KEY_EVENT);
+            if (keyEvent.getAction() != KeyEvent.ACTION_DOWN) {
+                return;
+            }
+
+            switch (keyEvent.getKeyCode()) {
+                case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+                    try {
+                        castMgr.togglePlayback();
+                    } catch (Exception e) {
+                        // already logged
+                    }
+                    break;
+            }
         }
 
-      } catch (Exception e) {
-        // already logged
-      }
-    } else if (action.equals(VideoCastNotificationService.ACTION_STOP)) {
-
-      try {
-        if (null != castMgr) {
-          LOGD(TAG, "Calling stopApplication from intent");
-          castMgr.disconnect();
-        } else {
-          context.startService(new Intent(VideoCastNotificationService.ACTION_STOP));
-        }
-      } catch (Exception e) {
-        LOGE(TAG, "onReceive(): Failed to stop application");
-      }
-    } else if (action.equals(Intent.ACTION_MEDIA_BUTTON)) {
-
-      KeyEvent keyEvent = (KeyEvent) intent.getExtras().get(Intent.EXTRA_KEY_EVENT);
-      if (keyEvent.getAction() != KeyEvent.ACTION_DOWN) {
-        return;
-      }
-
-      switch (keyEvent.getKeyCode()) {
-        case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-          try {
-            castMgr.togglePlayback();
-          } catch (Exception e) {
-            // already logged
-          }
-          break;
-      }
     }
-
-  }
 
 }
