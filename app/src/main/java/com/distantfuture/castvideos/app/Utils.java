@@ -1,5 +1,5 @@
 
-package com.distantfuture.castvideos.app.utils;
+package com.distantfuture.castvideos.app;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.CastException;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.NoConnectionException;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.TransientNetworkDisconnectionException;
-import com.distantfuture.castvideos.app.R;
 
 import java.io.IOException;
 
@@ -122,7 +121,7 @@ public class Utils {
       resourceId = R.string.failed_to_perfrom_action;
     }
     if (resourceId > 0) {
-      com.distantfuture.castvideos.app.utils.Utils.showOopsDialog(context, resourceId);
+      Utils.showOopsDialog(context, resourceId);
     }
   }
 

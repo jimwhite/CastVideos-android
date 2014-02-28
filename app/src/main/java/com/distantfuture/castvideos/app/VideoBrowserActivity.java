@@ -16,7 +16,6 @@ import com.distantfuture.castcompanionlibrary.lib.cast.VideoCastManager;
 import com.distantfuture.castcompanionlibrary.lib.cast.callbacks.IVideoCastConsumer;
 import com.distantfuture.castcompanionlibrary.lib.cast.callbacks.VideoCastConsumerImpl;
 import com.distantfuture.castcompanionlibrary.lib.utils.MiniController;
-import com.distantfuture.castvideos.app.settings.CastPreference;
 
 public class VideoBrowserActivity extends FragmentActivity {
 
@@ -49,13 +48,13 @@ public class VideoBrowserActivity extends FragmentActivity {
       @Override
       public void onConnectionSuspended(int cause) {
         Log.d(TAG, "onConnectionSuspended() was called with cause: " + cause);
-        com.distantfuture.castvideos.app.utils.Utils.
+        Utils.
             showToast(VideoBrowserActivity.this, R.string.connection_temp_lost);
       }
 
       @Override
       public void onConnectivityRecovered() {
-        com.distantfuture.castvideos.app.utils.Utils.
+        Utils.
             showToast(VideoBrowserActivity.this, R.string.connection_recovered);
       }
 
@@ -136,7 +135,7 @@ public class VideoBrowserActivity extends FragmentActivity {
       mCastManager.incrementVolume(volumeIncrement);
     } catch (Exception e) {
       Log.e(TAG, "onVolumeChange() Failed to change volume", e);
-      com.distantfuture.castvideos.app.utils.Utils.handleException(this, e);
+      Utils.handleException(this, e);
     }
   }
 

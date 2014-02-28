@@ -1,5 +1,5 @@
 
-package com.distantfuture.castvideos.app.mediaplayer;
+package com.distantfuture.castvideos.app;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -36,10 +36,6 @@ import com.distantfuture.castcompanionlibrary.lib.cast.VideoCastManager;
 import com.distantfuture.castcompanionlibrary.lib.cast.callbacks.VideoCastConsumerImpl;
 import com.distantfuture.castcompanionlibrary.lib.utils.CastUtils;
 import com.distantfuture.castcompanionlibrary.lib.utils.MiniController;
-import com.distantfuture.castvideos.app.CastApplication;
-import com.distantfuture.castvideos.app.R;
-import com.distantfuture.castvideos.app.settings.CastPreference;
-import com.distantfuture.castvideos.app.utils.Utils;
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;

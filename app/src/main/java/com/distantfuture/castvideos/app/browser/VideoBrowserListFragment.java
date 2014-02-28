@@ -11,7 +11,7 @@ import android.widget.ListView;
 
 import com.distantfuture.castcompanionlibrary.lib.utils.CastUtils;
 import com.distantfuture.castvideos.app.R;
-import com.distantfuture.castvideos.app.mediaplayer.LocalPlayerActivity;
+import com.distantfuture.castvideos.app.LocalPlayerActivity;
 import com.google.android.gms.cast.MediaInfo;
 
 import java.util.List;

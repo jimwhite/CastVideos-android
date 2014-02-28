@@ -6,7 +6,6 @@ import android.content.Context;
 
 import com.distantfuture.castcompanionlibrary.lib.cast.VideoCastManager;
 import com.distantfuture.castcompanionlibrary.lib.utils.CastUtils;
-import com.distantfuture.castvideos.app.settings.CastPreference;
 
 public class CastApplication extends Application {
   private static String APPLICATION_ID;
