@@ -44,11 +44,11 @@ import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.TransientNetwo
 import com.distantfuture.castcompanionlibrary.lib.cast.player.IMediaAuthService;
 import com.distantfuture.castcompanionlibrary.lib.cast.player.VideoCastControllerActivity;
 import com.distantfuture.castcompanionlibrary.lib.utils.CastUtils;
-import com.distantfuture.castcompanionlibrary.lib.utils.VideoCastNotificationService;
-import com.distantfuture.castcompanionlibrary.lib.utils.VideoIntentReceiver;
 import com.distantfuture.castcompanionlibrary.lib.utils.IMiniController;
 import com.distantfuture.castcompanionlibrary.lib.utils.MiniController;
 import com.distantfuture.castcompanionlibrary.lib.utils.MiniController.OnMiniControllerChangedListener;
+import com.distantfuture.castcompanionlibrary.lib.utils.VideoCastNotificationService;
+import com.distantfuture.castcompanionlibrary.lib.utils.VideoIntentReceiver;
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.cast.Cast;
 import com.google.android.gms.cast.Cast.CastOptions.Builder;

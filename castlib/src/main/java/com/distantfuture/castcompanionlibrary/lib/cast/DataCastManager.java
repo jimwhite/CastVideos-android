@@ -117,8 +117,7 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
    * Returns the initialized instance of this class. If it is not initialized yet, a
    * {@link CastException} will be thrown.
    *
-   * @return
-   * throws CastException
+   * @return throws CastException
    * see initialze()
    */
   public static DataCastManager getInstance() throws CastException {
@@ -137,8 +136,7 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
    * needed. This method is preferred over the similar one without a context argument.
    *
    * @param ctx the current Context
-   * @return
-   * throws CastException
+   * @return throws CastException
    * see initialize()},  setContext()
    */
   public static DataCastManager getInstance(Context ctx) throws CastException {
