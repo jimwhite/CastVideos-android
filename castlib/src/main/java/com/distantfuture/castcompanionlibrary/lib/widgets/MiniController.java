@@ -66,9 +66,6 @@ public class MiniController extends RelativeLayout implements IMiniController {
   protected TextView mSubTitle;
   protected ImageView mPlayPause;
   protected ProgressBar mLoading;
-  public static final int PLAYBACK = 1;
-  public static final int PAUSE = 2;
-  public static final int IDLE = 3;
   private OnMiniControllerChangedListener mListener;
   private Uri mIconUri;
   private Drawable mPauseDrawable;
@@ -77,10 +74,6 @@ public class MiniController extends RelativeLayout implements IMiniController {
   private int mStreamType = MediaInfo.STREAM_TYPE_BUFFERED;
   private Drawable mStopDrawable;
 
-  /**
-   * @param context
-   * @param attrs
-   */
   public MiniController(Context context, AttributeSet attrs) {
     super(context, attrs);
     LayoutInflater inflater = LayoutInflater.from(context);
@@ -106,11 +99,6 @@ public class MiniController extends RelativeLayout implements IMiniController {
     }
   }
 
-  /**
-   * Removes the listener that was registered by {@link setOnMiniControllerChangedListener}
-   *
-   * @param listener
-   */
   public void removeOnMiniControllerChangedListener(OnMiniControllerChangedListener listener) {
     if (null != listener && this.mListener == listener) {
       this.mListener = null;
@@ -161,11 +149,6 @@ public class MiniController extends RelativeLayout implements IMiniController {
     });
   }
 
-  /**
-   * Constructor
-   *
-   * @param context
-   */
   public MiniController(Context context) {
     super(context);
     loadViews();

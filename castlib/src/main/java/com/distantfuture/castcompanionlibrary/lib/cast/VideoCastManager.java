@@ -16,7 +16,6 @@
 
 package com.distantfuture.castcompanionlibrary.lib.cast;
 
-import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
@@ -1506,7 +1505,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
      * Sets up the {@link RemoteControlClient} for this application. It also handles the audio
      * focus.
      */
-  @SuppressLint("InlinedApi")
   private void setUpRemoteControl(final MediaInfo info) {
     if (!isFeatureEnabled(BaseCastManager.FEATURE_LOCKSCREEN)) {
       return;
@@ -1611,7 +1609,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
   /*
    * Updates the playback status of the RemoteControlClient
    */
-  @SuppressLint("InlinedApi")
   private void updateRemoteControl(boolean playing) {
     if (!isFeatureEnabled(FEATURE_LOCKSCREEN)) {
       return;

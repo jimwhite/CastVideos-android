@@ -18,6 +18,7 @@ package com.distantfuture.castcompanionlibrary.lib.remotecontrol;
 
 import android.app.PendingIntent;
 import android.graphics.Bitmap;
+import android.media.RemoteControlClient;
 import android.os.Looper;
 import android.support.v7.media.MediaRouter;
 import android.util.Log;
