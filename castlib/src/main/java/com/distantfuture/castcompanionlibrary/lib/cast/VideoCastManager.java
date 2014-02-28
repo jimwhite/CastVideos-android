@@ -156,8 +156,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
    *                       local player.
    * @param dataNamespace  if not <code>null</code>, a custom data channel with this namespace will
    *                       be created.
-   * @return
-   * see getInstance()
+   * @return see getInstance()
    */
   public static synchronized VideoCastManager initialize(Context context, String applicationId, Class<?> targetActivity, String dataNamespace) {
     if (null == sInstance) {
@@ -177,8 +176,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
    * {@link CastException} will be thrown.
    *
    * @return
-   * @throws CastException
-   * see initialze()
+   * @throws CastException see initialze()
    */
   public static VideoCastManager getInstance() throws CastException {
     if (null == sInstance) {
@@ -198,8 +196,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
    *
    * @param context the current Context
    * @return
-   * @throws CastException
-   * see initialize(),  setContext()
+   * @throws CastException see initialize(),  setContext()
    */
   public static VideoCastManager getInstance(Context context) throws CastException {
     if (null == sInstance) {
@@ -1553,10 +1550,8 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
           if (null == bm) {
             return;
           }
-          mRemoteControlClient.editMetadata(false)
-              .putBitmap(RemoteControlClient.MetadataEditor.
-                  BITMAP_KEY_ARTWORK, bm)
-              .apply();
+          mRemoteControlClient.editMetadata(false).putBitmap(RemoteControlClient.MetadataEditor.
+              BITMAP_KEY_ARTWORK, bm).apply();
         } catch (Exception e) {
           LOGD(TAG, "Failed to update lock screen image", e);
         }

@@ -19,7 +19,6 @@ package com.distantfuture.castcompanionlibrary.lib.cast.player;
 import android.graphics.Bitmap;
 
 import com.distantfuture.castcompanionlibrary.lib.widgets.MiniController.OnMiniControllerChangedListener;
-import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaStatus;
 
 public interface IVideoCastController {

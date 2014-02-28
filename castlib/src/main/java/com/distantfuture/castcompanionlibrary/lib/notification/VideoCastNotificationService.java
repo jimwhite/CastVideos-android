@@ -26,7 +26,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -74,7 +73,6 @@ public class VideoCastNotificationService extends Service {
   private int mStatus;
   private Notification mNotification;
   private boolean mVisible;
-  boolean mIsIcsOrAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH;
   private BroadcastReceiver mBroadcastReceiver;
   private VideoCastManager mCastManager;
   private VideoCastConsumerImpl mConsumer;
@@ -114,10 +112,10 @@ public class VideoCastNotificationService extends Service {
     if (null != intent) {
 
       String action = intent.getAction();
-      if (ACTION_TOGGLE_PLAYBACK.equals(action) && mIsIcsOrAbove) {
+      if (ACTION_TOGGLE_PLAYBACK.equals(action)) {
         LOGD(TAG, "onStartCommand(): Action: ACTION_TOGGLE_PLAYBACK");
         togglePlayback();
-      } else if (ACTION_STOP.equals(action) && mIsIcsOrAbove) {
+      } else if (ACTION_STOP.equals(action)) {
         LOGD(TAG, "onStartCommand(): Action: ACTION_STOP");
         stopApplication();
       } else if (ACTION_VISIBILITY.equals(action)) {
@@ -292,9 +290,8 @@ public class VideoCastNotificationService extends Service {
     MediaMetadata mm = info.getMetadata();
 
     RemoteViews rv = new RemoteViews(getPackageName(), R.layout.custom_notification);
-    if (mIsIcsOrAbove) {
-      addPendingIntents(rv, isPlaying, info);
-    }
+    addPendingIntents(rv, isPlaying, info);
+
     if (null != bitmap) {
       rv.setImageViewBitmap(R.id.iconView, bitmap);
     }
