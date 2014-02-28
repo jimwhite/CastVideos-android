@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2013 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 package com.distantfuture.castvideos.app.utils;
 
@@ -45,9 +30,6 @@ public class Utils {
 
   /**
    * Returns the screen/display size
-   *
-   * @param context
-   * @return
    */
   public static Point getDisplaySize(Context context) {
     WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -61,9 +43,6 @@ public class Utils {
 
   /**
    * Shows an error dialog with a given text message.
-   *
-   * @param context
-   * @param errorString
    */
   public static void showErrorDialog(Context context, String errorString) {
     new AlertDialog.Builder(context).setTitle(R.string.error)
@@ -80,9 +59,6 @@ public class Utils {
 
   /**
    * Shows an error dialog with a text provided by a resource ID
-   *
-   * @param context
-   * @param resourceId
    */
   public static void showErrorDialog(Context context, int resourceId) {
     new AlertDialog.Builder(context).setTitle(R.string.error)
@@ -99,9 +75,6 @@ public class Utils {
 
   /**
    * Shows an "Oops" error dialog with a text provided by a resource ID
-   *
-   * @param context
-   * @param resourceId
    */
   public static void showOopsDialog(Context context, int resourceId) {
     new AlertDialog.Builder(context).setTitle(R.string.oops)
@@ -129,9 +102,6 @@ public class Utils {
    * <li><code>R.string.connection_lost</code></li>
    * <li><code>R.string.failed_to_perfrom_action</code></li>
    * </ul>
-   *
-   * @param context
-   * @param e
    */
   public static void handleException(Context context, Exception e) {
     int resourceId = 0;
@@ -158,9 +128,6 @@ public class Utils {
 
   /**
    * Gets the version of app.
-   *
-   * @param context
-   * @return
    */
   public static String getAppVersionName(Context context) {
     String versionString = null;
@@ -176,9 +143,6 @@ public class Utils {
 
   /**
    * Shows a (long) toast
-   *
-   * @param context
-   * @param msg
    */
   public static void showToast(Context context, String msg) {
     Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
@@ -186,9 +150,6 @@ public class Utils {
 
   /**
    * Shows a (long) toast.
-   *
-   * @param context
-   * @param resourceId
    */
   public static void showToast(Context context, int resourceId) {
     Toast.makeText(context, context.getString(resourceId), Toast.LENGTH_LONG).show();

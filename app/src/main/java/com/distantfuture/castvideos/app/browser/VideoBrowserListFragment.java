@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2013 Google Inc. All Rights Reserved. 
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at 
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and 
- * limitations under the License.
- */
 
 package com.distantfuture.castvideos.app.browser;
 
@@ -32,18 +17,14 @@ import com.google.android.gms.cast.MediaInfo;
 import java.util.List;
 
 public class VideoBrowserListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<List<MediaInfo>> {
-
-  private static final String CATALOG_URL = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/" + "videos-enhanced-b.json";
   private VideoListAdapter mAdapter;
 
-  /*
-   * (non-Javadoc)
-   * @see android.support.v4.app.Fragment#onActivityCreated(android.os.Bundle)
-   */
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
+
     getListView().setFastScrollEnabled(true);
+
     mAdapter = new VideoListAdapter(getActivity());
     setEmptyText(getString(R.string.no_video_found));
     setListAdapter(mAdapter);
@@ -51,11 +32,6 @@ public class VideoBrowserListFragment extends ListFragment implements LoaderMana
     getLoaderManager().initLoader(0, null, this);
   }
 
-  /*
-   * (non-Javadoc)
-   * @see android.support.v4.app.LoaderManager.LoaderCallbacks#onLoadFinished(android
-   * .support.v4.content.Loader, java.lang.Object)
-   */
   @Override
   public void onLoadFinished(Loader<List<MediaInfo>> arg0, List<MediaInfo> data) {
     mAdapter.setData(data);
@@ -66,11 +42,6 @@ public class VideoBrowserListFragment extends ListFragment implements LoaderMana
     }
   }
 
-  /*
-   * (non-Javadoc)
-   * @see android.support.v4.app.LoaderManager.LoaderCallbacks#onLoaderReset(android
-   * .support.v4.content.Loader)
-   */
   @Override
   public void onLoaderReset(Loader<List<MediaInfo>> arg0) {
     mAdapter.setData(null);
@@ -89,27 +60,10 @@ public class VideoBrowserListFragment extends ListFragment implements LoaderMana
     getActivity().startActivity(intent);
   }
 
-  /*
-   * (non-Javadoc)
-   * @see android.support.v4.app.LoaderManager.LoaderCallbacks#onCreateLoader(int,
-   * android.os.Bundle)
-   */
   @Override
   public Loader<List<MediaInfo>> onCreateLoader(int arg0, Bundle arg1) {
+    final String CATALOG_URL = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/" + "videos-enhanced-b.json";
+
     return new VideoItemLoader(getActivity(), CATALOG_URL);
   }
-
-  public static VideoBrowserListFragment newInstance() {
-    VideoBrowserListFragment f = new VideoBrowserListFragment();
-    Bundle b = new Bundle();
-    f.setArguments(b);
-    return f;
-  }
-
-  public static VideoBrowserListFragment newInstance(Bundle b) {
-    VideoBrowserListFragment f = new VideoBrowserListFragment();
-    f.setArguments(b);
-    return f;
-  }
-
 }
