@@ -119,9 +119,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
   /**
    * Since application lifecycle callbacks are managed by subclasses, this abstract method needs
    * to be implemented by each subclass independently.
-   *
-   * @param device
-   * @return
    */
   abstract Cast.CastOptions.Builder getCastOptionBuilder(CastDevice device);
 
@@ -136,26 +133,17 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
   /**
    * Subclasses should implement this to react appropriately to the successful launch of their
    * application. This is called when the application is successfully launched.
-   *
-   * @param applicationMetadata
-   * @param applicationStatus
-   * @param sessionId
-   * @param wasLaunched
    */
   abstract void onApplicationConnected(ApplicationMetadata applicationMetadata, String applicationStatus, String sessionId, boolean wasLaunched);
 
   /**
    * Called when the launch of application has failed. Subclasses need to handle this by doing
    * appropriate clean up.
-   *
-   * @param statusCode
    */
   abstract void onApplicationConnectionFailed(int statusCode);
 
   /**
    * Called when the attempt to stop application has failed.
-   *
-   * @param statusCode
    */
   abstract void onApplicationStopFailed(int statusCode);
 
@@ -203,8 +191,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
   /**
    * Sets the {@link Context} for the subsequent calls. Setting context can help the library to
    * show error messages to the user.
-   *
-   * @param context
    */
   public void setContext(Context context) {
     mContext = context;
@@ -277,15 +263,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
     }
   }
 
-  /**
-   * Adds and wires up the Media Router cast button. It returns a pointer to the Media Router menu
-   * item if the caller needs such reference.
-   *
-   * @param menu
-   * @param menuResourceId The resource id of the cast button in the xml menu descriptor file
-   * @return
-   */
-
   public MenuItem addMediaRouterButton(Menu menu, int menuResourceId, Activity activity) {
     MenuItem item = menu.findItem(menuResourceId);
     if (item != null) {
@@ -348,8 +325,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
 
   /**
    * This is called when UI visibility of the client has changed
-   *
-   * @param visible The updated visibility status
    */
   protected void onUiVisibilityChanged(boolean visible) {
     if (visible) {
@@ -375,9 +350,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
    * displays a localized message about the error and upon user confirmation (by tapping on
    * dialog) will direct them to the Play Store if Google Play services is out of date or missing,
    * or to system settings if Google Play services is disabled on the device.
-   *
-   * @param activity
-   * @return
    */
   public static boolean checkGooglePlayServices(final Activity activity) {
     return CastUtils.checkGooglePlayServices(activity);
@@ -385,8 +357,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
 
   /**
    * can be used to find out if the application is connected to the service or not.
-   *
-   * @return <code>true</code> if connected, <code>false</code> otherwise.
    */
   public boolean isConnected() {
     return (null != mApiClient) && mApiClient.isConnected();
@@ -404,8 +374,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
   /**
    * Returns the assigned human-readable name of the device, or <code>null</code> if no device is
    * connected.
-   *
-   * @return
    */
   public final String getDeviceName() {
     return mDeviceName;
@@ -424,8 +392,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
 
   /**
    * Returns the {@link MediaRouteSelector} object.
-   *
-   * @return
    */
   public final MediaRouteSelector getMediaRouteSelector() {
     return mMediaRouteSelector;
@@ -461,10 +427,7 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
   /**
    * Sets the device (system) volume.
    *
-   * @param volume Should be a value between 0 and 1, inclusive.
-   * @throws CastException
-   * @throws NoConnectionException
-   * @throws TransientNetworkDisconnectionException
+   * param volume Should be a value between 0 and 1, inclusive.
    */
   public void setDeviceVolume(double volume) throws CastException, TransientNetworkDisconnectionException, NoConnectionException {
     checkConnectivity();
@@ -478,9 +441,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
 
   /**
    * Gets the remote's system volume, a number between 0 and 1, inclusive.
-   *
-   * @throws NoConnectionException
-   * @throws TransientNetworkDisconnectionException
    */
   public final double getDeviceVolume() throws TransientNetworkDisconnectionException, NoConnectionException {
     checkConnectivity();
@@ -489,11 +449,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
 
   /**
    * Increments (or decrements) the device volume by the given amount.
-   *
-   * @param delta
-   * @throws CastException
-   * @throws NoConnectionException
-   * @throws TransientNetworkDisconnectionException
    */
   public void incrementDeviceVolume(double delta) throws CastException, TransientNetworkDisconnectionException, NoConnectionException {
     checkConnectivity();
@@ -506,10 +461,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
   /**
    * Returns <code>true</code> if remote device is muted. It internally determines if this should
    * be done for <code>stream</code> or <code>device</code> volume.
-   *
-   * @return
-   * @throws NoConnectionException
-   * @throws TransientNetworkDisconnectionException
    */
   public final boolean isDeviceMute() throws TransientNetworkDisconnectionException, NoConnectionException {
     checkConnectivity();
@@ -518,11 +469,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
 
   /**
    * Mutes or un-mutes the device volume.
-   *
-   * @param mute
-   * @throws CastException
-   * @throws NoConnectionException
-   * @throws TransientNetworkDisconnectionException
    */
   public void setDeviceMute(boolean mute) throws CastException, TransientNetworkDisconnectionException, NoConnectionException {
     checkConnectivity();
@@ -540,8 +486,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
 
   /**
    * Returns the current {@link ReconnectionStatus}
-   *
-   * @return
    */
   public ReconnectionStatus getReconnectionStatus() {
     return mReconnectionStatus;
@@ -549,8 +493,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
 
   /**
    * Sets the {@link ReconnectionStatus}
-   *
-   * @param status
    */
   public final void setReconnectionStatus(ReconnectionStatus status) {
     mReconnectionStatus = status;
@@ -560,8 +502,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
    * Returns <code>true</code> if there is enough persisted information to attempt a session
    * recovery. For this to return <code>true</code>, there needs to be persisted session ID and
    * route ID from the last successful launch.
-   *
-   * @return
    */
   public final boolean canConsiderSessionRecovery() {
     String sessionId = CastUtils.getStringFromPreference(mContext, PREFS_KEY_SESSION_ID);
@@ -613,10 +553,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
    * optional dialog can be shown if <code>showDialog</code> is set to <code>true</code>. The
    * message in this dialog can be changed by overriding the resource
    * <code>R.string.session_reconnection_attempt</code>
-   *
-   * @param context
-   * @param showDialog
-   * @param timeoutInSeconds
    */
   public void reconnectSessionIfPossible(final Context context, final boolean showDialog, final int timeoutInSeconds) {
     if (isConnected()) {
@@ -763,9 +699,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
    * This attempt will go on for 5 seconds. During this period, an optional dialog can be shown if
    * <code>showDialog</code> is set to <code>true
    * </code>.
-   *
-   * @param context
-   * @param showDialog if set to <code>true</code>, a dialog will be shown
    */
   public void reconnectSessionIfPossible(final Context context, final boolean showDialog) {
     reconnectSessionIfPossible(context, showDialog, SESSION_RECOVERY_TIMEOUT);
@@ -947,11 +880,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
 
   /**
    * Stops the application on the receiver device.
-   *
-   * @throws IllegalStateException
-   * @throws IOException
-   * @throws NoConnectionException
-   * @throws TransientNetworkDisconnectionException
    */
   public void stopApplication() throws IllegalStateException, IOException, TransientNetworkDisconnectionException, NoConnectionException {
     checkConnectivity();
@@ -975,9 +903,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
   /**
    * Registers an {@link IBaseCastConsumer} interface with this class. Registered listeners will
    * be notified of changes to a variety of lifecycle callbacks that the interface provides.
-   *
-   * @param listener
-   * @see BaseCastConsumerImpl
    */
   public synchronized void addBaseCastConsumer(IBaseCastConsumer listener) {
     if (null != listener) {
@@ -989,8 +914,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
 
   /**
    * Unregisters an {@link IBaseCastConsumer}.
-   *
-   * @param listener
    */
   public synchronized void removeBaseCastConsumer(IBaseCastConsumer listener) {
     if (null != listener) {
@@ -1002,9 +925,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
 
   /**
    * A simple method that throws an exception of there is no connectivity to the cast device.
-   *
-   * @throws TransientNetworkDisconnectionException If framework is still trying to recover
-   * @throws NoConnectionException                  If no connectivity to the device exists
    */
   public void checkConnectivity() throws TransientNetworkDisconnectionException, NoConnectionException {
     if (!isConnected()) {
