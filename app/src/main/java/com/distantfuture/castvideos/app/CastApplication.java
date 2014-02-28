@@ -47,7 +47,7 @@ public class CastApplication extends Application {
 
   public static VideoCastManager getCastManager(Context context) {
     if (null == mCastMgr) {
-      mCastMgr = VideoCastManager.initialize(context, APPLICATION_ID, null, null);
+      mCastMgr = VideoCastManager.initialize(context, APPLICATION_ID, null);
       mCastMgr.enableFeatures(VideoCastManager.FEATURE_NOTIFICATION |
           VideoCastManager.FEATURE_LOCKSCREEN |
           VideoCastManager.FEATURE_DEBUGGING);

@@ -309,7 +309,7 @@ public class VideoMediaRouteControllerDialog extends MediaRouteControllerDialog 
       @Override
       public void onClick(View v) {
 
-        if (null != mCastManager && null != mCastManager.getTargetActivity()) {
+        if (null != mCastManager) {
           try {
             mCastManager.onTargetActivityInvoked(mContext);
           } catch (TransientNetworkDisconnectionException e) {

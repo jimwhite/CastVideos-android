@@ -64,7 +64,6 @@ public class VideoCastNotificationService extends Service {
   private Bitmap mVideoArtBitmap;
   private Uri mVideoArtUri;
   private boolean mIsPlaying;
-  private Class<?> mTargetActivity;
   private int mStatus;
   private Notification mNotification;
   private boolean mVisible;
@@ -76,7 +75,7 @@ public class VideoCastNotificationService extends Service {
   public void onCreate() {
     super.onCreate();
     readPersistedData();
-    mCastManager = VideoCastManager.initialize(this, mApplicationId, mTargetActivity, null);
+    mCastManager = VideoCastManager.initialize(this, mApplicationId, null);
     if (!mCastManager.isConnected()) {
       mCastManager.reconnectSessionIfPossible(this, false);
     }
@@ -143,13 +142,13 @@ public class VideoCastNotificationService extends Service {
         uri = mm.getImages().get(0).getUrl();
       }
       if (null == uri) {
-        build(info, null, mIsPlaying, mTargetActivity);
+        build(info, null, mIsPlaying);
         if (visible) {
           startForeground(NOTIFICATION_ID, mNotification);
         }
       } else if (null != mVideoArtBitmap && null != mVideoArtUri &&
           mVideoArtUri.equals(uri)) {
-        build(info, mVideoArtBitmap, mIsPlaying, mTargetActivity);
+        build(info, mVideoArtBitmap, mIsPlaying);
         if (visible) {
           startForeground(NOTIFICATION_ID, mNotification);
         }
@@ -164,7 +163,7 @@ public class VideoCastNotificationService extends Service {
               mVideoArtUri = mm.getImages().get(0).getUrl();
               imgUrl = new URL(mVideoArtUri.toString());
               mVideoArtBitmap = BitmapFactory.decodeStream(imgUrl.openStream());
-              build(info, mVideoArtBitmap, mIsPlaying, mTargetActivity);
+              build(info, mVideoArtBitmap, mIsPlaying);
               if (visible) {
                 startForeground(NOTIFICATION_ID, mNotification);
               }
@@ -261,19 +260,16 @@ public class VideoCastNotificationService extends Service {
    * Build the RemoteViews for the notification. We also need to add the appropriate "back stack"
    * so when user goes into the CastPlayerActivity, she can have a meaningful "back" experience.
    */
-  private RemoteViews build(MediaInfo info, Bitmap bitmap, boolean isPlaying, Class<?> targetActivity) throws CastException, TransientNetworkDisconnectionException, NoConnectionException {
+  private RemoteViews build(MediaInfo info, Bitmap bitmap, boolean isPlaying) throws CastException, TransientNetworkDisconnectionException, NoConnectionException {
     Bundle mediaWrapper = CastUtils.fromMediaInfo(mCastManager.getRemoteMediaInformation());
     Intent contentIntent = null;
-    if (null == mTargetActivity) {
-      mTargetActivity = VideoCastControllerActivity.class;
-    }
-    contentIntent = new Intent(this, mTargetActivity);
+    contentIntent = new Intent(this, VideoCastControllerActivity.class);
 
     contentIntent.putExtra("media", mediaWrapper);
 
     TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 
-    stackBuilder.addParentStack(mTargetActivity);
+    stackBuilder.addParentStack(VideoCastControllerActivity.class);
 
     stackBuilder.addNextIntent(contentIntent);
 
@@ -358,16 +354,5 @@ public class VideoCastNotificationService extends Service {
    */
   private void readPersistedData() {
     mApplicationId = CastUtils.getStringFromPreference(this, VideoCastManager.PREFS_KEY_APPLICATION_ID);
-    String targetName = CastUtils.getStringFromPreference(this, VideoCastManager.PREFS_KEY_CAST_ACTIVITY_NAME);
-    try {
-      if (null != targetName) {
-        mTargetActivity = Class.forName(targetName);
-      } else {
-        mTargetActivity = VideoCastControllerActivity.class;
-      }
-
-    } catch (ClassNotFoundException e) {
-      CastUtils.LOGE(TAG, "Failed to find the targetActivity class", e);
-    }
   }
 }

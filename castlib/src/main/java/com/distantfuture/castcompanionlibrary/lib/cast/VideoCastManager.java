@@ -31,6 +31,7 @@ import android.os.Bundle;
 import android.support.v7.app.MediaRouteDialogFactory;
 import android.support.v7.media.MediaRouter.RouteInfo;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import com.distantfuture.castcompanionlibrary.lib.R;
@@ -123,7 +124,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
 
   private static final String TAG = CastUtils.makeLogTag(VideoCastManager.class);
   private static VideoCastManager sInstance;
-  private final Class<?> mTargetActivity;
   private final Set<IMiniController> mMiniControllers;
   private final AudioManager mAudioManager;
   private RemoteMediaPlayer mRemoteMediaPlayer;
@@ -146,22 +146,19 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
    * {@link CastException} exception.
    *
    * @param context
-   * @param applicationId  the unique ID for your application
-   * @param targetActivity this points to the activity that should be invoked when user clicks on
-   *                       the icon in the {@link MiniController}. Often this is the activity that hosts the
-   *                       local player.
-   * @param dataNamespace  if not <code>null</code>, a custom data channel with this namespace will
-   *                       be created.
+   * @param applicationId the unique ID for your application
+   * @param dataNamespace if not <code>null</code>, a custom data channel with this namespace will
+   *                      be created.
    * @return see getInstance()
    */
-  public static synchronized VideoCastManager initialize(Context context, String applicationId, Class<?> targetActivity, String dataNamespace) {
+  public static synchronized VideoCastManager initialize(Context context, String applicationId, String dataNamespace) {
     if (null == sInstance) {
       CastUtils.LOGD(TAG, "New instance of VideoCastManager is created");
       if (ConnectionResult.SUCCESS != GooglePlayServicesUtil.isGooglePlayServicesAvailable(context)) {
         String msg = "Couldn't find the appropriate version of Goolge Play Services";
         CastUtils.LOGE(TAG, msg);
       }
-      sInstance = new VideoCastManager(context, applicationId, targetActivity, dataNamespace);
+      sInstance = new VideoCastManager(context, applicationId, dataNamespace);
       mCastManager = sInstance;
     }
     return sInstance;
@@ -204,16 +201,11 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
     return sInstance;
   }
 
-  private VideoCastManager(Context context, String applicationId, Class<?> targetActivity, String dataNamespace) {
+  private VideoCastManager(Context context, String applicationId, String dataNamespace) {
     super(context, applicationId);
     CastUtils.LOGD(TAG, "VideoCastManager is instantiated");
     mVideoConsumers = new HashSet<IVideoCastConsumer>();
     mDataNamespace = dataNamespace;
-    if (null == targetActivity) {
-      targetActivity = VideoCastControllerActivity.class;
-    }
-    mTargetActivity = targetActivity;
-    CastUtils.saveStringToPreference(mContext, PREFS_KEY_CAST_ACTIVITY_NAME, mTargetActivity.getName());
 
     mMiniControllers = new HashSet<IMiniController>();
 
@@ -288,7 +280,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
    */
   @Override
   public void onTargetActivityInvoked(Context ctx) throws TransientNetworkDisconnectionException, NoConnectionException {
-    Intent intent = new Intent(ctx, mTargetActivity);
+    Intent intent = new Intent(ctx, VideoCastControllerActivity.class);
     intent.putExtra(EXTRA_MEDIA, CastUtils.fromMediaInfo(getRemoteMediaInformation()));
     ctx.startActivity(intent);
   }
@@ -706,15 +698,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
     checkConnectivity();
     checkRemoteMediaPlayerAvailable();
     return mRemoteMediaPlayer.getApproximateStreamPosition();
-  }
-
-  /**
-   * Returns the target activity that points to the player page
-   *
-   * @return
-   */
-  public Class<?> getTargetActivity() {
-    return mTargetActivity;
   }
 
   /*
