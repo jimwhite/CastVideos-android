@@ -166,9 +166,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
   /**
    * Returns the initialized instances of this class. If it is not initialized yet, a
    * {@link CastException} will be thrown.
-   *
-   * @return
-   * @throws CastException see initialze()
    */
   public static VideoCastManager getInstance() throws CastException {
     if (null == sInstance) {
@@ -185,10 +182,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
    * </code> instance. The main purpose of updating context is to enable the library to provide
    * {@link Context} related functionalities, e.g. it can create an error dialog if needed. This
    * method is preferred over the similar one without a context argument.
-   *
-   * @param context the current Context
-   * @return
-   * @throws CastException see initialize(),  setContext()
    */
   public static VideoCastManager getInstance(Context context) throws CastException {
     if (null == sInstance) {
@@ -218,9 +211,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
 
   /**
    * Updates the information and state of a MiniController.
-   *
-   * @throws TransientNetworkDisconnectionException
-   * @throws NoConnectionException
    */
   private void updateMiniController(IMiniController controller) throws TransientNetworkDisconnectionException, NoConnectionException {
     checkConnectivity();
@@ -287,8 +277,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
   /**
    * Updates the visibility of the mini controllers. In most cases, clients do not need to use
    * this as the {@link VideoCastManager} handles the visibility.
-   *
-   * @param visible
    */
   public void updateMiniControllersVisibility(boolean visible) {
     CastUtils.LOGD(TAG, "updateMiniControllersVisibility() reached with visibility: " + visible);
@@ -322,9 +310,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
   /**
    * Launches the {@link VideoCastControllerActivity} that provides a default Cast Player page.
    * This variation should be used when an {@link IMediaAuthService} needs to be used.
-   *
-   * @param context
-   * @param authService
    */
   public void startCastControllerActivity(Context context, IMediaAuthService authService) {
     if (null != authService) {
@@ -434,8 +419,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
 
   /**
    * Sets the type of volume.
-   *
-   * @param vType
    */
   public final void setVolumeType(VolumeType vType) {
     mVolumeType = vType;
@@ -463,10 +446,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
 
   /**
    * Indicates if the remote movie is currently playing (or buffering).
-   *
-   * @return
-   * @throws NoConnectionException
-   * @throws TransientNetworkDisconnectionException
    */
   public boolean isRemoteMoviePlaying() throws TransientNetworkDisconnectionException, NoConnectionException {
     checkConnectivity();
@@ -475,10 +454,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
 
   /**
    * Returns <code>true</code> if the remote connected device is playing a movie.
-   *
-   * @return
-   * @throws NoConnectionException
-   * @throws TransientNetworkDisconnectionException
    */
   public boolean isRemoteMoviePaused() throws TransientNetworkDisconnectionException, NoConnectionException {
     checkConnectivity();
@@ -488,10 +463,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
   /**
    * Returns <code>true</code> only if there is a media on the remote being played, paused or
    * buffered.
-   *
-   * @return
-   * @throws NoConnectionException
-   * @throws TransientNetworkDisconnectionException
    */
   public boolean isRemoteMediaLoaded() throws TransientNetworkDisconnectionException, NoConnectionException {
     checkConnectivity();
@@ -596,8 +567,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
    * Increments or decrements volume by <code>delta</code> if <code>delta &gt; 0</code> or
    * <code>delta &lt; 0</code>, respectively. Note that the volume range is between 0 and
    * RouteInfo.getVolumeMax()
-   *
-   * @param delta
    */
   public void updateVolume(int delta) {
     if (null != mMediaRouter.getSelectedRoute()) {
@@ -609,10 +578,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
   /**
    * Returns <code>true</code> if remote device is muted. It internally determines if this should
    * be done for <code>stream</code> or <code>device</code> volume.
-   *
-   * @return
-   * @throws NoConnectionException
-   * @throws TransientNetworkDisconnectionException
    */
   public boolean isMute() throws TransientNetworkDisconnectionException, NoConnectionException {
     checkConnectivity();
@@ -627,11 +592,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
   /**
    * Mutes or un-mutes the volume. It internally determines if this should be done for
    * <code>stream</code> or <code>device</code> volume.
-   *
-   * @param mute
-   * @throws CastException
-   * @throws NoConnectionException
-   * @throws TransientNetworkDisconnectionException
    */
   public void setMute(boolean mute) throws CastException, TransientNetworkDisconnectionException, NoConnectionException {
     checkConnectivity();
@@ -651,10 +611,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
   /**
    * Returns the duration of the media that is loaded, in seconds. If there is no connection or if
    * there is no channel established, this method returns -1.
-   *
-   * @return
-   * @throws NoConnectionException
-   * @throws TransientNetworkDisconnectionException
    */
   public double getMediaDuration() throws TransientNetworkDisconnectionException, NoConnectionException {
     checkConnectivity();
@@ -665,10 +621,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
   /**
    * Returns the current (approximate) position of the current media, in seconds. If there is no
    * channel established, this method returns -1.
-   *
-   * @return
-   * @throws NoConnectionException
-   * @throws TransientNetworkDisconnectionException
    */
   public double getCurrentMediaPosition() throws TransientNetworkDisconnectionException, NoConnectionException {
     checkConnectivity();
@@ -1005,10 +957,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
 
   /**
    * Resumes the playback from where it was left (can be the beginning).
-   *
-   * @throws CastException
-   * @throws NoConnectionException
-   * @throws TransientNetworkDisconnectionException
    */
   public void play() throws CastException, TransientNetworkDisconnectionException, NoConnectionException {
     play(null);
@@ -1016,11 +964,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
 
   /**
    * Stops the playback of media/stream
-   *
-   * @param customData
-   * @throws CastException
-   * @throws TransientNetworkDisconnectionException
-   * @throws NoConnectionException
    */
   public void stop(JSONObject customData) throws CastException, TransientNetworkDisconnectionException, NoConnectionException {
     CastUtils.LOGD(TAG, "stop()");
@@ -1039,10 +982,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
 
   /**
    * Stops the playback of media/stream
-   *
-   * @throws CastException
-   * @throws TransientNetworkDisconnectionException
-   * @throws NoConnectionException
    */
   public void stop() throws CastException, TransientNetworkDisconnectionException, NoConnectionException {
     stop(null);
@@ -1050,10 +989,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
 
   /**
    * Pauses the playback.
-   *
-   * @throws CastException
-   * @throws NoConnectionException
-   * @throws TransientNetworkDisconnectionException
    */
   public void pause() throws CastException, TransientNetworkDisconnectionException, NoConnectionException {
     pause(null);
@@ -1086,10 +1021,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
    * Seeks to the given point without changing the state of the player, i.e. after seek is
    * completed, it resumes what it was doing before the start of seek.
    *
-   * @param position in milliseconds
-   * @throws NoConnectionException
-   * @throws TransientNetworkDisconnectionException
-   * @throws CastException
+   * position in milliseconds
    */
   public void seek(int position) throws TransientNetworkDisconnectionException, NoConnectionException {
     CastUtils.LOGD(TAG, "attempting to seek media");
@@ -1114,10 +1046,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
   /**
    * Seeks to the given point and starts playback regardless of the starting state.
    *
-   * @param position in milliseconds
-   * @throws NoConnectionException
-   * @throws TransientNetworkDisconnectionException
-   * @throws CastException
+   * position in milliseconds
    */
   public void seekAndPlay(int position) throws TransientNetworkDisconnectionException, NoConnectionException {
     CastUtils.LOGD(TAG, "attempting to seek media");
@@ -1142,10 +1071,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
 
   /**
    * Toggles the playback of the movie.
-   *
-   * @throws CastException
-   * @throws NoConnectionException
-   * @throws TransientNetworkDisconnectionException
    */
   public void togglePlayback() throws CastException, TransientNetworkDisconnectionException, NoConnectionException {
     checkConnectivity();
@@ -1240,8 +1165,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
    * Returns the Idle reason, defined in <code>MediaStatus.IDLE_*</code>. Note that the returned
    * value is only meaningful if the status is truly <code>MediaStatus.PLAYER_STATE_IDLE
    * </code>
-   *
-   * @return
    */
   public int getIdleReason() {
     return mIdleReason;
@@ -1256,8 +1179,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
     /*
      * If a data namespace was provided when initializing this class, we set things up for a data
      * channel
-     * @throws NoConnectionException
-     * @throws TransientNetworkDisconnectionException
      */
   private void attachDataChannel() throws TransientNetworkDisconnectionException, NoConnectionException {
     if (TextUtils.isEmpty(mDataNamespace)) {
@@ -1332,10 +1253,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
    * Remove the custom data channel, if any. It returns <code>true</code> if it succeeds otherwise
    * if it encounters an error or if no connection exists or if no custom data channel exists,
    * then it returns <code>false</code>
-   *
-   * @return
-   * @throws NoConnectionException
-   * @throws TransientNetworkDisconnectionException
    */
   public boolean removeDataChannel() {
     if (TextUtils.isEmpty(mDataNamespace)) {
@@ -1628,9 +1545,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
    * Registers an {@link IVideoCastConsumer} interface with this class. Registered listeners will
    * be notified of changes to a variety of lifecycle and media status changes through the
    * callbacks that the interface provides.
-   *
-   * @param listener
-   * @see VideoCastConsumerImpl
    */
   public synchronized void addVideoCastConsumer(IVideoCastConsumer listener) {
     if (null != listener) {
@@ -1642,8 +1556,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
 
   /**
    * Unregisters an {@link IVideoCastConsumer}.
-   *
-   * @param listener
    */
   public synchronized void removeVideoCastConsumer(IVideoCastConsumer listener) {
     if (null != listener) {
@@ -1659,8 +1571,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
   /**
    * Adds a new {@link IMiniController} component. Callers need to provide their own
    * {@link OnMiniControllerChangedListener}.
-   *
-   * @param miniController
    */
   public synchronized void addMiniController(IMiniController miniController, OnMiniControllerChangedListener onChangedListener) {
     if (null != miniController) {
@@ -1688,8 +1598,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
   /**
    * Adds a new {@link IMiniController} component and assigns {@link VideoCastManager} as the
    * {@link OnMiniControllerChangedListener} for this component.
-   *
-   * @param miniController
    */
   public synchronized void addMiniController(IMiniController miniController) {
     addMiniController(miniController, null);
@@ -1697,8 +1605,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
 
   /**
    * Removes a {@link IMiniController} listener from the list of listeners.
-   *
-   * @param listener
    */
   public synchronized void removeMiniController(IMiniController listener) {
     if (null != listener) {
