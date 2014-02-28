@@ -320,13 +320,11 @@ public class VideoCastControllerActivity extends FragmentActivity implements IVi
   @Override
   public void setLine1(String text) {
     mLine1.setText(text);
-
   }
 
   @Override
   public void setLine2(String text) {
     mLine2.setText(text);
-
   }
 
   @Override

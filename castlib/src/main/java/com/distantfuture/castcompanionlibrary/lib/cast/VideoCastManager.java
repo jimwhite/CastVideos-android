@@ -131,7 +131,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
   private VolumeType mVolumeType = VolumeType.DEVICE;
   private int mState = MediaStatus.PLAYER_STATE_IDLE;
   private int mIdleReason;
-  private Bitmap mVideoArtBitmap;
   private final ComponentName mMediaButtonReceiverComponent;
   private final String mDataNamespace;
   private Cast.MessageReceivedCallback mDataChannel;
@@ -279,10 +278,10 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
    * OnMiniControllerChangedListener #onTargetActivityInvoked(android.content.Context)
    */
   @Override
-  public void onTargetActivityInvoked(Context ctx) throws TransientNetworkDisconnectionException, NoConnectionException {
-    Intent intent = new Intent(ctx, VideoCastControllerActivity.class);
+  public void onTargetActivityInvoked(Context context) throws TransientNetworkDisconnectionException, NoConnectionException {
+    Intent intent = videoCastControllerIntent(context);
     intent.putExtra(EXTRA_MEDIA, CastUtils.fromMediaInfo(getRemoteMediaInformation()));
-    ctx.startActivity(intent);
+    startVideoCastControllerIntent(context, intent);
   }
 
   /**
@@ -305,25 +304,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
   /*************************************************************************/
 
   /**
-   * Launches the VideoCastControllerActivity that provides a default Cast Player page.
-   *
-   * @param context
-   * @param mediaWrapper a bundle wrapper for the media that is or will be casted
-   * @param position     (in milliseconds) is the starting point of the media playback
-   * @param shouldStart  indicates if the remote playback should start after launching the new page
-   */
-  public void startCastControllerActivity(Context context, Bundle mediaWrapper, int position, boolean shouldStart, JSONObject customData) {
-    Intent intent = new Intent(context, VideoCastControllerActivity.class);
-    intent.putExtra(EXTRA_MEDIA, mediaWrapper);
-    intent.putExtra(EXTRA_START_POINT, position);
-    intent.putExtra(EXTRA_SHOULD_START, shouldStart);
-    if (null != customData) {
-      intent.putExtra("customData", customData.toString());
-    }
-    context.startActivity(intent);
-  }
-
-  /**
    * Launches the {@link VideoCastControllerActivity} that provides a default Cast Player page.
    *
    * @param context
@@ -332,11 +312,11 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
    * @param shouldStart  indicates if the remote playback should start after launching the new page
    */
   public void startCastControllerActivity(Context context, Bundle mediaWrapper, int position, boolean shouldStart) {
-    Intent intent = new Intent(context, VideoCastControllerActivity.class);
+    Intent intent = videoCastControllerIntent(context);
     intent.putExtra(EXTRA_MEDIA, mediaWrapper);
     intent.putExtra(EXTRA_START_POINT, position);
     intent.putExtra(EXTRA_SHOULD_START, shouldStart);
-    context.startActivity(intent);
+    startVideoCastControllerIntent(context, intent);
   }
 
   /**
@@ -349,10 +329,21 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
   public void startCastControllerActivity(Context context, IMediaAuthService authService) {
     if (null != authService) {
       this.mAuthService = authService;
-      Intent intent = new Intent(context, VideoCastControllerActivity.class);
+
+      Intent intent = videoCastControllerIntent(context);
       intent.putExtra(EXTRA_HAS_AUTH, true);
-      context.startActivity(intent);
+      startVideoCastControllerIntent(context, intent);
     }
+  }
+
+  private void startVideoCastControllerIntent(Context context, Intent intent) {
+    // SNG: need to clear this otherwise if reason is finished, the activity will finish() immediately
+    mIdleReason = 0;
+    context.startActivity(intent);
+  }
+
+  private Intent videoCastControllerIntent(Context context) {
+    return new Intent(context, VideoCastControllerActivity.class);
   }
 
   /**
@@ -445,15 +436,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
     if (null == mRemoteMediaPlayer) {
       throw new NoConnectionException();
     }
-  }
-
-  /**
-   * Returns the bitmap for the current video
-   *
-   * @return
-   */
-  public Bitmap getAlbumArt() {
-    return mVideoArtBitmap;
   }
 
   /**
