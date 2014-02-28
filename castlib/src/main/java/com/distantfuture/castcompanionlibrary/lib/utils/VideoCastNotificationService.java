@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.distantfuture.castcompanionlibrary.lib.notification;
+package com.distantfuture.castcompanionlibrary.lib.utils;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -39,8 +39,6 @@ import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.CastException;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.NoConnectionException;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.TransientNetworkDisconnectionException;
 import com.distantfuture.castcompanionlibrary.lib.cast.player.VideoCastControllerActivity;
-import com.distantfuture.castcompanionlibrary.lib.utils.LogUtils;
-import com.distantfuture.castcompanionlibrary.lib.utils.Utils;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.cast.MediaStatus;

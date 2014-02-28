@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.distantfuture.castcompanionlibrary.lib.widgets;
+package com.distantfuture.castcompanionlibrary.lib.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -35,6 +35,7 @@ import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.CastException;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.NoConnectionException;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.OnFailedListener;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.TransientNetworkDisconnectionException;
+import com.distantfuture.castcompanionlibrary.lib.utils.IMiniController;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaStatus;
 
@@ -273,7 +274,7 @@ public class MiniController extends RelativeLayout implements IMiniController {
 
   /**
    * The interface for a listener that will be called when user interacts with the
-   * {@link MiniController}, like clicking on the play/pause button, etc.
+   * MiniController, like clicking on the play/pause button, etc.
    */
   public interface OnMiniControllerChangedListener extends OnFailedListener {
 

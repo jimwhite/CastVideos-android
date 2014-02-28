@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package com.distantfuture.castcompanionlibrary.lib.widgets;
+package com.distantfuture.castcompanionlibrary.lib.utils;
 
 import android.net.Uri;
 
-import com.distantfuture.castcompanionlibrary.lib.widgets.MiniController.OnMiniControllerChangedListener;
+import com.distantfuture.castcompanionlibrary.lib.utils.MiniController.OnMiniControllerChangedListener;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaStatus;
 
 /**
- * An interface to abstract {@link MiniController} so that other components can also control the
+ * An interface to abstract {@link com.distantfuture.castcompanionlibrary.lib.utils.MiniController} so that other components can also control the
  * MiniControllers. Clients should code against this interface when they want to control the
- * provided {@link MiniController} or other custom implementations.
+ * provided {@link com.distantfuture.castcompanionlibrary.lib.utils.MiniController} or other custom implementations.
  */
 public interface IMiniController {
 

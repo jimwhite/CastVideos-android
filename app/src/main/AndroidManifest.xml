@@ -58,7 +58,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="com.distantfuture.castcompanionlibrary.lib.remotecontrol.VideoIntentReceiver">
+        <receiver android:name="com.distantfuture.castcompanionlibrary.lib.utils.VideoIntentReceiver">
             <intent-filter>
                 <action android:name="android.media.AUDIO_BECOMING_NOISY"/>
                 <action android:name="android.intent.action.MEDIA_BUTTON"/>
@@ -68,7 +68,7 @@
         </receiver>
 
         <service
-            android:name="com.distantfuture.castcompanionlibrary.lib.notification.VideoCastNotificationService"
+            android:name="com.distantfuture.castcompanionlibrary.lib.utils.VideoCastNotificationService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.distantfuture.castcompanionlibrary.lib.action.toggleplayback"/>

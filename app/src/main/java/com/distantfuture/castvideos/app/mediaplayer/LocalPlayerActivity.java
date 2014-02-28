@@ -49,7 +49,7 @@ import android.widget.VideoView;
 import com.androidquery.AQuery;
 import com.distantfuture.castcompanionlibrary.lib.cast.VideoCastManager;
 import com.distantfuture.castcompanionlibrary.lib.cast.callbacks.VideoCastConsumerImpl;
-import com.distantfuture.castcompanionlibrary.lib.widgets.MiniController;
+import com.distantfuture.castcompanionlibrary.lib.utils.MiniController;
 import com.distantfuture.castvideos.app.CastApplication;
 import com.distantfuture.castvideos.app.R;
 import com.distantfuture.castvideos.app.settings.CastPreference;

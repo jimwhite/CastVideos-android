@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.distantfuture.castcompanionlibrary.lib.remotecontrol;
+package com.distantfuture.castcompanionlibrary.lib.utils;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -23,8 +23,6 @@ import android.view.KeyEvent;
 
 import com.distantfuture.castcompanionlibrary.lib.cast.VideoCastManager;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.CastException;
-import com.distantfuture.castcompanionlibrary.lib.notification.VideoCastNotificationService;
-import com.distantfuture.castcompanionlibrary.lib.utils.LogUtils;
 
 import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGD;
 import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGE;

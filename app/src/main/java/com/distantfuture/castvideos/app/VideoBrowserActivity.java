@@ -30,7 +30,7 @@ import android.view.MenuItem;
 import com.distantfuture.castcompanionlibrary.lib.cast.VideoCastManager;
 import com.distantfuture.castcompanionlibrary.lib.cast.callbacks.IVideoCastConsumer;
 import com.distantfuture.castcompanionlibrary.lib.cast.callbacks.VideoCastConsumerImpl;
-import com.distantfuture.castcompanionlibrary.lib.widgets.MiniController;
+import com.distantfuture.castcompanionlibrary.lib.utils.MiniController;
 import com.distantfuture.castvideos.app.settings.CastPreference;
 
 public class VideoBrowserActivity extends FragmentActivity {

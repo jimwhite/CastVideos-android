@@ -43,13 +43,13 @@ import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.OnFailedListen
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.TransientNetworkDisconnectionException;
 import com.distantfuture.castcompanionlibrary.lib.cast.player.IMediaAuthService;
 import com.distantfuture.castcompanionlibrary.lib.cast.player.VideoCastControllerActivity;
-import com.distantfuture.castcompanionlibrary.lib.notification.VideoCastNotificationService;
-import com.distantfuture.castcompanionlibrary.lib.remotecontrol.VideoIntentReceiver;
+import com.distantfuture.castcompanionlibrary.lib.utils.VideoCastNotificationService;
+import com.distantfuture.castcompanionlibrary.lib.utils.VideoIntentReceiver;
 import com.distantfuture.castcompanionlibrary.lib.utils.LogUtils;
 import com.distantfuture.castcompanionlibrary.lib.utils.Utils;
-import com.distantfuture.castcompanionlibrary.lib.widgets.IMiniController;
-import com.distantfuture.castcompanionlibrary.lib.widgets.MiniController;
-import com.distantfuture.castcompanionlibrary.lib.widgets.MiniController.OnMiniControllerChangedListener;
+import com.distantfuture.castcompanionlibrary.lib.utils.IMiniController;
+import com.distantfuture.castcompanionlibrary.lib.utils.MiniController;
+import com.distantfuture.castcompanionlibrary.lib.utils.MiniController.OnMiniControllerChangedListener;
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.cast.Cast;
 import com.google.android.gms.cast.Cast.CastOptions.Builder;
@@ -266,7 +266,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
 
   /*
    * (non-Javadoc)
-   * @see com.distantfuture.castcompanionlibrary.lib.widgets.MiniController.
+   * @see com.distantfuture.castcompanionlibrary.lib.utils.MiniController.
    * OnMiniControllerChangedListener#onPlayPauseClicked(android.view.View)
    * @throws TransientNetworkDisconnectionException
    * @throws NoConnectionException
@@ -287,7 +287,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
 
   /*
    * (non-Javadoc)
-   * @see com.distantfuture.castcompanionlibrary.lib.widgets.MiniController.
+   * @see com.distantfuture.castcompanionlibrary.lib.utils.MiniController.
    * OnMiniControllerChangedListener #onTargetActivityInvoked(android.content.Context)
    */
   @Override
