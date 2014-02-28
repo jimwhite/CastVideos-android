@@ -41,7 +41,7 @@ public interface IMediaAuthListener {
    * Called when IMediaAuthService returns with a failure message due to some issues such as
    * network, backend issues, etc.
    *
-   * @param failureMessage The message stating the reason for failure. This message should be
+   * param failureMessage The message stating the reason for failure. This message should be
    *                       localized.
    */
   public void onFailure(String failureMessage);

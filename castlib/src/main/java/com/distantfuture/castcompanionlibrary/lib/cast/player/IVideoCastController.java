@@ -25,46 +25,34 @@ public interface IVideoCastController {
 
   /**
    * Sets the uri for the album art
-   *
-   * @param bitmap
    */
   public void setImage(Bitmap bitmap);
 
   /**
    * Sets the title
-   *
-   * @param text
    */
   public void setLine1(String text);
 
   /**
    * Sets the subtitle
-   *
-   * @param text
    */
   public void setLine2(String text);
 
   /**
    * Sets the playback state, and the idleReason (this is only reliable when the state is idle).
    * Values that can be passed to this method are from {@link MediaStatus}
-   *
-   * @param state
    */
   public void setPlaybackStatus(int state);
 
   /**
    * Assigns a {@link OnMiniControllerChangedListener} listener to be notified of the changes in
    * the mini controller
-   *
-   * @param listener
    */
   public void setOnVideoCastControllerChangedListener(OnVideoCastControllerListener listener);
 
   /**
    * Sets the type of stream. <code>streamType</code> can be MediaInfo.STREAM_TYPE_LIVE or
    * MediaInfo.STREAM_TYPE_BUFFERED
-   *
-   * @param streamType
    */
   public void setStreamType(int streamType);
 

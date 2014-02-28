@@ -51,9 +51,6 @@ public class CastUtils {
 
   /**
    * Formats time in milliseconds to hh:mm:ss string format.
-   *
-   * @param millis
-   * @return
    */
   public static String formatMillis(int millis) {
     String result = "";
@@ -83,9 +80,6 @@ public class CastUtils {
   /**
    * A utility method to show a simple error dialog. The textual content of the dialog is provided
    * through the passed-in resource id.
-   *
-   * @param context
-   * @param resourceId
    */
   public static void showErrorDialog(Context context, int resourceId) {
     showErrorDialog(context, context.getString(resourceId));
@@ -94,8 +88,7 @@ public class CastUtils {
   /**
    * A utility method to show a simple error dialog.
    *
-   * @param context
-   * @param message The message to be shown in the dialog
+   * param message The message to be shown in the dialog
    */
   public static void showErrorDialog(Context context, String message) {
     new AlertDialog.Builder(context).setTitle(R.string.error)
@@ -114,10 +107,6 @@ public class CastUtils {
    * Returns the URL of an image for the MediaInformation at the given level. Level should
    * be a number between 0 and <code>n - 1</code> where <code>n
    * </code> is the number of images for that given item.
-   *
-   * @param info
-   * @param level
-   * @return
    */
   public static String getImageUrl(MediaInfo info, int level) {
     MediaMetadata mm = info.getMetadata();
@@ -130,10 +119,6 @@ public class CastUtils {
   /**
    * Saves a string value under the provided key in the preference manager. If <code>value</code>
    * is <code>null</code>, then the provided key will be removed from the preferences.
-   *
-   * @param context
-   * @param key
-   * @param value
    */
   public static void saveStringToPreference(Context context, String key, String value) {
     SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -148,10 +133,6 @@ public class CastUtils {
   /**
    * Saves a float value under the provided key in the preference manager. If <code>value</code>
    * is <code>Float.MIN_VALUE</code>, then the provided key will be removed from the preferences.
-   *
-   * @param context
-   * @param key
-   * @param value
    */
   public static void saveFloatToPreference(Context context, String key, float value) {
     SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -167,10 +148,6 @@ public class CastUtils {
   /**
    * Retrieves a String value from preference manager. If no such key exists, it will return
    * <code>null</code>.
-   *
-   * @param context
-   * @param key
-   * @return
    */
   public static String getStringFromPreference(Context context, String key) {
     SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -180,10 +157,6 @@ public class CastUtils {
   /**
    * Retrieves a float value from preference manager. If no such key exists, it will return
    * <code>Float.MIN_VALUE</code>.
-   *
-   * @param context
-   * @param key
-   * @return
    */
   public static float getFloatFromPreference(Context context, String key) {
     SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -193,11 +166,6 @@ public class CastUtils {
   /**
    * Retrieves a boolean value from preference manager. If no such key exists, it will return the
    * value provided as <code>defaultValue</code>
-   *
-   * @param context
-   * @param key
-   * @param defaultValue
-   * @return
    */
   public static boolean getBooleanFromPreference(Context context, String key, boolean defaultValue) {
     SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -210,9 +178,6 @@ public class CastUtils {
    * displays a localized message about the error and upon user confirmation (by tapping on
    * dialog) will direct them to the Play Store if Google Play services is out of date or missing,
    * or to system settings if Google Play services is disabled on the device.
-   *
-   * @param activity
-   * @return
    */
   public static boolean checkGooglePlayServices(final Activity activity) {
     final int googlePlayServicesCheck = GooglePlayServicesUtil.isGooglePlayServicesAvailable(activity);
@@ -236,10 +201,6 @@ public class CastUtils {
    * Builds and returns a {@link Bundle} which contains a select subset of data in the
    * {@link MediaInfo}. Since {@link MediaInfo} is not {@link Parcelable}, one can use this
    * container bundle to pass around from one activity to another.
-   *
-   * @param info
-   * @return
-   * @see <code>toMediaInfo()</code>
    */
   public static Bundle fromMediaInfo(MediaInfo info) {
     if (null == info) {
@@ -267,11 +228,6 @@ public class CastUtils {
 
   /**
    * Builds and returns a {@link MediaInfo} that was wrapped in a {@link Bundle} by
-   * <code>fromMediaInfo</code>.
-   *
-   * @param wrapper
-   * @return
-   * @see <code>fromMediaInfo()</code>
    */
   public static MediaInfo toMediaInfo(Bundle wrapper) {
     if (null == wrapper) {

@@ -87,8 +87,6 @@ public class MiniController extends RelativeLayout implements IMiniController {
    * Sets the listener that should be notified when a relevant event is fired from this component.
    * Clients can register the {@link VideoCastManager} instance to be the default listener so it
    * can control the remote media playback.
-   *
-   * @param listener
    */
   @Override
   public void setOnMiniControllerChangedListener(OnMiniControllerChangedListener listener) {
@@ -287,10 +285,6 @@ public class MiniController extends RelativeLayout implements IMiniController {
 
     /**
      * Notification that the user has clicked on the album art
-     *
-     * @param context
-     * @throws NoConnectionException
-     * @throws TransientNetworkDisconnectionException
      */
     public void onTargetActivityInvoked(Context context) throws TransientNetworkDisconnectionException, NoConnectionException;
 

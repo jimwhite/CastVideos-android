@@ -27,34 +27,21 @@ public interface OnVideoCastControllerListener {
 
   /**
    * Called when seeking is stopped by user.
-   *
-   * @param seekBar
    */
   public void onStopTrackingTouch(SeekBar seekBar);
 
   /**
    * Called when seeking starts by user
-   *
-   * @param seekBar
    */
   public void onStartTrackingTouch(SeekBar seekBar);
 
   /**
    * Called while seeking is happening by the user
-   *
-   * @param seekBar
-   * @param progress
-   * @param fromUser
    */
   public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser);
 
   /**
    * Notification that user has clicked on the Play/Pause button
-   *
-   * @param v
-   * @throws TransientNetworkDisconnectionException
-   * @throws NoConnectionException
-   * @throws CastException
    */
   public void onPlayPauseClicked(View v) throws CastException, TransientNetworkDisconnectionException, NoConnectionException;
 

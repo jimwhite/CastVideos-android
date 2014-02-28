@@ -440,9 +440,6 @@ public class VideoCastControllerFragment extends Fragment implements OnVideoCast
 
   /**
    * Call this static method to create an instance of this fragment.
-   *
-   * @param extras
-   * @return
    */
   public static VideoCastControllerFragment newInstance(Bundle extras) {
     VideoCastControllerFragment f = new VideoCastControllerFragment();

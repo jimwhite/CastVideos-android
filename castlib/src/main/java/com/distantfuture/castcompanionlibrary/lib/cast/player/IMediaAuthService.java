@@ -57,31 +57,23 @@ public interface IMediaAuthService {
    * Registers an {@link IMediaAuthListener} listener to be notified when the authentication
    * service has obtained its result. To remove a previously set listener, pass a
    * <code>null</code> argument.
-   *
-   * @param listener
    */
   public void setOnResult(IMediaAuthListener listener);
 
   /**
    * Returns the current {@link MediaInfo} object that is the subject of authorization. At a
    * minimum, it is expected to have images for the media at any stage.
-   *
-   * @return
    */
   public MediaInfo getMediaInfo();
 
   /**
    * In pending state, implementors can provide an optional localized message to be shown to the
    * user. If <code>null</code> is returned, no message will be shown to the user.
-   *
-   * @return
    */
   public String getPendingMessage();
 
   /**
    * Returns the current status of the service.
-   *
-   * @return
    */
   public MediaAuthStatus getStatus();
 
@@ -89,7 +81,7 @@ public interface IMediaAuthService {
    * Returns the length of time within which the library expects to have heard back from the
    * authorization service. If it doesn't, it will call abort().
    *
-   * @return Timeout in milliseconds
+   * Timeout in milliseconds
    */
   public long getTimeout();
 
@@ -97,7 +89,7 @@ public interface IMediaAuthService {
    * If authorization times out or user cancels the authorization process, this method will be
    * called.
    *
-   * @param abortReason One of the MediaAuthStatus#ABORT_* reasons
+   * param abortReason One of the MediaAuthStatus#ABORT_* reasons
    */
   public void abort(MediaAuthStatus abortReason);
 
