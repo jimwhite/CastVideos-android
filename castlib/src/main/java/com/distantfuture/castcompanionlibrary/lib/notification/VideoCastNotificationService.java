@@ -284,7 +284,6 @@ public class VideoCastNotificationService extends Service {
 
     stackBuilder.addNextIntent(contentIntent);
 
-    // SNG IndexOutOfBoundsException here ##############
     stackBuilder.editIntentAt(1).putExtra("media", mediaWrapper);
 
     // Gets a PendingIntent containing the entire back stack
