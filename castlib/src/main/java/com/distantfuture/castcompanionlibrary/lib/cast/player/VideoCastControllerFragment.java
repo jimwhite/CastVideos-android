@@ -374,8 +374,9 @@ public class VideoCastControllerFragment extends Fragment implements OnVideoCast
       case MediaStatus.PLAYER_STATE_IDLE:
         switch (mCastManager.getIdleReason()) {
           case MediaStatus.IDLE_REASON_FINISHED:
-            mCastController.closeActivity();
-
+            if (!mIsFresh) {
+              mCastController.closeActivity();
+            }
             break;
           case MediaStatus.IDLE_REASON_CANCELED:
             try {
@@ -421,6 +422,7 @@ public class VideoCastControllerFragment extends Fragment implements OnVideoCast
       }
       mCastManager.addVideoCastConsumer(mCastConsumer);
       updatePlayerStatus();
+      mIsFresh = false;
       mCastManager.incrementUiCounter();
     } catch (CastException e) {
       // logged already

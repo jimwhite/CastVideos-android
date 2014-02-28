@@ -281,7 +281,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
   public void onTargetActivityInvoked(Context context) throws TransientNetworkDisconnectionException, NoConnectionException {
     Intent intent = videoCastControllerIntent(context);
     intent.putExtra(EXTRA_MEDIA, CastUtils.fromMediaInfo(getRemoteMediaInformation()));
-    startVideoCastControllerIntent(context, intent);
+    context.startActivity(intent);
   }
 
   /**
@@ -316,7 +316,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
     intent.putExtra(EXTRA_MEDIA, mediaWrapper);
     intent.putExtra(EXTRA_START_POINT, position);
     intent.putExtra(EXTRA_SHOULD_START, shouldStart);
-    startVideoCastControllerIntent(context, intent);
+    context.startActivity(intent);
   }
 
   /**
@@ -332,14 +332,8 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
 
       Intent intent = videoCastControllerIntent(context);
       intent.putExtra(EXTRA_HAS_AUTH, true);
-      startVideoCastControllerIntent(context, intent);
+      context.startActivity(intent);
     }
-  }
-
-  private void startVideoCastControllerIntent(Context context, Intent intent) {
-    // SNG: need to clear this otherwise if reason is finished, the activity will finish() immediately
-    mIdleReason = 0;
-    context.startActivity(intent);
   }
 
   private Intent videoCastControllerIntent(Context context) {
