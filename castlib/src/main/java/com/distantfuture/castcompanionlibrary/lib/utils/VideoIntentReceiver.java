@@ -24,16 +24,13 @@ import android.view.KeyEvent;
 import com.distantfuture.castcompanionlibrary.lib.cast.VideoCastManager;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.CastException;
 
-import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGD;
-import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGE;
-
 /**
  * A broadcastreceiver for receiving media button actions (from the lock screen) as well as
  * the the status bar notification media actions.
  */
 public class VideoIntentReceiver extends BroadcastReceiver {
 
-  private static final String TAG = LogUtils.makeLogTag(VideoIntentReceiver.class);
+  private static final String TAG = CastUtils.makeLogTag(VideoIntentReceiver.class);
 
   @Override
   public void onReceive(Context context, Intent intent) {
@@ -41,7 +38,7 @@ public class VideoIntentReceiver extends BroadcastReceiver {
     try {
       castMgr = VideoCastManager.getInstance();
     } catch (CastException e1) {
-      LOGE(TAG, "onReceive(): No CastManager instance exists");
+      CastUtils.LOGE(TAG, "onReceive(): No CastManager instance exists");
     }
     String action = intent.getAction();
     if (null == action) {
@@ -50,10 +47,10 @@ public class VideoIntentReceiver extends BroadcastReceiver {
     if (action.equals(VideoCastNotificationService.ACTION_TOGGLE_PLAYBACK)) {
       try {
         if (null != castMgr) {
-          LOGD(TAG, "Toggling playback via CastManager");
+          CastUtils.LOGD(TAG, "Toggling playback via CastManager");
           castMgr.togglePlayback();
         } else {
-          LOGD(TAG, "Toggling playback via NotificationService");
+          CastUtils.LOGD(TAG, "Toggling playback via NotificationService");
           context.startService(new Intent(VideoCastNotificationService.ACTION_TOGGLE_PLAYBACK));
         }
 
@@ -64,13 +61,13 @@ public class VideoIntentReceiver extends BroadcastReceiver {
 
       try {
         if (null != castMgr) {
-          LOGD(TAG, "Calling stopApplication from intent");
+          CastUtils.LOGD(TAG, "Calling stopApplication from intent");
           castMgr.disconnect();
         } else {
           context.startService(new Intent(VideoCastNotificationService.ACTION_STOP));
         }
       } catch (Exception e) {
-        LOGE(TAG, "onReceive(): Failed to stop application");
+        CastUtils.LOGE(TAG, "onReceive(): Failed to stop application");
       }
     } else if (action.equals(Intent.ACTION_MEDIA_BUTTON)) {
 

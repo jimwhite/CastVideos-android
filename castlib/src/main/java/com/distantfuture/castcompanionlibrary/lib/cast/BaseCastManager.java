@@ -40,8 +40,7 @@ import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.CastException;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.NoConnectionException;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.OnFailedListener;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.TransientNetworkDisconnectionException;
-import com.distantfuture.castcompanionlibrary.lib.utils.LogUtils;
-import com.distantfuture.castcompanionlibrary.lib.utils.Utils;
+import com.distantfuture.castcompanionlibrary.lib.utils.CastUtils;
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.cast.Cast;
 import com.google.android.gms.cast.Cast.ApplicationConnectionResult;
@@ -58,9 +57,6 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGD;
-import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGE;
 
 /**
  * An abstract class that manages connectivity to a cast device. Subclasses are expected to extend
@@ -86,7 +82,7 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
 
   public static final int NO_STATUS_CODE = -1;
 
-  private static final String TAG = LogUtils.makeLogTag(BaseCastManager.class);
+  private static final String TAG = CastUtils.makeLogTag(BaseCastManager.class);
   private static final int SESSION_RECOVERY_TIMEOUT = 5; // in seconds
 
   protected Context mContext;
@@ -170,13 +166,13 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
    */
 
   protected BaseCastManager(Context context, String applicationId) {
-    LOGD(TAG, "BaseCastManager is instantiated");
+    CastUtils.LOGD(TAG, "BaseCastManager is instantiated");
     mContext = context;
     mHandler = new Handler(Looper.getMainLooper());
     mApplicationId = applicationId;
-    Utils.saveStringToPreference(mContext, PREFS_KEY_APPLICATION_ID, applicationId);
+    CastUtils.saveStringToPreference(mContext, PREFS_KEY_APPLICATION_ID, applicationId);
 
-    LOGD(TAG, "Application ID is: " + mApplicationId);
+    CastUtils.LOGD(TAG, "Application ID is: " + mApplicationId);
     mMediaRouter = MediaRouter.getInstance(context);
     mMediaRouteSelector = new MediaRouteSelector.Builder().addControlCategory(CastMediaControlIntent
         .categoryForCast(mApplicationId)).build();
@@ -186,7 +182,7 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
   }
 
   public void onWifiConnectivityChanged(boolean connected) {
-    LOGD(TAG, "WIFI connectivity changed to " + (connected ? "enabled" : "disabled"));
+    CastUtils.LOGD(TAG, "WIFI connectivity changed to " + (connected ? "enabled" : "disabled"));
     if (connected && !mWifiConnectivity) {
       mWifiConnectivity = true;
       mHandler.postDelayed(new Runnable() {
@@ -227,30 +223,30 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
 
     if (mSelectedCastDevice == null) {
       if (!mConnectionSuspened) {
-        Utils.saveStringToPreference(mContext, PREFS_KEY_SESSION_ID, null);
-        Utils.saveStringToPreference(mContext, PREFS_KEY_ROUTE_ID, null);
+        CastUtils.saveStringToPreference(mContext, PREFS_KEY_SESSION_ID, null);
+        CastUtils.saveStringToPreference(mContext, PREFS_KEY_ROUTE_ID, null);
       }
       mConnectionSuspened = false;
       try {
         if (isConnected()) {
           if (stopAppOnExit) {
-            LOGD(TAG, "Calling stopApplication");
+            CastUtils.LOGD(TAG, "Calling stopApplication");
             stopApplication();
           }
         }
       } catch (IllegalStateException e) {
-        LOGE(TAG, "Failed to stop the application after disconecting route", e);
+        CastUtils.LOGE(TAG, "Failed to stop the application after disconecting route", e);
       } catch (IOException e) {
-        LOGE(TAG, "Failed to stop the application after disconecting route", e);
+        CastUtils.LOGE(TAG, "Failed to stop the application after disconecting route", e);
       } catch (TransientNetworkDisconnectionException e) {
-        LOGE(TAG, "Failed to stop the application after disconecting route", e);
+        CastUtils.LOGE(TAG, "Failed to stop the application after disconecting route", e);
       } catch (NoConnectionException e) {
-        LOGE(TAG, "Failed to stop the application after disconecting route", e);
+        CastUtils.LOGE(TAG, "Failed to stop the application after disconecting route", e);
       }
       onDisconnected();
       onDeviceUnselected();
       if (null != mApiClient) {
-        LOGD(TAG, "Trying to disconnect");
+        CastUtils.LOGD(TAG, "Trying to disconnect");
         mApiClient.disconnect();
         if (null != mMediaRouter) {
           mMediaRouter.selectRoute(mMediaRouter.getDefaultRoute());
@@ -258,7 +254,7 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
         mApiClient = null;
       }
     } else if (null == mApiClient) {
-      LOGD(TAG, "acquiring a conenction to Google Play services for " + mSelectedCastDevice);
+      CastUtils.LOGD(TAG, "acquiring a conenction to Google Play services for " + mSelectedCastDevice);
       Cast.CastOptions.Builder apiOptionsBuilder = getCastOptionBuilder(mSelectedCastDevice);
       mApiClient = new GoogleApiClient.Builder(mContext).addApi(Cast.API, apiOptionsBuilder.build())
           .addConnectionCallbacks(this)
@@ -277,7 +273,7 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
         try {
           consumer.onCastDeviceDetected(info);
         } catch (Exception e) {
-          LOGE(TAG, "onCastDeviceDetected(): Failed to inform " + consumer, e);
+          CastUtils.LOGE(TAG, "onCastDeviceDetected(): Failed to inform " + consumer, e);
         }
       }
     }
@@ -324,9 +320,9 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
       onUiVisibilityChanged(true);
     }
     if (mVisibilityCounter == 0) {
-      LOGD(TAG, "UI is no longer visible");
+      CastUtils.LOGD(TAG, "UI is no longer visible");
     } else {
-      LOGD(TAG, "UI is visible");
+      CastUtils.LOGD(TAG, "UI is visible");
     }
   }
 
@@ -340,13 +336,13 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
       @Override
       public void run() {
         if (--mVisibilityCounter == 0) {
-          LOGD(TAG, "UI is no longer visible");
+          CastUtils.LOGD(TAG, "UI is no longer visible");
           if (mUiVisible) {
             mUiVisible = false;
             onUiVisibilityChanged(false);
           }
         } else {
-          LOGD(TAG, "UI is visible");
+          CastUtils.LOGD(TAG, "UI is visible");
         }
       }
     }, 300);
@@ -360,12 +356,12 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
   protected void onUiVisibilityChanged(boolean visible) {
     if (visible) {
       if (null != mMediaRouter && null != mMediaRouterCallback) {
-        LOGD(TAG, "onUiVisibilityChanged() addCallback called");
+        CastUtils.LOGD(TAG, "onUiVisibilityChanged() addCallback called");
         mMediaRouter.addCallback(mMediaRouteSelector, mMediaRouterCallback, MediaRouter.CALLBACK_FLAG_PERFORM_ACTIVE_SCAN);
       }
     } else {
       if (null != mMediaRouter) {
-        LOGD(TAG, "onUiVisibilityChanged() removeCallback called");
+        CastUtils.LOGD(TAG, "onUiVisibilityChanged() removeCallback called");
         mMediaRouter.removeCallback(mMediaRouterCallback);
       }
     }
@@ -386,7 +382,7 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
    * @return
    */
   public static boolean checkGooglePlayServices(final Activity activity) {
-    return Utils.checkGooglePlayServices(activity);
+    return CastUtils.checkGooglePlayServices(activity);
   }
 
   /**
@@ -477,7 +473,7 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
     try {
       Cast.CastApi.setVolume(mApiClient, volume);
     } catch (Exception e) {
-      LOGE(TAG, "Failed to set volume", e);
+      CastUtils.LOGE(TAG, "Failed to set volume", e);
       throw new CastException("Failed to set volume");
     }
   }
@@ -535,7 +531,7 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
     try {
       Cast.CastApi.setMute(mApiClient, mute);
     } catch (Exception e) {
-      LOGE(TAG, "Failed to set mute to: " + mute, e);
+      CastUtils.LOGE(TAG, "Failed to set mute to: " + mute, e);
       throw new CastException("Failed to mute");
     }
   }
@@ -570,12 +566,12 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
    * @return
    */
   public final boolean canConsiderSessionRecovery() {
-    String sessionId = Utils.getStringFromPreference(mContext, PREFS_KEY_SESSION_ID);
-    String routeId = Utils.getStringFromPreference(mContext, PREFS_KEY_ROUTE_ID);
+    String sessionId = CastUtils.getStringFromPreference(mContext, PREFS_KEY_SESSION_ID);
+    String routeId = CastUtils.getStringFromPreference(mContext, PREFS_KEY_ROUTE_ID);
     if (null == sessionId || null == routeId) {
       return false;
     }
-    LOGD(TAG, "Found session info in the preferences, so proceed with an " + "attempt to reconnect if possible");
+    CastUtils.LOGD(TAG, "Found session info in the preferences, so proceed with an " + "attempt to reconnect if possible");
     return true;
   }
 
@@ -583,9 +579,9 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
     if (isConnected()) {
       return;
     }
-    String sessionId = Utils.getStringFromPreference(mContext, PREFS_KEY_SESSION_ID);
-    String routeId = Utils.getStringFromPreference(mContext, PREFS_KEY_ROUTE_ID);
-    LOGD(TAG, "reconnectSessionIfPossible() Retrieved from preferences: " + "sessionId=" + sessionId + ", routeId=" + routeId);
+    String sessionId = CastUtils.getStringFromPreference(mContext, PREFS_KEY_SESSION_ID);
+    String routeId = CastUtils.getStringFromPreference(mContext, PREFS_KEY_ROUTE_ID);
+    CastUtils.LOGD(TAG, "reconnectSessionIfPossible() Retrieved from preferences: " + "sessionId=" + sessionId + ", routeId=" + routeId);
     if (null == sessionId || null == routeId) {
       return;
     }
@@ -593,7 +589,7 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
     CastDevice device = CastDevice.getFromBundle(theRoute.getExtras());
 
     if (null != device) {
-      LOGD(TAG, "trying to acquire Cast Client for " + device);
+      CastUtils.LOGD(TAG, "trying to acquire Cast Client for " + device);
       onDeviceSelected(device);
     }
   }
@@ -602,7 +598,7 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
    * Cancels the task responsible for recovery of prior sessions, is used internally.
    */
   void cancelReconnectionTask() {
-    LOGD(TAG, "cancelling reconnection task");
+    CastUtils.LOGD(TAG, "cancelling reconnection task");
     if (null != mReconnectionTask && !mReconnectionTask.isCancelled()) {
       mReconnectionTask.cancel(true);
     }
@@ -628,7 +624,7 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
     if (isConnected()) {
       return;
     }
-    String routeId = Utils.getStringFromPreference(mContext, PREFS_KEY_ROUTE_ID);
+    String routeId = CastUtils.getStringFromPreference(mContext, PREFS_KEY_ROUTE_ID);
     if (canConsiderSessionRecovery()) {
       List<RouteInfo> routes = mMediaRouter.getRoutes();
       RouteInfo theRoute = null;
@@ -789,7 +785,7 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
       try {
         consumer.onConnectivityRecovered();
       } catch (Exception e) {
-        LOGE(TAG, "onConnectivityRecovered: Failed to inform " + consumer, e);
+        CastUtils.LOGE(TAG, "onConnectivityRecovered: Failed to inform " + consumer, e);
       }
     }
   }
@@ -801,7 +797,7 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
    */
   @Override
   public void onConnected(Bundle arg0) {
-    LOGD(TAG, "onConnected() reached with prior suspension: " + mConnectionSuspened);
+    CastUtils.LOGD(TAG, "onConnected() reached with prior suspension: " + mConnectionSuspened);
     if (mConnectionSuspened) {
       mConnectionSuspened = false;
       onConnectivityRecovered();
@@ -822,19 +818,19 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
           try {
             consumer.onConnected();
           } catch (Exception e) {
-            LOGE(TAG, "onConnected: Failed to inform " + consumer, e);
+            CastUtils.LOGE(TAG, "onConnected: Failed to inform " + consumer, e);
           }
         }
       }
 
     } catch (IOException e) {
-      LOGE(TAG, "error requesting status", e);
+      CastUtils.LOGE(TAG, "error requesting status", e);
     } catch (IllegalStateException e) {
-      LOGE(TAG, "error requesting status", e);
+      CastUtils.LOGE(TAG, "error requesting status", e);
     } catch (TransientNetworkDisconnectionException e) {
-      LOGE(TAG, "error requesting status due to network issues", e);
+      CastUtils.LOGE(TAG, "error requesting status due to network issues", e);
     } catch (NoConnectionException e) {
-      LOGE(TAG, "error requesting status due to network issues", e);
+      CastUtils.LOGE(TAG, "error requesting status due to network issues", e);
     }
 
   }
@@ -844,14 +840,14 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
    * time.
    */
   protected void onDisconnected() {
-    LOGD(TAG, "onDisconnected() reached");
+    CastUtils.LOGD(TAG, "onDisconnected() reached");
     mDeviceName = null;
     if (null != mBaseCastConsumers) {
       for (IBaseCastConsumer consumer : mBaseCastConsumers) {
         try {
           consumer.onDisconnected();
         } catch (Exception e) {
-          LOGE(TAG, "onDisconnected(): Failed to inform " + consumer, e);
+          CastUtils.LOGE(TAG, "onDisconnected(): Failed to inform " + consumer, e);
         }
       }
     }
@@ -864,7 +860,7 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
    */
   @Override
   public void onConnectionFailed(ConnectionResult result) {
-    LOGD(TAG, "onConnectionFailed() reached, error code: " + result.getErrorCode() + ", reason: " + result
+    CastUtils.LOGD(TAG, "onConnectionFailed() reached, error code: " + result.getErrorCode() + ", reason: " + result
         .toString());
     mSelectedCastDevice = null;
     if (null != mMediaRouter) {
@@ -876,24 +872,24 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
         try {
           consumer.onConnectionFailed(result);
         } catch (Exception e) {
-          LOGE(TAG, "onConnectionFailed(): Failed to inform " + consumer, e);
+          CastUtils.LOGE(TAG, "onConnectionFailed(): Failed to inform " + consumer, e);
         }
       }
     }
     if (showError) {
-      Utils.showErrorDialog(mContext, R.string.failed_to_connect);
+      CastUtils.showErrorDialog(mContext, R.string.failed_to_connect);
     }
   }
 
   @Override
   public void onConnectionSuspended(int cause) {
     mConnectionSuspened = true;
-    LOGD(TAG, "onConnectionSuspended() was called with cause: " + cause);
+    CastUtils.LOGD(TAG, "onConnectionSuspended() was called with cause: " + cause);
     for (IBaseCastConsumer consumer : mBaseCastConsumers) {
       try {
         consumer.onConnectionSuspended(cause);
       } catch (Exception e) {
-        LOGE(TAG, "onConnectionSuspended(): Failed to inform " + consumer, e);
+        CastUtils.LOGE(TAG, "onConnectionSuspended(): Failed to inform " + consumer, e);
       }
     }
   }
@@ -903,7 +899,7 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
    * CastClient.
    */
   private void launchApp() throws TransientNetworkDisconnectionException, NoConnectionException {
-    LOGD(TAG, "launchApp() is called");
+    CastUtils.LOGD(TAG, "launchApp() is called");
     if (!isConnected()) {
       if (mReconnectionStatus == ReconnectionStatus.IN_PROGRESS) {
         mReconnectionStatus = ReconnectionStatus.INACTIVE;
@@ -913,37 +909,37 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
     }
 
     if (mReconnectionStatus == ReconnectionStatus.IN_PROGRESS) {
-      LOGD(TAG, "Attempting to join a previously interrupted session...");
-      String sessionId = Utils.getStringFromPreference(mContext, PREFS_KEY_SESSION_ID);
-      LOGD(TAG, "joinApplication() -> start");
+      CastUtils.LOGD(TAG, "Attempting to join a previously interrupted session...");
+      String sessionId = CastUtils.getStringFromPreference(mContext, PREFS_KEY_SESSION_ID);
+      CastUtils.LOGD(TAG, "joinApplication() -> start");
       Cast.CastApi.joinApplication(mApiClient, mApplicationId, sessionId)
           .setResultCallback(new ResultCallback<Cast.ApplicationConnectionResult>() {
 
             @Override
             public void onResult(ApplicationConnectionResult result) {
               if (result.getStatus().isSuccess()) {
-                LOGD(TAG, "joinApplication() -> success");
+                CastUtils.LOGD(TAG, "joinApplication() -> success");
                 onApplicationConnected(result.getApplicationMetadata(), result.getApplicationStatus(), result
                     .getSessionId(), result.getWasLaunched());
               } else {
-                LOGD(TAG, "joinApplication() -> failure");
+                CastUtils.LOGD(TAG, "joinApplication() -> failure");
                 onApplicationConnectionFailed(result.getStatus().getStatusCode());
               }
             }
           });
     } else {
-      LOGD(TAG, "Launching app");
+      CastUtils.LOGD(TAG, "Launching app");
       Cast.CastApi.launchApplication(mApiClient, mApplicationId)
           .setResultCallback(new ResultCallback<Cast.ApplicationConnectionResult>() {
 
             @Override
             public void onResult(ApplicationConnectionResult result) {
               if (result.getStatus().isSuccess()) {
-                LOGD(TAG, "launchApplication() -> success result");
+                CastUtils.LOGD(TAG, "launchApplication() -> success result");
                 onApplicationConnected(result.getApplicationMetadata(), result.getApplicationStatus(), result
                     .getSessionId(), result.getWasLaunched());
               } else {
-                LOGD(TAG, "launchApplication() -> failure result");
+                CastUtils.LOGD(TAG, "launchApplication() -> failure result");
                 onApplicationConnectionFailed(result.getStatus().getStatusCode());
               }
             }
@@ -966,10 +962,10 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
       @Override
       public void onResult(Status result) {
         if (!result.isSuccess()) {
-          LOGD(TAG, "stopApplication -> onResult: stopping " + "application failed");
+          CastUtils.LOGD(TAG, "stopApplication -> onResult: stopping " + "application failed");
           onApplicationStopFailed(result.getStatusCode());
         } else {
-          LOGD(TAG, "stopApplication -> onResult Stopped application " + "successfully");
+          CastUtils.LOGD(TAG, "stopApplication -> onResult Stopped application " + "successfully");
         }
       }
     });
@@ -988,7 +984,7 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
   public synchronized void addBaseCastConsumer(IBaseCastConsumer listener) {
     if (null != listener) {
       if (mBaseCastConsumers.add(listener)) {
-        LOGD(TAG, "Successfully added the new BaseCastConsumer listener " + listener);
+        CastUtils.LOGD(TAG, "Successfully added the new BaseCastConsumer listener " + listener);
       }
     }
   }
@@ -1001,7 +997,7 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
   public synchronized void removeBaseCastConsumer(IBaseCastConsumer listener) {
     if (null != listener) {
       if (mBaseCastConsumers.remove(listener)) {
-        LOGD(TAG, "Successfully removed the existing BaseCastConsumer listener " + listener);
+        CastUtils.LOGD(TAG, "Successfully removed the existing BaseCastConsumer listener " + listener);
       }
     }
   }
@@ -1024,12 +1020,12 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
 
   @Override
   public void onFailed(int resourceId, int statusCode) {
-    LOGD(TAG, "onFailed() was called with statusCode: " + statusCode);
+    CastUtils.LOGD(TAG, "onFailed() was called with statusCode: " + statusCode);
     for (IBaseCastConsumer consumer : mBaseCastConsumers) {
       try {
         consumer.onFailed(resourceId, statusCode);
       } catch (Exception e) {
-        LOGE(TAG, "onFailed(): Failed to inform " + consumer, e);
+        CastUtils.LOGE(TAG, "onFailed(): Failed to inform " + consumer, e);
       }
     }
 

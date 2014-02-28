@@ -35,13 +35,10 @@ import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.CastException;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.NoConnectionException;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.OnFailedListener;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.TransientNetworkDisconnectionException;
-import com.distantfuture.castcompanionlibrary.lib.utils.IMiniController;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaStatus;
 
 import java.net.URL;
-
-import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGE;
 
 /**
  * A compound component that provides a superset of functionalities required for the global access
@@ -175,7 +172,7 @@ public class MiniController extends RelativeLayout implements IMiniController {
           URL imgUrl = new URL(mIconUri.toString());
           bm = BitmapFactory.decodeStream(imgUrl.openStream());
         } catch (Exception e) {
-          LOGE(TAG, "setIcon(): Failed to load the image with url: " +
+          CastUtils.LOGE(TAG, "setIcon(): Failed to load the image with url: " +
               mIconUri + ", using the default one", e);
           bm = BitmapFactory.decodeResource(getResources(), R.drawable.dummy_album_art);
         }

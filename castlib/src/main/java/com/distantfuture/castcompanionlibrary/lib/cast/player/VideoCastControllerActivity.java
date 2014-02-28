@@ -39,13 +39,9 @@ import com.distantfuture.castcompanionlibrary.lib.cast.VideoCastManager;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.CastException;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.NoConnectionException;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.TransientNetworkDisconnectionException;
-import com.distantfuture.castcompanionlibrary.lib.utils.LogUtils;
-import com.distantfuture.castcompanionlibrary.lib.utils.Utils;
+import com.distantfuture.castcompanionlibrary.lib.utils.CastUtils;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaStatus;
-
-import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGD;
-import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGE;
 
 /**
  * This class provides an {@link Activity} that clients can easily add to their applications to
@@ -63,7 +59,7 @@ import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGE;
  */
 public class VideoCastControllerActivity extends FragmentActivity implements IVideoCastController {
 
-  private static final String TAG = LogUtils.makeLogTag(VideoCastControllerActivity.class);
+  private static final String TAG = CastUtils.makeLogTag(VideoCastControllerActivity.class);
   private VideoCastManager mCastManager;
   private View mPageView;
   private ImageView mPlayPause;
@@ -87,7 +83,7 @@ public class VideoCastControllerActivity extends FragmentActivity implements IVi
     super.onCreate(savedInstanceState);
     setContentView(R.layout.cast_activity);
     loadAndSetupViews();
-    mVolumeIncrement = Utils.getFloatFromPreference(this, VideoCastManager.PREFS_KEY_VOLUME_INCREMENT);
+    mVolumeIncrement = CastUtils.getFloatFromPreference(this, VideoCastManager.PREFS_KEY_VOLUME_INCREMENT);
     try {
       mCastManager = VideoCastManager.getInstance(this);
     } catch (CastException e) {
@@ -154,14 +150,14 @@ public class VideoCastControllerActivity extends FragmentActivity implements IVi
     try {
       mCastManager.incrementVolume(volumeIncrement);
     } catch (Exception e) {
-      LOGE(TAG, "onVolumeChange() Failed to change volume", e);
-      Utils.showErrorDialog(VideoCastControllerActivity.this, R.string.failed_setting_volume);
+      CastUtils.LOGE(TAG, "onVolumeChange() Failed to change volume", e);
+      CastUtils.showErrorDialog(VideoCastControllerActivity.this, R.string.failed_setting_volume);
     }
   }
 
   @Override
   protected void onResume() {
-    LOGD(TAG, "onResume() was called");
+    CastUtils.LOGD(TAG, "onResume() was called");
     try {
       mCastManager = VideoCastManager.getInstance(VideoCastControllerActivity.this);
     } catch (CastException e) {
@@ -192,14 +188,14 @@ public class VideoCastControllerActivity extends FragmentActivity implements IVi
         try {
           mListener.onPlayPauseClicked(v);
         } catch (TransientNetworkDisconnectionException e) {
-          LOGE(TAG, "Failed to toggle playback due to temporary network issue", e);
-          Utils.showErrorDialog(VideoCastControllerActivity.this, R.string.failed_no_connection_trans);
+          CastUtils.LOGE(TAG, "Failed to toggle playback due to temporary network issue", e);
+          CastUtils.showErrorDialog(VideoCastControllerActivity.this, R.string.failed_no_connection_trans);
         } catch (NoConnectionException e) {
-          LOGE(TAG, "Failed to toggle playback due to network issues", e);
-          Utils.showErrorDialog(VideoCastControllerActivity.this, R.string.failed_no_connection);
+          CastUtils.LOGE(TAG, "Failed to toggle playback due to network issues", e);
+          CastUtils.showErrorDialog(VideoCastControllerActivity.this, R.string.failed_no_connection);
         } catch (Exception e) {
-          LOGE(TAG, "Failed to toggle playback due to other issues", e);
-          Utils.showErrorDialog(VideoCastControllerActivity.this, R.string.failed_perform_action);
+          CastUtils.LOGE(TAG, "Failed to toggle playback due to other issues", e);
+          CastUtils.showErrorDialog(VideoCastControllerActivity.this, R.string.failed_perform_action);
         }
       }
     });
@@ -213,7 +209,7 @@ public class VideoCastControllerActivity extends FragmentActivity implements IVi
             mListener.onStopTrackingTouch(seekBar);
           }
         } catch (Exception e) {
-          LOGE(TAG, "Failed to complete seek", e);
+          CastUtils.LOGE(TAG, "Failed to complete seek", e);
           finish();
         }
       }
@@ -225,20 +221,20 @@ public class VideoCastControllerActivity extends FragmentActivity implements IVi
             mListener.onStartTrackingTouch(seekBar);
           }
         } catch (Exception e) {
-          LOGE(TAG, "Failed to start seek", e);
+          CastUtils.LOGE(TAG, "Failed to start seek", e);
           finish();
         }
       }
 
       @Override
       public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        mStart.setText(Utils.formatMillis(progress));
+        mStart.setText(CastUtils.formatMillis(progress));
         try {
           if (null != mListener) {
             mListener.onProgressChanged(seekBar, progress, fromUser);
           }
         } catch (Exception e) {
-          LOGE(TAG, "Failed to set teh progress result", e);
+          CastUtils.LOGE(TAG, "Failed to set teh progress result", e);
         }
       }
     });
@@ -309,8 +305,8 @@ public class VideoCastControllerActivity extends FragmentActivity implements IVi
   public void updateSeekbar(int position, int duration) {
     mSeekbar.setProgress(position);
     mSeekbar.setMax(duration);
-    mStart.setText(Utils.formatMillis(position));
-    mEnd.setText(Utils.formatMillis(duration));
+    mStart.setText(CastUtils.formatMillis(position));
+    mEnd.setText(CastUtils.formatMillis(duration));
   }
 
   @Override

@@ -26,7 +26,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
+import com.distantfuture.castcompanionlibrary.lib.BuildConfig;
 import com.distantfuture.castcompanionlibrary.lib.R;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
@@ -39,9 +41,9 @@ import java.util.ArrayList;
 /**
  * A collection of utility methods, all static.
  */
-public class Utils {
+public class CastUtils {
 
-  private static final String TAG = LogUtils.makeLogTag(Utils.class);
+  private static final String TAG = CastUtils.makeLogTag(CastUtils.class);
   private static final String KEY_IMAGES = "images";
   private static final String KEY_URL = "movie-urls";
   private static final String KEY_CONTENT_TYPE = "content-type";
@@ -109,7 +111,7 @@ public class Utils {
   }
 
   /**
-   * Returns the URL of an image for the {@link MediaInformation} at the given level. Level should
+   * Returns the URL of an image for the MediaInformation at the given level. Level should
    * be a number between 0 and <code>n - 1</code> where <code>n
    * </code> is the number of images for that given item.
    *
@@ -293,4 +295,44 @@ public class Utils {
         .setMetadata(metaData)
         .build();
   }
+
+  public static String makeLogTag(String str) {
+    final String LOG_PREFIX = "ccl_";
+    final int LOG_PREFIX_LENGTH = LOG_PREFIX.length();
+    final int MAX_LOG_TAG_LENGTH = 23;
+
+    if (str.length() > MAX_LOG_TAG_LENGTH - LOG_PREFIX_LENGTH) {
+      return LOG_PREFIX + str.substring(0, MAX_LOG_TAG_LENGTH - LOG_PREFIX_LENGTH - 1);
+    }
+
+    return LOG_PREFIX + str;
+  }
+
+  /**
+   * WARNING: Don't use this when obfuscating class names with Proguard!
+   */
+  public static String makeLogTag(Class<?> cls) {
+    return makeLogTag(cls.getSimpleName());
+  }
+
+  public static void LOGD(final String tag, String message) {
+    if (BuildConfig.DEBUG || Log.isLoggable(tag, Log.DEBUG)) {
+      Log.d(tag, message);
+    }
+  }
+
+  public static void LOGD(final String tag, String message, Throwable cause) {
+    if (BuildConfig.DEBUG || Log.isLoggable(tag, Log.DEBUG)) {
+      Log.d(tag, message, cause);
+    }
+  }
+
+  public static void LOGE(final String tag, String message) {
+    Log.e(tag, message);
+  }
+
+  public static void LOGE(final String tag, String message, Throwable cause) {
+    Log.e(tag, message, cause);
+  }
+
 }

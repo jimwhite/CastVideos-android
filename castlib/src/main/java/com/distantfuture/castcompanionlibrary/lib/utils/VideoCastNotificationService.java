@@ -47,9 +47,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGD;
-import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGE;
-
 /**
  * A service to provide status bar Notifications when we are casting. For JB+ versions, notification
  * area provides a play/pause toggle and an "x" button to disconnect but that for GB, we do not show
@@ -62,7 +59,7 @@ public class VideoCastNotificationService extends Service {
   public static final String ACTION_VISIBILITY = "com.distantfuture.castcompanionlibrary.lib.action.notificationvisibility";
   private static int NOTIFICATION_ID = 1;
 
-  private static final String TAG = LogUtils.makeLogTag(VideoCastNotificationService.class);
+  private static final String TAG = CastUtils.makeLogTag(VideoCastNotificationService.class);
   private String mApplicationId;
   private Bitmap mVideoArtBitmap;
   private Uri mVideoArtUri;
@@ -86,7 +83,7 @@ public class VideoCastNotificationService extends Service {
     mConsumer = new VideoCastConsumerImpl() {
       @Override
       public void onApplicationDisconnected(int errorCode) {
-        LOGD(TAG, "onApplicationDisconnected() was reached");
+        CastUtils.LOGD(TAG, "onApplicationDisconnected() was reached");
         stopSelf();
       }
 
@@ -111,25 +108,25 @@ public class VideoCastNotificationService extends Service {
 
       String action = intent.getAction();
       if (ACTION_TOGGLE_PLAYBACK.equals(action)) {
-        LOGD(TAG, "onStartCommand(): Action: ACTION_TOGGLE_PLAYBACK");
+        CastUtils.LOGD(TAG, "onStartCommand(): Action: ACTION_TOGGLE_PLAYBACK");
         togglePlayback();
       } else if (ACTION_STOP.equals(action)) {
-        LOGD(TAG, "onStartCommand(): Action: ACTION_STOP");
+        CastUtils.LOGD(TAG, "onStartCommand(): Action: ACTION_STOP");
         stopApplication();
       } else if (ACTION_VISIBILITY.equals(action)) {
         mVisible = intent.getBooleanExtra("visible", false);
-        LOGD(TAG, "onStartCommand(): Action: ACTION_VISIBILITY " + mVisible);
+        CastUtils.LOGD(TAG, "onStartCommand(): Action: ACTION_VISIBILITY " + mVisible);
         if (mVisible && null != mNotification) {
           startForeground(NOTIFICATION_ID, mNotification);
         } else {
           stopForeground(true);
         }
       } else {
-        LOGD(TAG, "onStartCommand(): Action: none");
+        CastUtils.LOGD(TAG, "onStartCommand(): Action: none");
       }
 
     } else {
-      LOGD(TAG, "onStartCommand(): Intent was null");
+      CastUtils.LOGD(TAG, "onStartCommand(): Intent was null");
     }
 
     return Service.START_FLAG_REDELIVERY;
@@ -172,19 +169,19 @@ public class VideoCastNotificationService extends Service {
                 startForeground(NOTIFICATION_ID, mNotification);
               }
             } catch (MalformedURLException e) {
-              LOGE(TAG, "setIcon(): Failed to load the image with url: " +
+              CastUtils.LOGE(TAG, "setIcon(): Failed to load the image with url: " +
                   imgUrl + ", using the default one", e);
             } catch (IOException e) {
-              LOGE(TAG, "setIcon(): Failed to load the image with url: " +
+              CastUtils.LOGE(TAG, "setIcon(): Failed to load the image with url: " +
                   imgUrl + ", using the default one", e);
             } catch (CastException e) {
-              LOGE(TAG, "setIcon(): Failed to load the image with url: " +
+              CastUtils.LOGE(TAG, "setIcon(): Failed to load the image with url: " +
                   imgUrl + ", using the default one", e);
             } catch (TransientNetworkDisconnectionException e) {
-              LOGE(TAG, "setIcon(): Failed to load the image with url: " +
+              CastUtils.LOGE(TAG, "setIcon(): Failed to load the image with url: " +
                   imgUrl + " due to network issues, using the default one", e);
             } catch (NoConnectionException e) {
-              LOGE(TAG, "setIcon(): Failed to load the image with url: " +
+              CastUtils.LOGE(TAG, "setIcon(): Failed to load the image with url: " +
                   imgUrl + " due to network issues, using the default one", e);
             }
 
@@ -206,7 +203,7 @@ public class VideoCastNotificationService extends Service {
 
   private void onRemoteMediaPlayerStatusUpdated(int mediaStatus) {
     mStatus = mediaStatus;
-    LOGD(TAG, "onRemoteMediaPlayerMetadataUpdated() reached with status: " + mStatus);
+    CastUtils.LOGD(TAG, "onRemoteMediaPlayerMetadataUpdated() reached with status: " + mStatus);
     try {
       switch (mediaStatus) {
         case MediaStatus.PLAYER_STATE_BUFFERING: // (== 4)
@@ -237,9 +234,9 @@ public class VideoCastNotificationService extends Service {
           break;
       }
     } catch (TransientNetworkDisconnectionException e) {
-      LOGE(TAG, "Failed to update the playback status due to network issues", e);
+      CastUtils.LOGE(TAG, "Failed to update the playback status due to network issues", e);
     } catch (NoConnectionException e) {
-      LOGE(TAG, "Failed to update the playback status due to network issues", e);
+      CastUtils.LOGE(TAG, "Failed to update the playback status due to network issues", e);
     }
   }
 
@@ -249,7 +246,7 @@ public class VideoCastNotificationService extends Service {
    */
   @Override
   public void onDestroy() {
-    LOGD(TAG, "onDestroy was called");
+    CastUtils.LOGD(TAG, "onDestroy was called");
     removeNotification();
     if (null != mBroadcastReceiver) {
       unregisterReceiver(mBroadcastReceiver);
@@ -265,7 +262,7 @@ public class VideoCastNotificationService extends Service {
    * so when user goes into the CastPlayerActivity, she can have a meaningful "back" experience.
    */
   private RemoteViews build(MediaInfo info, Bitmap bitmap, boolean isPlaying, Class<?> targetActivity) throws CastException, TransientNetworkDisconnectionException, NoConnectionException {
-    Bundle mediaWrapper = Utils.fromMediaInfo(mCastManager.getRemoteMediaInformation());
+    Bundle mediaWrapper = CastUtils.fromMediaInfo(mCastManager.getRemoteMediaInformation());
     Intent contentIntent = null;
     if (null == mTargetActivity) {
       mTargetActivity = VideoCastControllerActivity.class;
@@ -338,7 +335,7 @@ public class VideoCastNotificationService extends Service {
     try {
       mCastManager.togglePlayback();
     } catch (Exception e) {
-      LOGE(TAG, "Failed to toggle the playback", e);
+      CastUtils.LOGE(TAG, "Failed to toggle the playback", e);
     }
   }
 
@@ -348,10 +345,10 @@ public class VideoCastNotificationService extends Service {
    */
   private void stopApplication() {
     try {
-      LOGD(TAG, "Calling stopApplication");
+      CastUtils.LOGD(TAG, "Calling stopApplication");
       mCastManager.disconnect();
     } catch (Exception e) {
-      LOGE(TAG, "Failed to disconnect application", e);
+      CastUtils.LOGE(TAG, "Failed to disconnect application", e);
     }
     stopSelf();
   }
@@ -360,8 +357,8 @@ public class VideoCastNotificationService extends Service {
    * Reads application ID and target activity from preference storage.
    */
   private void readPersistedData() {
-    mApplicationId = Utils.getStringFromPreference(this, VideoCastManager.PREFS_KEY_APPLICATION_ID);
-    String targetName = Utils.getStringFromPreference(this, VideoCastManager.PREFS_KEY_CAST_ACTIVITY_NAME);
+    mApplicationId = CastUtils.getStringFromPreference(this, VideoCastManager.PREFS_KEY_APPLICATION_ID);
+    String targetName = CastUtils.getStringFromPreference(this, VideoCastManager.PREFS_KEY_CAST_ACTIVITY_NAME);
     try {
       if (null != targetName) {
         mTargetActivity = Class.forName(targetName);
@@ -370,7 +367,7 @@ public class VideoCastNotificationService extends Service {
       }
 
     } catch (ClassNotFoundException e) {
-      LOGE(TAG, "Failed to find the targetActivity class", e);
+      CastUtils.LOGE(TAG, "Failed to find the targetActivity class", e);
     }
   }
 }

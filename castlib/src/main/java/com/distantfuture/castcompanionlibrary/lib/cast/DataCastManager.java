@@ -26,8 +26,7 @@ import com.distantfuture.castcompanionlibrary.lib.cast.callbacks.IDataCastConsum
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.CastException;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.NoConnectionException;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.TransientNetworkDisconnectionException;
-import com.distantfuture.castcompanionlibrary.lib.utils.LogUtils;
-import com.distantfuture.castcompanionlibrary.lib.utils.Utils;
+import com.distantfuture.castcompanionlibrary.lib.utils.CastUtils;
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.cast.Cast;
 import com.google.android.gms.cast.Cast.CastOptions.Builder;
@@ -41,9 +40,6 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGD;
-import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGE;
 
 /**
  * A concrete subclass of {@link BaseCastManager} that is suitable for data-centric applications
@@ -77,7 +73,7 @@ import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGE;
  */
 public class DataCastManager extends BaseCastManager implements Cast.MessageReceivedCallback {
 
-  private static final String TAG = LogUtils.makeLogTag(DataCastManager.class);
+  private static final String TAG = CastUtils.makeLogTag(DataCastManager.class);
   private static DataCastManager sInstance;
   private final Set<String> mNamespaceList = new HashSet<String>();
   protected Set<IDataCastConsumer> mDataConsumers;
@@ -95,10 +91,10 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
    */
   public static DataCastManager initialize(Context context, String applicationId, String... namespaces) {
     if (null == sInstance) {
-      LOGD(TAG, "New instance of DataCastManager is created");
+      CastUtils.LOGD(TAG, "New instance of DataCastManager is created");
       if (ConnectionResult.SUCCESS != GooglePlayServicesUtil.isGooglePlayServicesAvailable(context)) {
         String msg = "Couldn't find the appropriate version of Goolge Play Services";
-        LOGE(TAG, msg);
+        CastUtils.LOGE(TAG, msg);
         throw new RuntimeException(msg);
       }
       sInstance = new DataCastManager(context, applicationId, namespaces);
@@ -122,12 +118,12 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
    * {@link CastException} will be thrown.
    *
    * @return
-   * @throws CastException
-   * @see initialze()
+   * throws CastException
+   * see initialze()
    */
   public static DataCastManager getInstance() throws CastException {
     if (null == sInstance) {
-      LOGE(TAG, "No DataCastManager instance was initialized, you need to " + "call initialize() first");
+      CastUtils.LOGE(TAG, "No DataCastManager instance was initialized, you need to " + "call initialize() first");
       throw new CastException();
     }
     return sInstance;
@@ -142,15 +138,15 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
    *
    * @param ctx the current Context
    * @return
-   * @throws CastException
-   * @see {@link initialize()}, {@link setContext()}
+   * throws CastException
+   * see initialize()},  setContext()
    */
   public static DataCastManager getInstance(Context ctx) throws CastException {
     if (null == sInstance) {
-      LOGE(TAG, "No DataCastManager instance was initialized, you need to " + "call initialize() first");
+      CastUtils.LOGE(TAG, "No DataCastManager instance was initialized, you need to " + "call initialize() first");
       throw new CastException();
     }
-    LOGD(TAG, "Updated context to: " + ctx.getClass().getName());
+    CastUtils.LOGD(TAG, "Updated context to: " + ctx.getClass().getName());
     sInstance.mContext = ctx;
     return sInstance;
   }
@@ -174,7 +170,7 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
       throw new IllegalArgumentException("namespace cannot be empty");
     }
     if (mNamespaceList.contains(namespace)) {
-      LOGD(TAG, "Ignoring to add a namespace that is already added.");
+      CastUtils.LOGD(TAG, "Ignoring to add a namespace that is already added.");
       return false;
     }
     try {
@@ -182,9 +178,9 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
       mNamespaceList.add(namespace);
       return true;
     } catch (IOException e) {
-      LOGE(TAG, "Failed to add namespace", e);
+      CastUtils.LOGE(TAG, "Failed to add namespace", e);
     } catch (IllegalStateException e) {
-      LOGE(TAG, "Failed to add namespace", e);
+      CastUtils.LOGE(TAG, "Failed to add namespace", e);
     }
     return false;
   }
@@ -207,7 +203,7 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
       throw new IllegalArgumentException("namespace cannot be empty");
     }
     if (!mNamespaceList.contains(namespace)) {
-      LOGD(TAG, "Ignoring to remove a namespace that is not registered.");
+      CastUtils.LOGD(TAG, "Ignoring to remove a namespace that is not registered.");
       return false;
     }
     try {
@@ -215,9 +211,9 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
       mNamespaceList.remove(namespace);
       return true;
     } catch (IOException e) {
-      LOGE(TAG, "Failed to remove namespace: " + namespace, e);
+      CastUtils.LOGE(TAG, "Failed to remove namespace: " + namespace, e);
     } catch (IllegalStateException e) {
-      LOGE(TAG, "Failed to remove namespace: " + namespace, e);
+      CastUtils.LOGE(TAG, "Failed to remove namespace: " + namespace, e);
     }
     return false;
 
@@ -265,9 +261,9 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
     try {
       detachDataChannels();
     } catch (NoConnectionException e) {
-      LOGE(TAG, "Failed to detach data channels", e);
+      CastUtils.LOGE(TAG, "Failed to detach data channels", e);
     } catch (TransientNetworkDisconnectionException e) {
-      LOGE(TAG, "Failed to detach data channels", e);
+      CastUtils.LOGE(TAG, "Failed to detach data channels", e);
     }
   }
 
@@ -315,22 +311,22 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
 
   @Override
   public void onApplicationConnected(ApplicationMetadata appMetadata, String applicationStatus, String sessionId, boolean wasLaunched) {
-    LOGD(TAG, "onApplicationConnected() reached with sessionId: " + sessionId);
+    CastUtils.LOGD(TAG, "onApplicationConnected() reached with sessionId: " + sessionId);
 
     // saving session for future retrieval; we only save the last session
     // info
-    Utils.saveStringToPreference(mContext, PREFS_KEY_SESSION_ID, sessionId);
+    CastUtils.saveStringToPreference(mContext, PREFS_KEY_SESSION_ID, sessionId);
     if (mReconnectionStatus == ReconnectionStatus.IN_PROGRESS) {
       // we have tried to reconnect and successfully launched the app, so
       // it is time to select the route and make the cast icon happy :-)
       List<RouteInfo> routes = mMediaRouter.getRoutes();
       if (null != routes) {
-        String routeId = Utils.getStringFromPreference(mContext, PREFS_KEY_ROUTE_ID);
+        String routeId = CastUtils.getStringFromPreference(mContext, PREFS_KEY_ROUTE_ID);
         boolean found = false;
         for (RouteInfo routeInfo : routes) {
           if (routeId.equals(routeInfo.getId())) {
             // found the right route
-            LOGD(TAG, "Found the correct route during reconnection attempt");
+            CastUtils.LOGD(TAG, "Found the correct route during reconnection attempt");
             found = true;
             mReconnectionStatus = ReconnectionStatus.FINALIZE;
             mMediaRouter.selectRoute(routeInfo);
@@ -359,17 +355,17 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
         try {
           consumer.onApplicationConnected(appMetadata, applicationStatus, sessionId, wasLaunched);
         } catch (Exception e) {
-          LOGE(TAG, "onApplicationConnected(): Failed to inform " + consumer, e);
+          CastUtils.LOGE(TAG, "onApplicationConnected(): Failed to inform " + consumer, e);
         }
       }
     } catch (IllegalStateException e) {
-      LOGE(TAG, "Failed to attach namespaces", e);
+      CastUtils.LOGE(TAG, "Failed to attach namespaces", e);
     } catch (IOException e) {
-      LOGE(TAG, "Failed to attach namespaces", e);
+      CastUtils.LOGE(TAG, "Failed to attach namespaces", e);
     } catch (TransientNetworkDisconnectionException e) {
-      LOGE(TAG, "Failed to attach namespaces", e);
+      CastUtils.LOGE(TAG, "Failed to attach namespaces", e);
     } catch (NoConnectionException e) {
-      LOGE(TAG, "Failed to attach namespaces", e);
+      CastUtils.LOGE(TAG, "Failed to attach namespaces", e);
     }
 
   }
@@ -405,9 +401,9 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
         try {
           Cast.CastApi.removeMessageReceivedCallbacks(mApiClient, namespace);
         } catch (IllegalStateException e) {
-          LOGE(TAG, "Failed to add namespace: " + namespace, e);
+          CastUtils.LOGE(TAG, "Failed to add namespace: " + namespace, e);
         } catch (IOException e) {
-          LOGE(TAG, "Failed to add namespace: " + namespace, e);
+          CastUtils.LOGE(TAG, "Failed to add namespace: " + namespace, e);
         }
       }
     }
@@ -420,7 +416,7 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
       try {
         consumer.onApplicationConnectionFailed(errorCode);
       } catch (Exception e) {
-        LOGE(TAG, "onApplicationConnectionFailed(): Failed to inform " + consumer, e);
+        CastUtils.LOGE(TAG, "onApplicationConnectionFailed(): Failed to inform " + consumer, e);
       }
     }
 
@@ -431,7 +427,7 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
       try {
         consumer.onApplicationDisconnected(errorCode);
       } catch (Exception e) {
-        LOGE(TAG, "onApplicationDisconnected(): Failed to inform " + consumer, e);
+        CastUtils.LOGE(TAG, "onApplicationDisconnected(): Failed to inform " + consumer, e);
       }
     }
     if (null != mMediaRouter) {
@@ -448,17 +444,17 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
     }
     try {
       appStatus = Cast.CastApi.getApplicationStatus(mApiClient);
-      LOGD(TAG, "onApplicationStatusChanged() reached: " + Cast.CastApi.getApplicationStatus(mApiClient));
+      CastUtils.LOGD(TAG, "onApplicationStatusChanged() reached: " + Cast.CastApi.getApplicationStatus(mApiClient));
 
       for (IDataCastConsumer consumer : mDataConsumers) {
         try {
           consumer.onApplicationStatusChanged(appStatus);
         } catch (Exception e) {
-          LOGE(TAG, "onApplicationStatusChanged(): Failed to inform " + consumer, e);
+          CastUtils.LOGE(TAG, "onApplicationStatusChanged(): Failed to inform " + consumer, e);
         }
       }
     } catch (IllegalStateException e) {
-      LOGE(TAG, "onApplicationStatusChanged(): Failed", e);
+      CastUtils.LOGE(TAG, "onApplicationStatusChanged(): Failed", e);
     }
 
   }
@@ -469,7 +465,7 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
       try {
         consumer.onApplicationStopFailed(errorCode);
       } catch (Exception e) {
-        LOGE(TAG, "onApplicationStopFailed(): Failed to inform " + consumer, e);
+        CastUtils.LOGE(TAG, "onApplicationStopFailed(): Failed to inform " + consumer, e);
       }
     }
 
@@ -491,7 +487,7 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
       try {
         consumer.onMessageReceived(castDevice, namespace, message);
       } catch (Exception e) {
-        LOGE(TAG, "onMessageReceived(): Failed to inform " + consumer, e);
+        CastUtils.LOGE(TAG, "onMessageReceived(): Failed to inform " + consumer, e);
       }
     }
 
@@ -502,7 +498,7 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
       try {
         consumer.onMessageSendFailed(result);
       } catch (Exception e) {
-        LOGE(TAG, "onMessageSendFailed(): Failed to inform " + consumer, e);
+        CastUtils.LOGE(TAG, "onMessageSendFailed(): Failed to inform " + consumer, e);
       }
     }
   }
@@ -523,9 +519,9 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
       super.addBaseCastConsumer(listener);
       boolean result = mDataConsumers.add(listener);
       if (result) {
-        LOGD(TAG, "Successfully added the new DataCastConsumer listener " + listener);
+        CastUtils.LOGD(TAG, "Successfully added the new DataCastConsumer listener " + listener);
       } else {
-        LOGD(TAG, "Adding Listener " + listener + " was already registered, " +
+        CastUtils.LOGD(TAG, "Adding Listener " + listener + " was already registered, " +
             "skipping this step");
       }
     }

@@ -24,7 +24,7 @@ import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.ListView;
 
-import com.distantfuture.castcompanionlibrary.lib.utils.Utils;
+import com.distantfuture.castcompanionlibrary.lib.utils.CastUtils;
 import com.distantfuture.castvideos.app.R;
 import com.distantfuture.castvideos.app.mediaplayer.LocalPlayerActivity;
 import com.google.android.gms.cast.MediaInfo;
@@ -84,7 +84,7 @@ public class VideoBrowserListFragment extends ListFragment implements LoaderMana
 
   private void handleNavigation(MediaInfo info, boolean autoStart) {
     Intent intent = new Intent(getActivity(), LocalPlayerActivity.class);
-    intent.putExtra("media", Utils.fromMediaInfo(info));
+    intent.putExtra("media", CastUtils.fromMediaInfo(info));
     intent.putExtra("shouldStart", autoStart);
     getActivity().startActivity(intent);
   }

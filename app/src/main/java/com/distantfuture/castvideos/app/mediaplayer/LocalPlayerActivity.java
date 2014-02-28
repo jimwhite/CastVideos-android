@@ -49,6 +49,7 @@ import android.widget.VideoView;
 import com.androidquery.AQuery;
 import com.distantfuture.castcompanionlibrary.lib.cast.VideoCastManager;
 import com.distantfuture.castcompanionlibrary.lib.cast.callbacks.VideoCastConsumerImpl;
+import com.distantfuture.castcompanionlibrary.lib.utils.CastUtils;
 import com.distantfuture.castcompanionlibrary.lib.utils.MiniController;
 import com.distantfuture.castvideos.app.CastApplication;
 import com.distantfuture.castvideos.app.R;
@@ -122,8 +123,7 @@ public class LocalPlayerActivity extends FragmentActivity {
     // see what we need to play and were
     Bundle b = getIntent().getExtras();
     if (null != b) {
-      mSelectedMedia = com.distantfuture.castcompanionlibrary.lib.utils.Utils.toMediaInfo(getIntent()
-          .getBundleExtra("media"));
+      mSelectedMedia = CastUtils.toMediaInfo(getIntent().getBundleExtra("media"));
       mShouldStartPlayback = b.getBoolean("shouldStart");
       int startPosition = b.getInt("startPosition", 0);
       mVideoView.setVideoURI(Uri.parse(mSelectedMedia.getContentId()));
@@ -230,14 +230,14 @@ public class LocalPlayerActivity extends FragmentActivity {
         startControllersTimer();
       } else {
         stopControllersTimer();
-        setCoverArtStatus(com.distantfuture.castcompanionlibrary.lib.utils.Utils.
+        setCoverArtStatus(CastUtils.
             getImageUrl(mSelectedMedia, 0));
       }
 
       getActionBar().setTitle("");
     } else {
       stopControllersTimer();
-      setCoverArtStatus(com.distantfuture.castcompanionlibrary.lib.utils.Utils.
+      setCoverArtStatus(CastUtils.
           getImageUrl(mSelectedMedia, 0));
       updateControlersVisibility(true);
     }
@@ -485,7 +485,7 @@ public class LocalPlayerActivity extends FragmentActivity {
       public void onPrepared(MediaPlayer mp) {
         Log.d(TAG, "onPrepared is reached");
         mDuration = mp.getDuration();
-        mEndText.setText(com.distantfuture.castcompanionlibrary.lib.utils.Utils.formatMillis(mDuration));
+        mEndText.setText(CastUtils.formatMillis(mDuration));
         mSeekbar.setMax(mDuration);
         restartTrickplayTimer();
       }
@@ -534,7 +534,7 @@ public class LocalPlayerActivity extends FragmentActivity {
 
       @Override
       public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        mStartText.setText(com.distantfuture.castcompanionlibrary.lib.utils.Utils.formatMillis(progress));
+        mStartText.setText(CastUtils.formatMillis(progress));
       }
     });
 
@@ -575,8 +575,8 @@ public class LocalPlayerActivity extends FragmentActivity {
   private void updateSeekbar(int position, int duration) {
     mSeekbar.setProgress(position);
     mSeekbar.setMax(duration);
-    mStartText.setText(com.distantfuture.castcompanionlibrary.lib.utils.Utils.formatMillis(position));
-    mEndText.setText(com.distantfuture.castcompanionlibrary.lib.utils.Utils.formatMillis(duration));
+    mStartText.setText(CastUtils.formatMillis(position));
+    mEndText.setText(CastUtils.formatMillis(duration));
   }
 
   private void updatePlayButton(PlaybackState state) {

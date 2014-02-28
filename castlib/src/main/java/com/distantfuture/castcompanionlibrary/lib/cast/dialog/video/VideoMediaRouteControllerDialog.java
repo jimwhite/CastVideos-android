@@ -35,14 +35,12 @@ import com.distantfuture.castcompanionlibrary.lib.cast.callbacks.VideoCastConsum
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.CastException;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.NoConnectionException;
 import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.TransientNetworkDisconnectionException;
-import com.distantfuture.castcompanionlibrary.lib.utils.LogUtils;
+import com.distantfuture.castcompanionlibrary.lib.utils.CastUtils;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.cast.MediaStatus;
 
 import java.net.URL;
-
-import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGE;
 
 /**
  * A custom {@link MediaRouteControllerDialog} that provides an album art, a play/pause button and
@@ -50,7 +48,7 @@ import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGE;
  */
 public class VideoMediaRouteControllerDialog extends MediaRouteControllerDialog {
 
-  private static final String TAG = LogUtils.makeLogTag(VideoMediaRouteControllerDialog.class);
+  private static final String TAG = CastUtils.makeLogTag(VideoMediaRouteControllerDialog.class);
 
   private ImageView mIcon;
   private ImageView mPausePlay;
@@ -116,9 +114,9 @@ public class VideoMediaRouteControllerDialog extends MediaRouteControllerDialog 
       mPlayDrawable = context.getResources().getDrawable(R.drawable.ic_av_play_sm_dark);
       mStopDrawable = context.getResources().getDrawable(R.drawable.ic_av_stop_sm_dark);
     } catch (CastException e) {
-      LOGE(TAG, "Failed to update the content of dialog", e);
+      CastUtils.LOGE(TAG, "Failed to update the content of dialog", e);
     } catch (IllegalStateException e) {
-      LOGE(TAG, "Failed to update the content of dialog", e);
+      CastUtils.LOGE(TAG, "Failed to update the content of dialog", e);
     }
   }
 
@@ -144,7 +142,7 @@ public class VideoMediaRouteControllerDialog extends MediaRouteControllerDialog 
       hideControls(true, R.string.failed_no_connection_short);
       return;
     } catch (Exception e) {
-      LOGE(TAG, "Failed to get media information", e);
+      CastUtils.LOGE(TAG, "Failed to get media information", e);
     }
     if (null == info) {
       hideControls(true, R.string.no_media_info);
@@ -172,7 +170,7 @@ public class VideoMediaRouteControllerDialog extends MediaRouteControllerDialog 
           URL imgUrl = new URL(mIconUri.toString());
           bm = BitmapFactory.decodeStream(imgUrl.openStream());
         } catch (Exception e) {
-          LOGE(TAG, "setIcon(): Failed to load the image with url: " +
+          CastUtils.LOGE(TAG, "setIcon(): Failed to load the image with url: " +
               mIconUri + ", using the default one", e);
           bm = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.video_placeholder_200x200);
         }
@@ -295,13 +293,13 @@ public class VideoMediaRouteControllerDialog extends MediaRouteControllerDialog 
           setLoadingVisibility(true);
         } catch (CastException e) {
           setLoadingVisibility(false);
-          LOGE(TAG, "Failed to toggle playback", e);
+          CastUtils.LOGE(TAG, "Failed to toggle playback", e);
         } catch (TransientNetworkDisconnectionException e) {
           setLoadingVisibility(false);
-          LOGE(TAG, "Failed to toggle playback due to network issues", e);
+          CastUtils.LOGE(TAG, "Failed to toggle playback due to network issues", e);
         } catch (NoConnectionException e) {
           setLoadingVisibility(false);
-          LOGE(TAG, "Failed to toggle playback due to network issues", e);
+          CastUtils.LOGE(TAG, "Failed to toggle playback due to network issues", e);
         }
       }
     });
@@ -315,9 +313,9 @@ public class VideoMediaRouteControllerDialog extends MediaRouteControllerDialog 
           try {
             mCastManager.onTargetActivityInvoked(mContext);
           } catch (TransientNetworkDisconnectionException e) {
-            LOGE(TAG, "Failed to start the target activity due to network issues", e);
+            CastUtils.LOGE(TAG, "Failed to start the target activity due to network issues", e);
           } catch (NoConnectionException e) {
-            LOGE(TAG, "Failed to start the target activity due to network issues", e);
+            CastUtils.LOGE(TAG, "Failed to start the target activity due to network issues", e);
           }
           cancel();
         }

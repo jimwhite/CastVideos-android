@@ -20,7 +20,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.distantfuture.castcompanionlibrary.lib.cast.VideoCastManager;
-import com.distantfuture.castcompanionlibrary.lib.utils.Utils;
+import com.distantfuture.castcompanionlibrary.lib.utils.CastUtils;
 import com.distantfuture.castvideos.app.settings.CastPreference;
 
 /**
@@ -41,7 +41,7 @@ public class CastApplication extends Application {
     super.onCreate();
     mAppContext = getApplicationContext();
     APPLICATION_ID = getString(R.string.app_id);
-    Utils.saveFloatToPreference(getApplicationContext(), VideoCastManager.PREFS_KEY_VOLUME_INCREMENT, (float) VOLUME_INCREMENT);
+    CastUtils.saveFloatToPreference(getApplicationContext(), VideoCastManager.PREFS_KEY_VOLUME_INCREMENT, (float) VOLUME_INCREMENT);
 
   }
 
@@ -54,7 +54,7 @@ public class CastApplication extends Application {
 
     }
     mCastMgr.setContext(context);
-    String destroyOnExitStr = Utils.getStringFromPreference(context, CastPreference.TERMINATION_POLICY_KEY);
+    String destroyOnExitStr = CastUtils.getStringFromPreference(context, CastPreference.TERMINATION_POLICY_KEY);
     mCastMgr.setStopOnDisconnect(null != destroyOnExitStr && CastPreference.STOP_ON_DISCONNECT.equals(destroyOnExitStr));
     return mCastMgr;
   }
