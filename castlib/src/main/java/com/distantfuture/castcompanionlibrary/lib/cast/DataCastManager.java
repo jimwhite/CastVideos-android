@@ -98,7 +98,7 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
         throw new RuntimeException(msg);
       }
       sInstance = new DataCastManager(context, applicationId, namespaces);
-      mCastManager = sInstance;
+      sCastManager = sInstance;
     }
     return sInstance;
   }
@@ -508,9 +508,6 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
    * Registers an {@link IDataCastConsumer} interface with this class. Registered listeners will
    * be notified of changes to a variety of lifecycle and status changes through the callbacks
    * that the interface provides.
-   *
-   * @param listener
-   * @see DataCastConsumerImpl
    */
   public synchronized void addDataCastConsumer(IDataCastConsumer listener) {
     if (null != listener) {
@@ -527,8 +524,6 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
 
   /**
    * Unregisters an {@link IDataCastConsumer}.
-   *
-   * @param listener
    */
   public synchronized void removeDataCastConsumer(IDataCastConsumer listener) {
     if (null != listener) {

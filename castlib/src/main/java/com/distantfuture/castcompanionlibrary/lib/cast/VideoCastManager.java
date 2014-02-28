@@ -158,7 +158,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
         CastUtils.LOGE(TAG, msg);
       }
       sInstance = new VideoCastManager(context, applicationId, dataNamespace);
-      mCastManager = sInstance;
+      sCastManager = sInstance;
     }
     return sInstance;
   }

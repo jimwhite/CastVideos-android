@@ -63,10 +63,6 @@ import java.util.Set;
  * the functionality of this class based on their purpose.
  */
 public abstract class BaseCastManager implements DeviceSelectionListener, ConnectionCallbacks, OnConnectionFailedListener, OnFailedListener {
-
-  /**
-   * Enumerates various stages during a session recovery
-   */
   public static enum ReconnectionStatus {
     STARTED, IN_PROGRESS, FINALIZE, INACTIVE
   }
@@ -102,7 +98,7 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
   protected int mCapabilities;
   protected boolean mConnectionSuspened;
   private boolean mWifiConnectivity = true;
-  protected static BaseCastManager mCastManager;
+  protected static BaseCastManager sCastManager;
 
   /*************************************************************************/
   /************** Abstract Methods *****************************************/
@@ -125,8 +121,6 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
   /**
    * Subclasses can decide how the Cast Controller Dialog should be built. If this returns
    * <code>null</code>, the default dialog will be shown.
-   *
-   * @return
    */
   abstract MediaRouteDialogFactory getMediaRouteDialogFactory();
 
@@ -185,7 +179,7 @@ public abstract class BaseCastManager implements DeviceSelectionListener, Connec
   }
 
   public static BaseCastManager getCastManager() {
-    return mCastManager;
+    return sCastManager;
   }
 
   /**
