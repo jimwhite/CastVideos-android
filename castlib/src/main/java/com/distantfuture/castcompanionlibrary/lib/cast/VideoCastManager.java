@@ -44,8 +44,6 @@ import com.distantfuture.castcompanionlibrary.lib.cast.exceptions.TransientNetwo
 import com.distantfuture.castcompanionlibrary.lib.cast.player.IMediaAuthService;
 import com.distantfuture.castcompanionlibrary.lib.cast.player.VideoCastControllerActivity;
 import com.distantfuture.castcompanionlibrary.lib.notification.VideoCastNotificationService;
-import com.distantfuture.castcompanionlibrary.lib.remotecontrol.RemoteControlClientCompat;
-import com.distantfuture.castcompanionlibrary.lib.remotecontrol.RemoteControlHelper;
 import com.distantfuture.castcompanionlibrary.lib.remotecontrol.VideoIntentReceiver;
 import com.distantfuture.castcompanionlibrary.lib.utils.LogUtils;
 import com.distantfuture.castcompanionlibrary.lib.utils.Utils;
@@ -133,7 +131,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
   private final Set<IMiniController> mMiniControllers;
   private final AudioManager mAudioManager;
   private RemoteMediaPlayer mRemoteMediaPlayer;
-  private RemoteControlClientCompat mRemoteControlClientCompat;
+  private RemoteControlClient mRemoteControlClient;
   private VolumeType mVolumeType = VolumeType.DEVICE;
   private int mState = MediaStatus.PLAYER_STATE_IDLE;
   private int mIdleReason;
@@ -778,8 +776,8 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
   private void onApplicationDisconnected(int errorCode) {
     LOGD(TAG, "onApplicationDisconnected() reached with error code: " + errorCode);
     updateRemoteControl(false);
-    if (null != mRemoteControlClientCompat && isFeatureEnabled(FEATURE_LOCKSCREEN)) {
-      mRemoteControlClientCompat.removeFromMediaRouter(mMediaRouter);
+    if (null != mRemoteControlClient && isFeatureEnabled(FEATURE_LOCKSCREEN)) {
+      mMediaRouter.removeRemoteControlClient(mRemoteControlClient);
     }
     for (IVideoCastConsumer consumer : mVideoConsumers) {
       try {
@@ -1515,19 +1513,19 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
     ComponentName eventReceiver = new ComponentName(mContext, VideoIntentReceiver.class.getName());
     mAudioManager.registerMediaButtonEventReceiver(eventReceiver);
 
-    if (mRemoteControlClientCompat == null) {
+    if (mRemoteControlClient == null) {
       Intent intent = new Intent(Intent.ACTION_MEDIA_BUTTON);
       intent.setComponent(mMediaButtonReceiverComponent);
-      mRemoteControlClientCompat = new RemoteControlClientCompat(PendingIntent.getBroadcast(mContext, 0, intent, 0));
-      RemoteControlHelper.registerRemoteControlClient(mAudioManager, mRemoteControlClientCompat);
+      mRemoteControlClient = new RemoteControlClient(PendingIntent.getBroadcast(mContext, 0, intent, 0));
+      mAudioManager.registerRemoteControlClient(mRemoteControlClient);
     }
-    mRemoteControlClientCompat.addToMediaRouter(mMediaRouter);
-    mRemoteControlClientCompat.setTransportControlFlags(RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE);
+    mMediaRouter.addRemoteControlClient(mRemoteControlClient);
+    mRemoteControlClient.setTransportControlFlags(RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE);
     if (null == info) {
-      mRemoteControlClientCompat.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
+      mRemoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
       return;
     } else {
-      mRemoteControlClientCompat.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
+      mRemoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
     }
 
     // Update the remote control's image
@@ -1547,7 +1545,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
     new Thread(new Runnable() {
       @Override
       public void run() {
-        if (null == mRemoteControlClientCompat) {
+        if (null == mRemoteControlClient) {
           return;
         }
         try {
@@ -1555,9 +1553,9 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
           if (null == bm) {
             return;
           }
-          mRemoteControlClientCompat.editMetadata(false)
-              .putBitmap(RemoteControlClientCompat.MetadataEditorCompat.
-                  METADATA_KEY_ARTWORK, bm)
+          mRemoteControlClient.editMetadata(false)
+              .putBitmap(RemoteControlClient.MetadataEditor.
+                  BITMAP_KEY_ARTWORK, bm)
               .apply();
         } catch (Exception e) {
           LOGD(TAG, "Failed to update lock screen image", e);
@@ -1614,12 +1612,12 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
       return;
     }
     try {
-      if (null == mRemoteControlClientCompat) {
+      if (null == mRemoteControlClient) {
         setUpRemoteControl(getRemoteMediaInformation());
       }
-      if (mRemoteControlClientCompat != null) {
+      if (mRemoteControlClient != null) {
         int playState = isRemoteStreamLive() ? RemoteControlClient.PLAYSTATE_BUFFERING : RemoteControlClient.PLAYSTATE_PLAYING;
-        mRemoteControlClientCompat.setPlaybackState(playing ? playState : RemoteControlClient.PLAYSTATE_PAUSED);
+        mRemoteControlClient.setPlaybackState(playing ? playState : RemoteControlClient.PLAYSTATE_PAUSED);
       }
     } catch (TransientNetworkDisconnectionException e) {
       LOGE(TAG, "Failed to setup RCC due to network issues", e);
@@ -1633,7 +1631,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
    * has two lines: Title , Album Artist - Album
    */
   private void updateLockScreenMetadata() {
-    if (null == mRemoteControlClientCompat || !isFeatureEnabled(FEATURE_LOCKSCREEN)) {
+    if (null == mRemoteControlClient || !isFeatureEnabled(FEATURE_LOCKSCREEN)) {
       return;
     }
 
@@ -1645,7 +1643,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
       }
       final MediaMetadata mm = info.getMetadata();
 
-      mRemoteControlClientCompat.editMetadata(false)
+      mRemoteControlClient.editMetadata(false)
           .putString(MediaMetadataRetriever.METADATA_KEY_TITLE, mm.getString(MediaMetadata.KEY_TITLE))
           .putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, mContext.getResources()
               .getString(R.string.casting_to_device, getDeviceName()))
@@ -1666,9 +1664,9 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
   private void removeRemoteControlClient() {
     if (isFeatureEnabled(FEATURE_LOCKSCREEN)) {
       mAudioManager.abandonAudioFocus(null);
-      if (null != mRemoteControlClientCompat) {
-        RemoteControlHelper.unregisterRemoteControlClient(mAudioManager, mRemoteControlClientCompat);
-        mRemoteControlClientCompat = null;
+      if (null != mRemoteControlClient) {
+        mAudioManager.unregisterRemoteControlClient(mRemoteControlClient);
+        mRemoteControlClient = null;
       }
     }
   }
