@@ -313,11 +313,10 @@ public class VideoCastControllerActivity extends FragmentActivity implements IVi
     mEnd.setText(Utils.formatMillis(duration));
   }
 
-  @SuppressWarnings("deprecation")
   @Override
   public void setImage(Bitmap bitmap) {
     if (null != bitmap) {
-      mPageView.setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
+      mPageView.setBackground(new BitmapDrawable(getResources(), bitmap));
     }
   }
 

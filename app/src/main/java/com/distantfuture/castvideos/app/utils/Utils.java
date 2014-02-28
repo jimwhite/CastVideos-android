@@ -43,19 +43,20 @@ public class Utils {
   private Utils() {
   }
 
-  @SuppressWarnings("deprecation")
   /**
    * Returns the screen/display size
    *
-   * @param ctx
+   * @param context
    * @return
    */
   public static Point getDisplaySize(Context context) {
     WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     Display display = wm.getDefaultDisplay();
-    int width = display.getWidth();
-    int height = display.getHeight();
-    return new Point(width, height);
+
+    Point result = new Point();
+    display.getSize(result);
+
+    return result;
   }
 
   /**

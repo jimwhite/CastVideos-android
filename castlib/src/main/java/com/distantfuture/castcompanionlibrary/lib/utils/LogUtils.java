@@ -48,14 +48,12 @@ public class LogUtils {
     return makeLogTag(cls.getSimpleName());
   }
 
-  @SuppressWarnings("unused")
   public static void LOGD(final String tag, String message) {
     if (BuildConfig.DEBUG || Log.isLoggable(tag, Log.DEBUG)) {
       Log.d(tag, message);
     }
   }
 
-  @SuppressWarnings("unused")
   public static void LOGD(final String tag, String message, Throwable cause) {
     if (BuildConfig.DEBUG || Log.isLoggable(tag, Log.DEBUG)) {
       Log.d(tag, message, cause);

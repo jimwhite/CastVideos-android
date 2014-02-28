@@ -62,8 +62,8 @@ public interface IVideoCastController {
   public void setOnVideoCastControllerChangedListener(OnVideoCastControllerListener listener);
 
   /**
-   * Sets the type of stream. <code>streamType</code> can be {@link MediaInfo.STREAM_TYPE_LIVE} or
-   * {@link MediaInfo.STREAM_TYPE_BUFFERED}
+   * Sets the type of stream. <code>streamType</code> can be MediaInfo.STREAM_TYPE_LIVE or
+   * MediaInfo.STREAM_TYPE_BUFFERED
    *
    * @param streamType
    */

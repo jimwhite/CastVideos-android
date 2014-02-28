@@ -26,7 +26,6 @@ import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGE;
  * Contains methods to handle registering/unregistering remote control clients. These methods only
  * run on ICS+ devices. On older platform versions, all methods are no-ops.
  */
-@SuppressWarnings({"rawtypes"})
 public class RemoteControlHelper {
   private static final String TAG = "RemoteControlHelper";
 

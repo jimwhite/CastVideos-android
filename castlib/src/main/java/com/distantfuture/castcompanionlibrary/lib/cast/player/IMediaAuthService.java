@@ -29,14 +29,14 @@ import com.google.android.gms.cast.MediaInfo;
  * <p/>
  * Framework passes an {@link IMediaAuthListener} to the implementation of this interface to provide
  * a way for the implementation to callback to the framework with its results. When the
- * authorization process ends, the implementation has to call {@link IMediaAuthListener#onResult()}
+ * authorization process ends, the implementation has to call IMediaAuthListener#onResult()
  * with the relevant results; whether the authorization was granted or rejected. If, however, the
  * process encounters an unrecoverable error, it has to call the
- * {@link IMediaAuthListener#onFailure()} callback of the {@link IMediaAuthListener} to inform the
+ * IMediaAuthListener#onFailure() callback of the {@link IMediaAuthListener} to inform the
  * framework.
  * <p/>
  * If the library decides to to interrupt the authorization process (say, a user decides to
- * interrupt the process or if it times out), it will call {@link IMediaAuthService#abort()} and
+ * interrupt the process or if it times out), it will call IMediaAuthService#abort() and
  * provides a reason. Implementation has to make sure that it will not call any of the framework
  * callbacks after it has received an abort message.
  * <p/>
@@ -87,7 +87,7 @@ public interface IMediaAuthService {
 
   /**
    * Returns the length of time within which the library expects to have heard back from the
-   * authorization service. If it doesn't, it will call {@link abort()}.
+   * authorization service. If it doesn't, it will call abort().
    *
    * @return Timeout in milliseconds
    */
@@ -97,7 +97,7 @@ public interface IMediaAuthService {
    * If authorization times out or user cancels the authorization process, this method will be
    * called.
    *
-   * @param abortReason One of the {@link MediaAuthStatus#ABORT_*} reasons
+   * @param abortReason One of the MediaAuthStatus#ABORT_* reasons
    */
   public void abort(MediaAuthStatus abortReason);
 

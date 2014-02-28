@@ -38,7 +38,6 @@ import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGE;
  * {@link android.media.AudioManager#registerRemoteControlClient(android.media.RemoteControlClient)}
  * .
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
 public class RemoteControlClientCompat {
 
   private static final String TAG = "RemoteControlCompat";
