@@ -30,7 +30,7 @@ import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGD;
 import static com.distantfuture.castcompanionlibrary.lib.utils.LogUtils.LOGE;
 
 /**
- * A {@link BroadcasrReceiver} for receiving media button actions (from the lock screen) as well as
+ * A broadcastreceiver for receiving media button actions (from the lock screen) as well as
  * the the status bar notification media actions.
  */
 public class VideoIntentReceiver extends BroadcastReceiver {

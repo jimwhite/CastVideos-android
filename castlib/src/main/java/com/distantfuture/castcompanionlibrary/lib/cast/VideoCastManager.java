@@ -147,7 +147,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
   /**
    * Initializes the VideoCastManager for clients. Before clients can use VideoCastManager, they
    * need to initialize it by calling this static method. Then clients can obtain an instance of
-   * this singleton class by calling {@link getInstance()} or {@link getInstance(Context)}.
+   * this singleton class by calling getInstance() or getInstance(Context).
    * Failing to initialize this class before requesting an instance will result in a
    * {@link CastException} exception.
    *
@@ -159,7 +159,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
    * @param dataNamespace  if not <code>null</code>, a custom data channel with this namespace will
    *                       be created.
    * @return
-   * @see getInstance()
+   * see getInstance()
    */
   public static synchronized VideoCastManager initialize(Context context, String applicationId, Class<?> targetActivity, String dataNamespace) {
     if (null == sInstance) {
@@ -180,7 +180,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
    *
    * @return
    * @throws CastException
-   * @see initialze()
+   * see initialze()
    */
   public static VideoCastManager getInstance() throws CastException {
     if (null == sInstance) {
@@ -201,7 +201,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
    * @param context the current Context
    * @return
    * @throws CastException
-   * @see {@link initialize()}, {@link setContext()}
+   * see initialize(),  setContext()
    */
   public static VideoCastManager getInstance(Context context) throws CastException {
     if (null == sInstance) {
@@ -635,8 +635,8 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
 
   /**
    * Increments or decrements volume by <code>delta</code> if <code>delta &gt; 0</code> or
-   * <code>delta &lt; 0</code>, respectively. Note that the volume range is between 0 and {@link
-   * RouteInfo.getVolumeMax()}.
+   * <code>delta &lt; 0</code>, respectively. Note that the volume range is between 0 and
+   * RouteInfo.getVolumeMax()
    *
    * @param delta
    */
@@ -1713,8 +1713,6 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
    * {@link OnMiniControllerChangedListener}.
    *
    * @param miniController
-   * @param OnMiniControllerChangedListener
-   * @see setOnMiniControllerChangedListener
    */
   public synchronized void addMiniController(IMiniController miniController, OnMiniControllerChangedListener onChangedListener) {
     if (null != miniController) {
