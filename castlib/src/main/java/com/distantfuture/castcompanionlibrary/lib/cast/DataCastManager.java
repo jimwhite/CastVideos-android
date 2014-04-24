@@ -1,6 +1,5 @@
 
 package com.distantfuture.castcompanionlibrary.lib.cast;
-
 import android.content.Context;
 import android.support.v7.app.MediaRouteDialogFactory;
 import android.support.v7.media.MediaRouter.RouteInfo;
@@ -255,7 +254,7 @@ public class DataCastManager extends BaseCastManager implements Cast.MessageRece
 
     Builder builder = Cast.CastOptions.builder(mSelectedCastDevice, new CastListener());
     if (isFeatureEnabled(FEATURE_DEBUGGING)) {
-      builder.setDebuggingEnabled();
+      builder.setVerboseLoggingEnabled(true);
     }
     return builder;
   }

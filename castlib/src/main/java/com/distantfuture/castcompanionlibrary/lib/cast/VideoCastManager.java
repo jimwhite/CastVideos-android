@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.support.v7.app.MediaRouteDialogFactory;
 import android.support.v7.media.MediaRouter.RouteInfo;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
 import com.distantfuture.castcompanionlibrary.lib.R;
@@ -934,7 +933,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
         throw new NoConnectionException();
       }
       mRemoteMediaPlayer.play(mApiClient);
-    } catch (IOException e) {
+    } catch (Exception e) {
       CastUtils.LOGE(TAG, "Failed to play media", e);
       throw new CastException(mContext.getString(R.string.failed_to_play), e);
     }
@@ -959,7 +958,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
         throw new NoConnectionException();
       }
       mRemoteMediaPlayer.stop(mApiClient, customData);
-    } catch (IOException e) {
+    } catch (Exception e) {
       CastUtils.LOGE(TAG, "Failed to stop media", e);
       throw new CastException(mContext.getString(R.string.failed_to_stop), e);
     }
@@ -996,7 +995,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
     }
     try {
       mRemoteMediaPlayer.pause(mApiClient, customData);
-    } catch (IOException e) {
+    } catch (Exception e) {
       CastUtils.LOGE(TAG, "Failed to pause media", e);
       throw new CastException(mContext, R.string.failed_to_pause, e);
     }
@@ -1614,7 +1613,7 @@ public class VideoCastManager extends BaseCastManager implements OnMiniControlle
   Builder getCastOptionBuilder(CastDevice device) {
     Builder builder = Cast.CastOptions.builder(mSelectedCastDevice, new CastListener());
     if (isFeatureEnabled(FEATURE_DEBUGGING)) {
-      builder.setDebuggingEnabled();
+      builder.setVerboseLoggingEnabled(true);
     }
     return builder;
   }
